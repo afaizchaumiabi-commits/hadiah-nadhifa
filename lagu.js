@@ -258,11 +258,9 @@ const currentTimeDisplay = document.getElementById("current-time");
 const chatContainer = document.getElementById("chat-container");
 let chatInterval;
 
-// CHAT 1 - 22 (.PNG)
-const chatImages = [];
-for (let i = 1; i <= 22; i++) { 
-    chatImages.push(`chat${i}.png`); 
-}
+// CHAT NGAMBANG: PNG hasil crop dari screenshot WA "Berbintang" (nama file, lebar asli)
+const chatImages = [["chat1.png",561],["chat2.png",555],["chat3.png",442],["chat4.png",793],["chat5.png",432]];
+let lastChat = -1;
 
 // FOTO UTAMA HALAMAN 1 (1 - 10 .JPG)
 const syncData = [
@@ -329,15 +327,42 @@ function buildPuzzle(container, imgSrc) {
 const BUB=["semangattt bekerjanya cantikku","hati-hati di jalannya sayang","selamat istirahat sayangku","aku juga selalu percaya sama kamu","halloww cantikku sayang","aku sangat kangen kamu","kamu sama sekali nggak salah, sayang","semoga lancar kerjanya sayang","selamat pagi sayang, semangat ya hari ini"];
 function spawnChat() {
     if (!isPlaying) return;
-    const f = document.createElement("div");
-    f.className = "floating-chat";
-    const left = Math.random() > 0.5, edge = Math.random() * 30 + 4;
-    f.style[left ? "left" : "right"] = edge + "vw";
-    f.style.top = (Math.random() * 60 + 10) + "vh";
-    f.style.setProperty('--rot', `rotate(${(Math.random() - 0.5) * 20}deg)`);
-    f.innerHTML = chatCardHTML(CHATS[Math.floor(Math.random() * CHATS.length)]);
-    chatContainer.appendChild(f);
-    setTimeout(() => f.remove(), 8000);
+
+    let idx;
+    do { idx = Math.floor(Math.random() * chatImages.length); } while (idx === lastChat && chatImages.length > 1);
+    lastChat = idx;
+    const [chatSrc, nat] = chatImages[idx];
+
+    const floatContainer = document.createElement("div");
+    floatContainer.className = "floating-chat";
+    floatContainer.style.width = `min(${Math.round(nat * 0.34)}px, 68vw)`;
+
+    const isLeft = Math.random() > 0.5;
+    const randomEdge = Math.random() * 25 + 4;
+    if (isLeft) { floatContainer.style.left = `${randomEdge}vw`; }
+    else { floatContainer.style.right = `${randomEdge}vw`; }
+
+    floatContainer.style.top = `${Math.random() * 55 + 10}vh`;
+    const rot = (Math.random() - 0.5) * 24;
+    floatContainer.style.setProperty('--rot', `rotate(${rot}deg)`);
+
+    const innerWrapper = document.createElement("div");
+    innerWrapper.className = "chat-inner";
+    innerWrapper.style.webkitMaskImage = `url('${chatSrc}')`;
+    innerWrapper.style.maskImage = `url('${chatSrc}')`;
+
+    const chatImg = document.createElement("img");
+    chatImg.src = chatSrc;
+
+    const chatShimmer = document.createElement("div");
+    chatShimmer.className = "chat-shimmer";
+
+    innerWrapper.appendChild(chatImg);
+    innerWrapper.appendChild(chatShimmer);
+    floatContainer.appendChild(innerWrapper);
+    chatContainer.appendChild(floatContainer);
+
+    setTimeout(() => { floatContainer.remove(); }, 8000);
 }
 
 let isPlaying = false;
