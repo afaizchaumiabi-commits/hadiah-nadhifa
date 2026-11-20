@@ -335,7 +335,7 @@ function spawnChat() {
     f.style[left ? "left" : "right"] = edge + "vw";
     f.style.top = (Math.random() * 60 + 10) + "vh";
     f.style.setProperty('--rot', `rotate(${(Math.random() - 0.5) * 20}deg)`);
-    f.innerHTML = chatCardHTML(CHATS[Math.floor(Math.random() * CHATS.length)]);
+    f.innerHTML = starHTML(STAR[Math.floor(Math.random() * STAR.length)]);
     chatContainer.appendChild(f);
     setTimeout(() => f.remove(), 8000);
 }

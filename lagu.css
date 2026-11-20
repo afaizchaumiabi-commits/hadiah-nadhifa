@@ -884,4 +884,4 @@ a, button, .media-item, .icon-btn, .play-circle, .lightbox-close, .swipe-hint, .
 .cbub{padding:12px 18px;border-radius:20px 20px 20px 5px;background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(255,226,236,.92));color:#4a1d3d;font:600 15px/1.35 'Inter',system-ui,sans-serif;text-align:left;box-shadow:0 0 18px rgba(255,200,220,.55)}
 .home{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;z-index:60;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;text-decoration:none;font-size:20px;background:rgba(0,0,0,.35);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.25)}
 
-.media-item{object-position:50% 30%}.floating-chat .wa{width:250px}
+.media-item{object-position:50% 30%}.floating-chat{width:max-content;max-width:78vw}.floating-chat .ws{max-width:200px;font-size:12px}.floating-chat .ws i{width:26px;height:26px}.floating-chat .ws{grid-template-columns:26px auto}
