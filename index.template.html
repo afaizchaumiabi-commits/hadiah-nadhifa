@@ -12,7 +12,7 @@ body{background:radial-gradient(120% 90% at 50% 0%,#3d1f6e 0%,#22103f 45%,#12081
 #bgphoto{position:fixed;inset:-5%;background-size:cover;background-position:center;filter:blur(26px) saturate(1.2);opacity:.28;transition:opacity 1s}
 canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 #ghost{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
-.gb{opacity:.8;position:absolute;bottom:-80px;animation:rise linear forwards}
+.gb{opacity:.55;position:absolute;bottom:-60px;max-width:70vw;padding:9px 14px;border-radius:18px 18px 18px 4px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);font-size:13px;color:#ffe3ec;backdrop-filter:blur(3px);animation:rise linear forwards}
 @keyframes rise{to{transform:translateY(-115vh) rotate(var(--r,0deg));opacity:0}}
 .st{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:max(24px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom));text-align:center;opacity:0;visibility:hidden;transform:scale(.97);transition:opacity .7s,transform .7s,visibility .7s}
 .st.on{opacity:1;visibility:visible;transform:none}
@@ -46,7 +46,7 @@ p.sub{font-size:15px;opacity:.8;max-width:30ch;line-height:1.5}
 /* surat */
 #env{font-size:88px;cursor:pointer;animation:bob 2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-10px) rotate(-3deg)}}
 #card{display:none;width:min(420px,100%);max-height:66vh;overflow:auto;padding:26px 22px;border-radius:22px;background:var(--paper);color:#3a2145;text-align:left;font:italic 400 17px/1.7 var(--serif);box-shadow:0 20px 60px rgba(0,0,0,.45)}
-#card{scrollbar-width:thin;scrollbar-color:#d9a3be transparent;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}#card p{margin-bottom:14px}#card .sg{font-style:normal;font-weight:700;color:#b0336a}
+#card p{margin-bottom:14px}#card .sg{font-style:normal;font-weight:700;color:#b0336a}
 .pol{position:fixed;width:104px;padding:6px 6px 22px;background:#fff;border-radius:3px;box-shadow:0 10px 24px rgba(0,0,0,.4);z-index:4;opacity:0;transition:opacity 1s}
 .pol img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
 #s8.on~.pol{opacity:.9}
@@ -123,7 +123,7 @@ p.sub{font-size:15px;opacity:.8;max-width:30ch;line-height:1.5}
 <section class="st" id="s7">
  <h2 id="lt">Ada surat untukmu</h2>
  <div id="env">💌</div>
- <div id="card"></div><p class="sub" id="lmsg" hidden>Geser ke bawah untuk membaca sampai habis ↓</p>
+ <div id="card"></div>
  <button class="btn" id="nx" hidden>Lanjut</button>
 </section>
 
@@ -151,7 +151,7 @@ function rs(){fx.width=innerWidth*devicePixelRatio;fx.height=innerHeight*deviceP
 function burst(x,y,n){const c=['#ff9fb8','#c9b6ff','#ffd98a','#fff','#8fd3ff'];for(let i=0;i<n;i++){const a=Math.random()*6.28,s=3+Math.random()*9;P.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-6,r:3+Math.random()*4,c:c[i%5],l:1,rot:Math.random()*6})}}
 (function loop(){cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);cx.clearRect(0,0,innerWidth,innerHeight);P=P.filter(p=>p.l>0);for(const p of P){p.x+=p.vx;p.y+=p.vy;p.vy+=.28;p.vx*=.985;p.l-=.008;p.rot+=.2;cx.globalAlpha=Math.max(p.l,0);cx.fillStyle=p.c;cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot);cx.fillRect(-p.r,-p.r/2,p.r*2,p.r);cx.restore()}requestAnimationFrame(loop)})();
 /* ghost chat */
-setInterval(()=>{const S=window.STAR||[];if(!S.length)return;const d=document.createElement('div');d.className='gb';d.innerHTML=starHTML(S[Math.random()*S.length|0]);d.style.left=Math.random()*55+'vw';d.style.setProperty('--r',(Math.random()*10-5)+'deg');d.style.animationDuration=(11+Math.random()*7)+'s';$('ghost').appendChild(d);setTimeout(()=>d.remove(),19000)},2600);
+setInterval(()=>{if(!MSGS.length)return;const d=document.createElement('div');d.className='gb';d.textContent=MSGS[Math.random()*MSGS.length|0];d.style.left=Math.random()*55+'vw';d.style.setProperty('--r',(Math.random()*10-5)+'deg');d.style.animationDuration=(11+Math.random()*7)+'s';$('ghost').appendChild(d);setTimeout(()=>d.remove(),19000)},2600);
 /* foto */
 if(M.fotos.length){$('bgphoto').style.backgroundImage=`url(${M.fotos[0]})`;const s5=$('s8'),pos=[[4,9,-8],[68,11,7],[3,70,6],[66,72,-6]];M.fotos.slice(1,5).concat(M.fotos.length<5?M.fotos.slice(0,1):[]).slice(0,4).forEach((f,i)=>{const d=document.createElement('div');d.className='pol';d.style.cssText+=`left:${pos[i][0]}vw;top:${pos[i][1]}vh;transform:rotate(${pos[i][2]}deg)`;d.innerHTML=`<img src="${f}" alt="">`;s5.after(d)})}
 /* 0 countdown */
@@ -203,7 +203,10 @@ function startGame(){if(G)return;const W=gc.width=gc.clientWidth*2,H=gc.height=g
  G.hs=G.hs.filter(h=>h.y<H+60);g.font='84px serif';g.fillText('🧺',G.bx,H-30);
  if(G.n>=15){G.run=0;burst(innerWidth/2,innerHeight/2,120);$('gmsg').textContent='Kamu menangkap semuanya 🤍';setTimeout(()=>go(4),1500);return}requestAnimationFrame(f)})()}
 /* 4 surat */
-$('env').onclick=()=>{$('env').style.display='none';$('lt').textContent='Dari aku, untuk kamu';const c=$('card');c.innerHTML=LETTER.map(t=>`<p>${t}</p>`).join('')+'<p class="sg">Dengan sayang,<br>Afa 🤍</p>';c.style.display='block';c.scrollTop=0;const m=$('lmsg');m.hidden=false;const chk=()=>{if(c.scrollTop+c.clientHeight>=c.scrollHeight-24){$('nx').hidden=false;m.hidden=true}};c.onscroll=chk;chk();setTimeout(()=>$('nx').hidden=false,60000)};
+$('env').onclick=()=>{$('env').style.display='none';$('lt').textContent='Dari aku, untuk kamu';const c=$('card');c.style.display='block';let i=0,typing=false,skipT=0;
+ function nextP(){if(i>=LETTER.length){c.insertAdjacentHTML('beforeend','<p class="sg">Dengan sayang,<br>Afa 🤍</p>');$('nx').hidden=false;c.scrollTop=1e5;return}const p=document.createElement('p');c.appendChild(p);const t=LETTER[i++];let k=0;typing=true;skipT=()=>{k=t.length};
+  (function w(){k=Math.min(k+2,t.length);p.textContent=t.slice(0,k);c.scrollTop=1e5;if(k<t.length)setTimeout(w,26);else{typing=false;setTimeout(nextP,900)}})()}
+ c.onclick=()=>skipT&&skipT();nextP()};
 $('nx').onclick=()=>go(8);
 $('again').onclick=()=>{location.hash='';location.reload()};
 const h=+location.hash.slice(1);if(h>0&&h<9)go(h);

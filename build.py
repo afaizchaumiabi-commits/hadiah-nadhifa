@@ -14,7 +14,7 @@ fotos=[f for f in fotos if not f.startswith('foto/L')]
 open('media.js','w').write('window.MEDIA='+json.dumps({'fotos':fotos,'videos':vids,'sync':sync})+';')
 src=json.load(open('chats_src.json'));pk=[6,20,21,38,35,32,31,7,5,25,19,1]
 ch=[{'d':src[i][0]['d'],'m':[{'s':m['s'],'t':m['t'],'x':m['x']} for m in src[i]]} for i in pk]
-open('chats.js','w',encoding='utf-8').write(open('chats_tpl.js',encoding='utf-8').read().replace('/*CHATS*/[]',json.dumps(ch,ensure_ascii=False)).replace('/*STAR*/[]',open('star.json',encoding='utf-8').read()))
+open('chats.js','w',encoding='utf-8').write(open('chats_tpl.js',encoding='utf-8').read().replace('/*CHATS*/[]',json.dumps(ch,ensure_ascii=False)))
 h=open('index.template.html',encoding='utf-8').read()
 h=h.replace('/*LETTER*/[]',json.dumps(letter,ensure_ascii=False)).replace('/*MSGS*/[]',json.dumps(msgs,ensure_ascii=False)).replace('/*STATS*/{}',json.dumps(stats))
 open('index.html','w',encoding='utf-8').write(h)
