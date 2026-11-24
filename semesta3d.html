@@ -455,6 +455,9 @@
       sceneMode: 'island', // 'island' | 'house'
       isDayMode: false,    // false = Romantic Maroon-Gold Twilight (default), true = Golden Sunny Day
       hasKey: false,
+      isSwinging: false,
+      swingTime: 0,
+      swingBoost: 0,
       candlesLit: true,
       targetPos: null,
       nearbyAction: null,
@@ -491,178 +494,266 @@
     const particles = [];
 
     // ==========================================
-    // 5. CHARACTER BUILDER (NADHIFA WITH HIJAB & GLASSES)
+    // 5. CHARACTER BUILDER (CUTE CHIBI NADHIFA & AFA)
     // ==========================================
     function createChibiCharacter(opts) {
       const group = new THREE.Group();
 
-      // Drop Shadow Blob
-      const shadowGeo = new THREE.CircleGeometry(0.52, 24);
-      const shadowMat = new THREE.MeshBasicMaterial({ color: 0x120307, transparent: true, opacity: 0.28 });
+      // Soft Drop Shadow Blob
+      const shadowGeo = new THREE.CircleGeometry(0.46, 24);
+      const shadowMat = new THREE.MeshBasicMaterial({ color: 0x120307, transparent: true, opacity: 0.25 });
       const shadow = new THREE.Mesh(shadowGeo, shadowMat);
       shadow.rotation.x = -Math.PI / 2;
       shadow.position.y = 0.02;
       group.add(shadow);
 
-      // Legs
-      const legGeo = new THREE.CylinderGeometry(0.11, 0.1, 0.42, 12);
-      const skinMat = new THREE.MeshStandardMaterial({ color: '#ffdec7', roughness: 0.6 });
-      const shoeMat = new THREE.MeshStandardMaterial({ color: opts.shoeColor || '#2a0812', roughness: 0.5 });
+      const skinMat = new THREE.MeshStandardMaterial({ color: '#ffe2ce', roughness: 0.52 });
+      const shoeMat = new THREE.MeshStandardMaterial({ color: opts.shoeColor || '#2a0812', roughness: 0.45 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: opts.pantsColor || '#1e1b24', roughness: 0.72 });
 
+      // Legs (Clean rounded capsules / cylinders)
+      const legGeo = new THREE.CylinderGeometry(0.085, 0.078, 0.34, 14);
       const leftLeg = new THREE.Group();
-      leftLeg.position.set(-0.16, 0.42, 0);
-      const lMesh = new THREE.Mesh(legGeo, skinMat);
-      lMesh.position.y = -0.18;
-      const lShoe = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.3), shoeMat);
-      lShoe.position.set(0, -0.36, 0.04);
+      leftLeg.position.set(-0.13, 0.38, 0);
+      const lMesh = new THREE.Mesh(legGeo, opts.hasSkirt ? skinMat : pantsMat);
+      lMesh.position.y = -0.15;
+      const lShoe = new THREE.Mesh(new THREE.SphereGeometry(0.115, 14, 12), shoeMat);
+      lShoe.scale.set(0.95, 0.65, 1.35);
+      lShoe.position.set(0, -0.32, 0.04);
       leftLeg.add(lMesh, lShoe);
 
       const rightLeg = new THREE.Group();
-      rightLeg.position.set(0.16, 0.42, 0);
-      const rMesh = new THREE.Mesh(legGeo, skinMat);
-      rMesh.position.y = -0.18;
-      const rShoe = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.3), shoeMat);
-      rShoe.position.set(0, -0.36, 0.04);
+      rightLeg.position.set(0.13, 0.38, 0);
+      const rMesh = new THREE.Mesh(legGeo, opts.hasSkirt ? skinMat : pantsMat);
+      rMesh.position.y = -0.15;
+      const rShoe = new THREE.Mesh(new THREE.SphereGeometry(0.115, 14, 12), shoeMat);
+      rShoe.scale.set(0.95, 0.65, 1.35);
+      rShoe.position.set(0, -0.32, 0.04);
       rightLeg.add(rMesh, rShoe);
       group.add(leftLeg, rightLeg);
 
-      // Torso / Outfit
-      const torsoMat = new THREE.MeshStandardMaterial({ color: opts.shirtColor, roughness: 0.65 });
-      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.36, 0.56, 16), torsoMat);
-      torso.position.y = 0.68;
+      // Torso / Cute Chibi Body
+      const torsoMat = new THREE.MeshStandardMaterial({ color: opts.shirtColor, roughness: 0.62 });
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.28, 0.48, 18), torsoMat);
+      torso.position.y = 0.62;
       torso.castShadow = true;
       group.add(torso);
 
+      // Collar / Polo Neckline detail
+      if (!opts.hasHijab) {
+        const collarMat = new THREE.MeshStandardMaterial({ color: '#101828', roughness: 0.6 });
+        const collar = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.032, 10, 20), collarMat);
+        collar.rotation.x = Math.PI / 2;
+        collar.position.set(0, 0.85, 0.01);
+        group.add(collar);
+      }
+
       // Gold buttons on Nadhifa's blouse
       if (opts.hasHijab) {
-        const btnMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.8, roughness: 0.2 });
-        [0.82, 0.68, 0.54].forEach(by => {
-          const btn = new THREE.Mesh(new THREE.SphereGeometry(0.032, 10, 10), btnMat);
-          btn.position.set(0, by, 0.31);
+        const btnMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.85, roughness: 0.2 });
+        [0.74, 0.62, 0.50].forEach(by => {
+          const btn = new THREE.Mesh(new THREE.SphereGeometry(0.025, 10, 10), btnMat);
+          btn.position.set(0, by, 0.25);
           group.add(btn);
         });
       }
 
       if (opts.hasSkirt) {
-        const skirtMat = new THREE.MeshStandardMaterial({ color: opts.skirtColor || '#1e1924', roughness: 0.7 });
-        const skirt = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.45, 0.36, 18), skirtMat);
-        skirt.position.y = 0.42;
+        const skirtMat = new THREE.MeshStandardMaterial({ color: opts.skirtColor || '#18151e', roughness: 0.68 });
+        const skirt = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.36, 0.34, 20), skirtMat);
+        skirt.position.y = 0.38;
         skirt.castShadow = true;
         group.add(skirt);
       }
 
-      // Arms
-      const armGeo = new THREE.CylinderGeometry(0.085, 0.085, 0.42, 12);
+      // Arms with cute rounded hands
+      const armGeo = new THREE.CylinderGeometry(0.068, 0.062, 0.34, 12);
+      const handGeo = new THREE.SphereGeometry(0.068, 12, 12);
+
       const leftArm = new THREE.Group();
-      leftArm.position.set(-0.36, 0.88, 0);
+      leftArm.position.set(-0.28, 0.80, 0);
       const laMesh = new THREE.Mesh(armGeo, torsoMat);
-      laMesh.position.y = -0.18;
-      laMesh.rotation.z = 0.22;
-      leftArm.add(laMesh);
+      laMesh.position.set(-0.04, -0.15, 0);
+      laMesh.rotation.z = 0.24;
+      const lHand = new THREE.Mesh(handGeo, skinMat);
+      lHand.position.set(-0.08, -0.32, 0);
+      leftArm.add(laMesh, lHand);
 
       const rightArm = new THREE.Group();
-      rightArm.position.set(0.36, 0.88, 0);
+      rightArm.position.set(0.28, 0.80, 0);
       const raMesh = new THREE.Mesh(armGeo, torsoMat);
-      raMesh.position.y = -0.18;
-      raMesh.rotation.z = -0.22;
-      rightArm.add(raMesh);
+      raMesh.position.set(0.04, -0.15, 0);
+      raMesh.rotation.z = -0.24;
+      const rHand = new THREE.Mesh(handGeo, skinMat);
+      rHand.position.set(0.08, -0.32, 0);
+      rightArm.add(raMesh, rHand);
       group.add(leftArm, rightArm);
 
-      // Head Group
+      // Head Group (Cute Chibi Proportions, slightly fuller cheeks)
       const headGroup = new THREE.Group();
-      headGroup.position.y = 1.32;
+      headGroup.position.y = 1.24;
 
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.41, 24, 24), skinMat);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.39, 28, 28), skinMat);
+      head.scale.set(1.04, 0.96, 0.98);
       head.castShadow = true;
       headGroup.add(head);
 
-      // Eyes & Blush
-      const eyeMat = new THREE.MeshStandardMaterial({ color: '#1e1b2e', roughness: 0.15, metalness: 0.1 });
+      // Expressive Anime/Chibi Eyes + Eyebrows + Cute Smile
+      const eyeMat = new THREE.MeshStandardMaterial({ color: '#1b1726', roughness: 0.12, metalness: 0.1 });
       const shineMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
+      const browMat = new THREE.MeshStandardMaterial({ color: '#241c18', roughness: 0.6 });
 
-      [-0.14, 0.14].forEach(ex => {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.052, 12, 12), eyeMat);
-        eye.position.set(ex, 0.01, 0.375);
-        const shine = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 8), shineMat);
-        shine.position.set(ex + 0.016, 0.03, 0.418);
-        headGroup.add(eye, shine);
+      [-0.135, 0.135].forEach(ex => {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.048, 14, 14), eyeMat);
+        eye.scale.set(0.95, 1.15, 0.65);
+        eye.position.set(ex, 0.005, 0.365);
+
+        const shineBig = new THREE.Mesh(new THREE.SphereGeometry(0.017, 8, 8), shineMat);
+        shineBig.position.set(ex + 0.014, 0.025, 0.395);
+
+        const shineSmall = new THREE.Mesh(new THREE.SphereGeometry(0.009, 8, 8), shineMat);
+        shineSmall.position.set(ex - 0.012, -0.012, 0.395);
+
+        // Soft Eyebrows
+        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.085, 0.016, 0.015), browMat);
+        brow.position.set(ex, 0.085, 0.372);
+        brow.rotation.z = ex > 0 ? -0.08 : 0.08;
+        brow.rotation.y = ex > 0 ? 0.25 : -0.25;
+
+        headGroup.add(eye, shineBig, shineSmall, brow);
       });
 
-      const blushMat = new THREE.MeshBasicMaterial({ color: '#e5738a', transparent: true, opacity: 0.65 });
-      [-0.22, 0.22].forEach(bx => {
-        const blush = new THREE.Mesh(new THREE.CircleGeometry(0.06, 16), blushMat);
-        blush.position.set(bx, -0.06, 0.37);
-        blush.rotation.y = bx > 0 ? 0.35 : -0.35;
+      // Cute Curved Smile Mouth
+      const mouthCurve = new THREE.TorusGeometry(0.042, 0.009, 8, 16, Math.PI * 0.75);
+      const mouthMat = new THREE.MeshBasicMaterial({ color: '#b85066' });
+      const mouth = new THREE.Mesh(mouthCurve, mouthMat);
+      mouth.position.set(0, -0.075, 0.376);
+      mouth.rotation.z = Math.PI * 1.125;
+      headGroup.add(mouth);
+
+      // Soft Rosy Blush
+      const blushMat = new THREE.MeshBasicMaterial({ color: '#f07892', transparent: true, opacity: 0.55 });
+      [-0.21, 0.21].forEach(bx => {
+        const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 16), blushMat);
+        blush.scale.set(1.2, 0.75, 1);
+        blush.position.set(bx, -0.05, 0.345);
+        blush.rotation.y = bx > 0 ? 0.42 : -0.42;
         headGroup.add(blush);
       });
 
-      // Cute Glasses (both Nadhifa & Afa wear glasses in their photos!)
+      // Cute Cat-Eye / Round Glasses
       if (opts.hasGlasses) {
-        const glassMat = new THREE.MeshStandardMaterial({ color: opts.glassColor || '#4a2c18', metalness: 0.4, roughness: 0.3 });
-        [-0.145, 0.145].forEach(gx => {
-          const rim = new THREE.Mesh(new THREE.TorusGeometry(0.092, 0.013, 10, 24), glassMat);
-          rim.position.set(gx, 0.01, 0.415);
-          rim.rotation.y = gx > 0 ? 0.18 : -0.18;
-          headGroup.add(rim);
+        const glassMat = new THREE.MeshStandardMaterial({
+          color: opts.glassColor || '#5c341d',
+          metalness: 0.35,
+          roughness: 0.25
         });
-        const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.014, 0.014), glassMat);
-        bridge.position.set(0, 0.02, 0.425);
+        const lensMat = new THREE.MeshPhysicalMaterial({
+          color: '#ffffff',
+          transparent: true,
+          opacity: 0.16,
+          roughness: 0.1
+        });
+        [-0.138, 0.138].forEach(gx => {
+          const rimGroup = new THREE.Group();
+          rimGroup.position.set(gx, 0.008, 0.398);
+          rimGroup.rotation.y = gx > 0 ? 0.22 : -0.22;
+          if (opts.catEyeGlasses) {
+            rimGroup.rotation.z = gx > 0 ? 0.12 : -0.12;
+          }
+          const rim = new THREE.Mesh(new THREE.TorusGeometry(0.086, 0.011, 10, 24), glassMat);
+          if (opts.catEyeGlasses) rim.scale.set(1.12, 0.92, 1);
+          const lens = new THREE.Mesh(new THREE.CircleGeometry(0.082, 20), lensMat);
+          if (opts.catEyeGlasses) lens.scale.set(1.12, 0.92, 1);
+          rimGroup.add(rim, lens);
+          headGroup.add(rimGroup);
+        });
+        const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.012, 0.012), glassMat);
+        bridge.position.set(0, 0.018, 0.408);
         headGroup.add(bridge);
       }
 
       if (opts.hasHijab) {
-        // Graceful Layered Hijab for Nadhifa
-        const hijabMat = new THREE.MeshStandardMaterial({ color: opts.hijabColor || '#1c1821', roughness: 0.72 });
+        // Neat, Graceful Hijab Framing the Face (No clipping over eyes!)
+        const hijabMat = new THREE.MeshStandardMaterial({ color: opts.hijabColor || '#18151e', roughness: 0.72 });
 
-        // Outer hijab hood framing face cleanly (open front)
-        const hood = new THREE.Mesh(
-          new THREE.SphereGeometry(0.455, 28, 24, 0, Math.PI * 2, 0, Math.PI * 0.78),
-          hijabMat
-        );
-        hood.position.set(0, 0.02, -0.035);
-        hood.rotation.x = -0.16;
+        // Back & top hijab dome shifted backward so face is completely clear
+        const hood = new THREE.Mesh(new THREE.SphereGeometry(0.435, 28, 24), hijabMat);
+        hood.scale.set(1.06, 1.04, 1.08);
+        hood.position.set(0, 0.02, -0.075);
         hood.castShadow = true;
         headGroup.add(hood);
 
-        // Inner hijab cap / ciput band across forehead
-        const capBand = new THREE.Mesh(
-          new THREE.TorusGeometry(0.415, 0.042, 12, 28),
-          hijabMat
-        );
-        capBand.position.set(0, 0.01, 0.05);
-        capBand.rotation.y = 0.0;
-        headGroup.add(capBand);
+        // Clean Hijab Frame Ring around the outer perimeter of the face
+        const faceFrame = new THREE.Mesh(new THREE.TorusGeometry(0.365, 0.055, 14, 32), hijabMat);
+        faceFrame.scale.set(1.04, 1.02, 1.15);
+        faceFrame.position.set(0, 0.01, 0.085);
+        headGroup.add(faceFrame);
 
-        // Neck wrap scarf collar
-        const neckScarf = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.32, 0.42, 0.26, 20),
-          hijabMat
-        );
-        neckScarf.position.set(0, -0.36, -0.01);
+        // Soft chin/neck scarf wrap
+        const neckScarf = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.36, 0.24, 20), hijabMat);
+        neckScarf.position.set(0, -0.34, -0.02);
         headGroup.add(neckScarf);
 
-        // Draped pashmina chest fold
+        // Neat chest pashmina drape (attached to torso so it doesn't float awkwardly)
         const chestDrape = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.34, 0.44, 0.34, 18, 1, false, -0.9, 1.8),
+          new THREE.ConeGeometry(0.34, 0.42, 20),
           hijabMat
         );
-        chestDrape.position.set(0, -0.52, 0.04);
-        headGroup.add(chestDrape);
+        chestDrape.scale.set(1.05, 1, 0.72);
+        chestDrape.position.set(0, 0.72, 0.11);
+        group.add(chestDrape);
 
-        // Gold Birthday Tiara / Crown resting gracefully on top of hijab
-        const crownMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.85, roughness: 0.18, emissive: '#b45309', emissiveIntensity: 0.25 });
-        const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.11, 0.13, 8), crownMat);
-        crown.position.set(0, 0.51, 0.02);
+        // Cute Gold Birthday Crown on top of Hijab
+        const crownMat = new THREE.MeshStandardMaterial({
+          color: '#f3e1a6',
+          metalness: 0.85,
+          roughness: 0.18,
+          emissive: '#b45309',
+          emissiveIntensity: 0.25
+        });
+        const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.10, 0.11, 8), crownMat);
+        crown.position.set(0, 0.48, -0.04);
         headGroup.add(crown);
       } else {
-        // Hair for Afa
-        const hairMat = new THREE.MeshStandardMaterial({ color: opts.hairColor || '#181512', roughness: 0.7 });
-        const hairBack = new THREE.Mesh(new THREE.SphereGeometry(0.44, 24, 24), hairMat);
-        hairBack.position.set(0, 0.05, -0.05);
-        const bangs = new THREE.Mesh(new THREE.SphereGeometry(0.42, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.42), hairMat);
-        bangs.position.set(0, 0.08, 0.04);
-        bangs.rotation.x = 0.22;
-        headGroup.add(hairBack, bangs);
+        // Stylish Two-Block / Curtain Hair for Afa (matches photo!)
+        const hairMat = new THREE.MeshStandardMaterial({ color: opts.hairColor || '#171412', roughness: 0.65 });
+
+        // Back & crown hair volume (shifted back so face is clear)
+        const hairBack = new THREE.Mesh(new THREE.SphereGeometry(0.425, 26, 24), hairMat);
+        hairBack.scale.set(1.06, 1.02, 1.06);
+        hairBack.position.set(0, 0.04, -0.075);
+        hairBack.castShadow = true;
+        headGroup.add(hairBack);
+
+        // Top hair cap above forehead
+        const hairTop = new THREE.Mesh(
+          new THREE.SphereGeometry(0.415, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.44),
+          hairMat
+        );
+        hairTop.position.set(0, 0.05, -0.01);
+        hairTop.rotation.x = -0.12;
+        headGroup.add(hairTop);
+
+        // Two-part curtain bangs framing forehead nicely
+        const leftBang = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), hairMat);
+        leftBang.scale.set(1.15, 0.85, 0.55);
+        leftBang.position.set(-0.16, 0.26, 0.30);
+        leftBang.rotation.z = 0.38;
+
+        const rightBang = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), hairMat);
+        rightBang.scale.set(1.15, 0.85, 0.55);
+        rightBang.position.set(0.16, 0.26, 0.30);
+        rightBang.rotation.z = -0.38;
+
+        // Cute sideburns
+        [-0.38, 0.38].forEach(sx => {
+          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.14), hairMat);
+          sideHair.position.set(sx, 0.02, 0.04);
+          headGroup.add(sideHair);
+        });
+
+        headGroup.add(leftBang, rightBang);
       }
 
       group.add(headGroup);
@@ -670,15 +761,16 @@
       return group;
     }
 
-    // Player = Nadhifa (Maroon blouse, black hijab, tortoiseshell glasses, gold crown!)
+    // Player = Nadhifa (Maroon blouse with gold buttons, neat black hijab, tortoiseshell cat-eye glasses, gold crown!)
     const player = createChibiCharacter({
       hasHijab: true,
-      hijabColor: '#1a1620',
+      hijabColor: '#18151e',
       hasGlasses: true,
-      glassColor: '#5c341d',
+      catEyeGlasses: true,
+      glassColor: '#6b3e23',
       shirtColor: '#5e0f25',
       hasSkirt: true,
-      skirtColor: '#1c1822',
+      skirtColor: '#18151e',
       shoeColor: '#e8d9a8'
     });
     player.position.set(0, 0, 7.5);
@@ -855,10 +947,12 @@
       const afa = createChibiCharacter({
         hasHijab: false,
         hasGlasses: true,
-        glassColor: '#1e1b18',
-        shirtColor: '#1e293b',
-        shoeColor: '#0f172a',
-        hairColor: '#181512'
+        catEyeGlasses: false,
+        glassColor: '#1f1d24',
+        shirtColor: '#16284c',
+        pantsColor: '#18181f',
+        shoeColor: '#f5f5f4',
+        hairColor: '#161311'
       });
       afa.position.set(-3.2, 0, 1.4);
       afa.rotation.y = 0.5;
@@ -989,6 +1083,11 @@
               </div>
             `);
           }
+        },
+        {
+          id: 'swing', scene: 'island', pos: new THREE.Vector3(-6.2, 0, 6.2), radius: 2.4,
+          icon: '🎠', label: 'Naik Ayunan Pantai',
+          action: () => toggleSwing()
         },
         {
           id: 'jukebox', scene: 'island', pos: new THREE.Vector3(4.5, 0, 3.2), radius: 2.2,
@@ -1287,7 +1386,47 @@
     // ==========================================
     // 9. SCENE SWITCHING & LIGHTING MODES
     // ==========================================
+    function toggleSwing() {
+      state.isSwinging = !state.isSwinging;
+      state.targetPos = null;
+      const { leftLeg, rightLeg, leftArm, rightArm, headGroup } = player.userData;
+
+      if (state.isSwinging) {
+        state.swingTime = 0;
+        state.swingBoost = 0.42;
+        audio.playSfx('pop');
+        // Attach player cleanly onto the swing plank
+        beachSwingSeat.add(player);
+        player.position.set(0, -1.46, 0.03);
+        player.rotation.set(0, 0, 0);
+        // Cute sitting pose on swing
+        leftLeg.rotation.x = -Math.PI / 2.2;
+        rightLeg.rotation.x = -Math.PI / 2.2;
+        leftArm.rotation.x = -0.55;
+        rightArm.rotation.x = -0.55;
+        leftArm.rotation.z = -0.18;
+        rightArm.rotation.z = 0.18;
+        headGroup.position.y = 1.24;
+
+        spawnHearts(new THREE.Vector3(-6.2, 1.8, 6.2), 16);
+        showToast('🎠 Asyik! Naik ayunan! Tekan Spasi/Dorong untuk ayun lebih tinggi.');
+      } else {
+        // Detach player back to world scene beside swing
+        scene.add(player);
+        player.position.set(-4.7, 0, 6.6);
+        player.rotation.set(0, 0.7, 0);
+        leftLeg.rotation.x = 0;
+        rightLeg.rotation.x = 0;
+        leftArm.rotation.x = 0;
+        rightArm.rotation.x = 0;
+        leftArm.rotation.z = 0;
+        rightArm.rotation.z = 0;
+        showToast('✨ Turun dari ayunan pantai.');
+      }
+    }
+
     function enterHouse() {
+      if (state.isSwinging) toggleSwing();
       audio.playSfx('door');
       state.sceneMode = 'house';
       islandGroup.visible = false;
@@ -1349,7 +1488,22 @@
     // 10. MOVEMENT (KEYBOARD, TOUCH D-PAD & TAP)
     // ==========================================
     const keys = {};
-    window.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; state.targetPos = null; });
+    window.addEventListener('keydown', e => {
+      if (state.isSwinging) {
+        if (e.code === 'Space' || e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') {
+          e.preventDefault();
+          state.swingBoost = Math.min(state.swingBoost + 0.24, 0.85);
+          spawnHearts(new THREE.Vector3(-6.2, 1.9, 6.2), 6);
+          return;
+        }
+        if (e.key === 'Escape' || e.key.toLowerCase() === 's' || e.key === 'ArrowDown') {
+          toggleSwing();
+          return;
+        }
+      }
+      keys[e.key.toLowerCase()] = true;
+      state.targetPos = null;
+    });
     window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
     document.querySelectorAll('.dpad-btn').forEach(btn => {
@@ -1379,6 +1533,11 @@
     renderer.domElement.addEventListener('pointerup', e => {
       const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
       if (dist > 8) return;
+      if (state.isSwinging) {
+        state.swingBoost = Math.min(state.swingBoost + 0.22, 0.85);
+        spawnHearts(new THREE.Vector3(-6.2, 1.9, 6.2), 6);
+        return;
+      }
       pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(pointer, camera);
@@ -1785,7 +1944,15 @@
         keyMesh.position.y = 0.85 + Math.sin(elapsed * 3.5) * 0.12;
       }
       if (mochiTail) mochiTail.rotation.z = Math.sin(elapsed * 5) * 0.35;
-      if (beachSwingSeat) beachSwingSeat.rotation.x = Math.sin(elapsed * 1.8) * 0.22;
+      if (beachSwingSeat) {
+        if (state.isSwinging) {
+          state.swingTime += dt * 2.7;
+          state.swingBoost = THREE.MathUtils.lerp(state.swingBoost, 0.45, dt * 0.6);
+          beachSwingSeat.rotation.x = Math.sin(state.swingTime) * state.swingBoost;
+        } else {
+          beachSwingSeat.rotation.x = Math.sin(elapsed * 1.8) * 0.16;
+        }
+      }
       if (state.candlesLit && candleFlames.length) {
         candleFlames.forEach((f, idx) => {
           f.scale.setScalar(1 + Math.sin(elapsed * 18 + idx) * 0.16);
@@ -1809,6 +1976,35 @@
       }
 
       // Player Movement Logic
+      if (state.isSwinging) {
+        // Gentle leg kick while swinging
+        const { leftLeg, rightLeg, headGroup } = player.userData;
+        const kick = Math.sin(state.swingTime) * 0.28;
+        leftLeg.rotation.x = -Math.PI / 2.2 + kick;
+        rightLeg.rotation.x = -Math.PI / 2.2 + kick;
+        headGroup.rotation.x = -beachSwingSeat.rotation.x * 0.35;
+
+        // Smooth camera tracking on swing
+        const worldPlayerPos = new THREE.Vector3();
+        player.getWorldPosition(worldPlayerPos);
+        const camOffset = new THREE.Vector3().subVectors(camera.position, controls.target);
+        controls.target.lerp(new THREE.Vector3(worldPlayerPos.x, worldPlayerPos.y + 0.95, worldPlayerPos.z), 0.12);
+        camera.position.copy(controls.target).add(camOffset);
+        controls.update();
+
+        // Show dismount button
+        const swingAction = interactables.find(i => i.id === 'swing');
+        const promptEl = document.getElementById('interact-prompt');
+        if (swingAction) {
+          state.nearbyAction = swingAction;
+          document.getElementById('interact-icon').textContent = '⬇️';
+          document.getElementById('interact-label').textContent = 'Turun dari Ayunan';
+          promptEl.classList.remove('opacity-0', 'translate-y-2');
+        }
+        renderer.render(scene, camera);
+        return;
+      }
+
       const moveVec = new THREE.Vector3();
       if (keys['w'] || keys['arrowup']) moveVec.z -= 1;
       if (keys['s'] || keys['arrowdown']) moveVec.z += 1;
@@ -1855,7 +2051,7 @@
         leftArm.rotation.x *= 0.85;
         rightArm.rotation.x *= 0.85;
         player.position.y *= 0.85;
-        headGroup.position.y = 1.32 + Math.sin(elapsed * 2.5) * 0.02;
+        headGroup.position.y = 1.24 + Math.sin(elapsed * 2.5) * 0.02;
       }
 
       // Smooth Camera Follow
