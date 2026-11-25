@@ -35,7 +35,7 @@
     .font-cg { font-family: var(--cg); }
 
     .glass-maroon {
-      background: rgba(36, 7, 16, 0.82);
+      background: rgba(36, 7, 16, 0.84);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(232, 217, 168, 0.34);
@@ -83,7 +83,6 @@
     #modal-body::-webkit-scrollbar { width: 5px; }
     #modal-body::-webkit-scrollbar-thumb { background: rgba(232, 217, 168, 0.42); border-radius: 999px; }
 
-    /* Virtual Joystick */
     #joystick-zone {
       position: fixed;
       bottom: 22px;
@@ -112,6 +111,14 @@
       pointer-events: none;
       transition: transform 0.05s linear;
     }
+
+    /* Photobooth Filter Classes for Live Video Preview */
+    .pb-filter-none { filter: none; }
+    .pb-filter-warm { filter: sepia(0.28) saturate(1.25) contrast(1.05) brightness(1.04); }
+    .pb-filter-cream { filter: sepia(0.18) contrast(0.95) brightness(1.08) saturate(0.92); }
+    .pb-filter-noir { filter: grayscale(1) contrast(1.22) brightness(0.96); }
+    .pb-filter-rose { filter: sepia(0.22) hue-rotate(-14deg) saturate(1.3) brightness(1.03); }
+    .pb-filter-vintage { filter: sepia(0.42) contrast(1.08) brightness(0.95) saturate(0.85); }
   </style>
 </head>
 <body>
@@ -120,7 +127,7 @@
   <audio id="mp3-player" preload="metadata"></audio>
 
   <!-- Camera Flash Overlay for Photobooth -->
-  <div id="flash-overlay" class="fixed inset-0 z-50 bg-white pointer-events-none opacity-0 transition-opacity duration-200"></div>
+  <div id="flash-overlay" class="fixed inset-0 z-50 bg-white pointer-events-none opacity-0 transition-opacity duration-150"></div>
 
   <!-- 3D Viewport -->
   <div id="canvas-container"></div>
@@ -139,7 +146,7 @@
         Pulau Semesta Nadhifa
       </h1>
       <p class="text-sm leading-relaxed mb-5" style="color: #e4d5da;">
-        Semesta kecil 3D yang kubangun khusus di hari ulang tahunmu ke-22. Temukan <b>Kunci Emas</b>, gandeng tangan Afa, tiup 22 lilin, dan abadikan kenangan kita.
+        Semesta kecil 3D yang kubangun khusus di hari ulang tahunmu ke-22. Temukan <b>Kunci Emas</b>, gandeng tangan Afa, tiup 22 lilin, dan abadikan kenangan kita di photobooth.
       </p>
 
       <div class="grid grid-cols-3 gap-2 text-xs mb-6">
@@ -154,9 +161,9 @@
           <div class="text-[11px] opacity-75">Putar & Zoom 3D</div>
         </div>
         <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
-          <div class="text-lg mb-1">✨</div>
-          <div class="font-semibold" style="color: var(--gold);">6 Kejutan</div>
-          <div class="text-[11px] opacity-75">Misi Ulang Tahun</div>
+          <div class="text-lg mb-1">📸</div>
+          <div class="font-semibold" style="color: var(--gold);">Photobooth Pro</div>
+          <div class="text-[11px] opacity-75">Jeda, Frame & Filter</div>
         </div>
       </div>
 
@@ -173,7 +180,6 @@
 
   <!-- Top HUD Bar -->
   <div id="hud-top" class="fixed top-0 left-0 right-0 z-20 p-3 sm:p-4 flex flex-wrap items-start justify-between gap-2 pointer-events-none opacity-0 transition-opacity duration-500">
-    <!-- Location & Quest Pill -->
     <div class="glass-maroon rounded-2xl px-3.5 py-2.5 flex items-center gap-3 pointer-events-auto max-w-[94vw] sm:max-w-md">
       <div id="location-badge" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
            style="background: linear-gradient(135deg, #8a1a3d, #5e0f25); border: 1px solid rgba(232, 217, 168, 0.45);">
@@ -191,7 +197,6 @@
       </div>
     </div>
 
-    <!-- Action Controls -->
     <div class="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
       <a href="index.html" class="glass-maroon px-3 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1" title="Kartu Utama">
         <span>🎂</span> <span class="hidden md:inline">Kartu</span>
@@ -236,7 +241,7 @@
 
   <!-- Universal Modal Dialog -->
   <div id="modal-backdrop" class="fixed inset-0 z-40 hidden items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-    <div id="modal-card" class="glass-maroon max-w-lg w-full rounded-3xl p-5 sm:p-6 relative max-h-[88vh] flex flex-col">
+    <div id="modal-card" class="glass-maroon max-w-2xl w-full rounded-3xl p-5 sm:p-6 relative max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between pb-3 mb-4" style="border-bottom: 1px solid rgba(232, 217, 168, 0.25);">
         <div class="flex items-center gap-2.5 min-w-0">
           <span id="modal-icon" class="text-2xl shrink-0">💌</span>
@@ -285,7 +290,7 @@
       "Semoga di usia yang baru ini kamu bisa semakin mengenal diri kamu sendiri, semakin percaya sama kemampuan kamu, semakin berani mengambil kesempatan baik, dan semakin yakin bahwa kamu pantas mendapatkan banyak hal baik dalam hidup.",
       "Aku berdoa semoga Allah selalu menjaga kamu di mana pun kamu berada, memberikan kesehatan untuk tubuh kamu, ketenangan untuk hati dan pikiran kamu, melancarkan setiap urusan kamu, melapangkan rezeki kamu, memudahkan pekerjaan dan segala cita cita kamu, mempertemukan kamu dengan orang orang yang tulus, serta menjauhkan kamu dari hal hal yang bisa menyakiti dan membuat kamu kehilangan kebahagiaan, semoga setiap doa yang selama ini kamu simpan diam diam bisa menemukan jalannya untuk terkabul, semoga hal hal yang sedang kamu usahakan diberikan hasil terbaik, dan semoga kamu selalu punya alasan untuk tersenyum setiap harinya.",
       "Aku juga berharap kamu bisa lebih sering memberikan waktu untuk diri sendiri, nggak harus selalu kuat, nggak harus selalu menyelesaikan semuanya dalam satu waktu, nggak harus selalu memikirkan perasaan semua orang sampai lupa memperhatikan diri kamu sendiri, kalau kamu lelah, istirahatlah sayang, kalau kamu sedih, kamu boleh menangis, kalau ada sesuatu yang mengganggu pikiran kamu, kamu boleh cerita, kamu nggak perlu merasa harus menyimpan semuanya sendirian, aku ingin kamu bisa menjalani hidup dengan lebih ringan dan merasa bahwa kamu juga layak mendapatkan perhatian, pengertian, dan kasih sayang.",
-      "Terima kasih sudah menjadi kamu yang aku kenal sekarang, terima kasih untuk semua cerita kecil yang kamu bagikan, semua perhatian yang kamu berikan, semua candaan yang membuat aku tertawa, semua waktu yang kita habiskan bersama, bahkan untuk hal hal sederhana yang mungkin terlihat biasa tetapi selalu punya arti buat aku, aku suka mendecarkan cerita kamu tentang kegiatan sehari hari, tentang pekerjaan, makanan yang kamu inginkan, hal yang membuat kamu kesal, hal yang membuat kamu senang, sampai cerita random yang tiba tiba muncul di tengah obrolan kita, aku ingin terus mengenal kamu lebih dalam, melihat kamu tumbuh, mendukung apa yang ingin kamu capai, dan menemani kamu melewati berbagai bagian kehidupan yang akan datang.",
+      "Terima kasih sudah menjadi kamu yang aku kenal sekarang, terima kasih untuk semua cerita kecil yang kamu bagikan, semua perhatian yang kamu berikan, semua candaan yang membuat aku tertawa, semua waktu yang kita habiskan bersama, bahkan untuk hal hal sederhana yang mungkin terlihat biasa tetapi selalu punya arti buat aku, aku suka mendengarkan cerita kamu tentang kegiatan sehari hari, tentang pekerjaan, makanan yang kamu inginkan, hal yang membuat kamu kesal, hal yang membuat kamu senang, sampai cerita random yang tiba tiba muncul di tengah obrolan kita, aku ingin terus mengenal kamu lebih dalam, melihat kamu tumbuh, mendukung apa yang ingin kamu capai, dan menemani kamu melewati berbagai bagian kehidupan yang akan datang.",
       "Aku tahu hubungan kita juga nggak selalu berjalan sempurna, ada kalanya kita berbeda pendapat, salah memahami satu sama lain, atau tanpa sengaja membuat satu sama lain merasa sedih, tapi aku berharap kita terus punya kemauan untuk saling mendengarkan, saling memahami, dan memperbaiki hal hal yang masih perlu diperbaiki, aku nggak berharap kamu menjadi seseorang yang sempurna, aku juga nggak akan menjanjikan bahwa aku selalu bisa melakukan semuanya dengan benar, tetapi aku ingin terus belajar menjadi pasangan yang lebih baik untuk kamu, seseorang yang bisa kamu ajak berbagi cerita, seseorang yang menghargai perasaan kamu, seseorang yang mendukung langkah kamu, dan seseorang yang bisa membuat kamu merasa dicintai dengan baik.",
       "Semoga di usia 22 tahun ini ada lebih banyak kebahagiaan yang datang kepada kamu, lebih banyak pengalaman yang menyenangkan, lebih banyak kesempatan untuk melakukan hal yang kamu sukai, lebih banyak waktu bersama orang orang yang kamu cintai, dan lebih banyak pencapaian yang bisa kamu banggakan, semoga kamu bisa mewujudkan keinginan keinginan kamu satu per satu, termasuk keinginan kecil yang mungkin belum sempat kamu ceritakan kepada siapa pun, aku ingin melihat kamu bahagia dengan kehidupan yang sedang kamu bangun.",
       "Sayanggg, jangan pernah merasa bahwa kamu harus menjadi orang lain supaya pantas dicintai, aku mencintai kamu sebagai diri kamu sendiri, dengan segala cerita, kebiasaan, kelebihan, kekurangan, mimpi, dan proses yang sedang kamu jalani, terima kasih sudah hadir dalam hidup aku, terima kasih sudah memberikan aku kesempatan untuk mengenal dan menyayangi kamu sejauh ini.",
@@ -339,7 +344,7 @@
         } else if (kind === 'pop') {
           this.playTone(587.33, 0.12, 'sine', 0.08);
         } else if (kind === 'snap') {
-          this.playTone(880, 0.08, 'square', 0.06);
+          this.playTone(880, 0.09, 'square', 0.06);
         }
       }
 
@@ -533,7 +538,6 @@
     rimLight.position.set(-12, 10, -14);
     scene.add(rimLight);
 
-    // Starfield & Crescent Moon for Twilight/Night
     const starGeo = new THREE.BufferGeometry();
     const starCount = 420;
     const starPos = new Float32Array(starCount * 3);
@@ -561,8 +565,8 @@
     // 4. GAME STATE & 6-QUEST TRACKER
     // ==========================================
     const state = {
-      sceneMode: 'island', // 'island' | 'house'
-      lightMode: 0,        // 0 = Senja Emas, 1 = Malam Bintang, 2 = Siang Hangat
+      sceneMode: 'island',
+      lightMode: 0,
       hasKey: false,
       companionFollow: false,
       isSwinging: false,
@@ -580,7 +584,8 @@
         photobooth: false,
         tetris: false
       },
-      finaleShown: false
+      finaleShown: false,
+      savedStrips: []
     };
 
     const QUEST_INFO = [
@@ -588,7 +593,7 @@
       { id: 'telescope', label: 'Intip Bintang Harapan di Teleskop Dermaga' },
       { id: 'cake', label: 'Tiup 22 Lilin Kue Ulang Tahun di dalam rumah' },
       { id: 'letter', label: 'Baca Surat Lengkap dari Afa' },
-      { id: 'photobooth', label: 'Ambil 3 Foto di Photobooth Polaroid' },
+      { id: 'photobooth', label: 'Ambil Foto di Photobooth Pro (Jeda, Frame & Filter)' },
       { id: 'tetris', label: 'Mainkan Arcade Tetris Nadhifa' }
     ];
 
@@ -852,7 +857,6 @@
       return group;
     }
 
-    // Player = Nadhifa
     const player = createChibiCharacter({
       hasHijab: true,
       hijabColor: '#18151e',
@@ -867,7 +871,6 @@
     player.position.set(0, 0, 7.6);
     scene.add(player);
 
-    // Tap-to-Walk Glowing Target Ring on Ground
     const targetRing = new THREE.Mesh(
       new THREE.RingGeometry(0.26, 0.38, 28),
       new THREE.MeshBasicMaterial({ color: '#f7ecc6', side: THREE.DoubleSide, transparent: true, opacity: 0.85 })
@@ -884,7 +887,6 @@
     const sakuraPetals = [];
 
     function buildIsland() {
-      // Ocean Water
       const waterGeo = new THREE.PlaneGeometry(160, 160, 56, 56);
       const waterMat = new THREE.MeshStandardMaterial({
         color: '#196673',
@@ -897,7 +899,6 @@
       waterMesh.position.y = -0.45;
       islandGroup.add(waterMesh);
 
-      // Sandy Beach Base
       const sand = new THREE.Mesh(
         new THREE.CylinderGeometry(13.8, 15.4, 0.7, 48),
         new THREE.MeshStandardMaterial({ map: createSandTexture(), roughness: 0.85 })
@@ -906,7 +907,6 @@
       sand.receiveShadow = true;
       islandGroup.add(sand);
 
-      // Lush Grass Terrace
       const grass = new THREE.Mesh(
         new THREE.CylinderGeometry(11.6, 12.2, 0.4, 48),
         new THREE.MeshStandardMaterial({ map: createGrassTexture(), roughness: 0.8 })
@@ -915,7 +915,6 @@
       grass.receiveShadow = true;
       islandGroup.add(grass);
 
-      // Cobblestone Stepping Path
       const stoneMat = new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.75 });
       for (let z = 7.5; z >= -2.2; z -= 1.05) {
         const stone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.62, 0.08, 12), stoneMat);
@@ -924,7 +923,6 @@
         islandGroup.add(stone);
       }
 
-      // Maroon & Gold Entrance Arch (South)
       const archGroup = new THREE.Group();
       archGroup.position.set(0, 0, 9.4);
       const pillarMat = new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.6 });
@@ -941,7 +939,6 @@
       archGroup.add(topBeam);
       islandGroup.add(archGroup);
 
-      // Garden Lanterns lining the path
       [[-1.35, 5.2], [1.35, 5.2], [-1.35, 1.2], [1.35, 1.2], [-1.35, -2.0], [1.35, -2.0]].forEach(([lx, lz]) => {
         const lantern = new THREE.Group();
         lantern.position.set(lx, 0, lz);
@@ -957,7 +954,6 @@
         islandGroup.add(lantern);
       });
 
-      // Wooden Pier & Star-Gazing Telescope (West Coast)
       const pier = new THREE.Group();
       pier.position.set(-11.4, -0.1, -1.2);
       const woodMat = new THREE.MeshStandardMaterial({ color: '#5c2d16', roughness: 0.8 });
@@ -971,7 +967,6 @@
         leg.position.set(px, -0.35, pz);
         pier.add(leg);
       });
-      // Golden Telescope at Pier Tip
       const tripod = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.22, 1.1, 8), pillarMat);
       tripod.position.set(-2.3, 0.65, 0);
       const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.85, 12), goldMetalMat);
@@ -980,7 +975,6 @@
       pier.add(tripod, scope);
       islandGroup.add(pier);
 
-      // Little Golden Paper Boat floating near Pier
       paperBoat = new THREE.Group();
       paperBoat.position.set(-13.8, -0.35, 1.6);
       const boatHull = new THREE.Mesh(
@@ -997,7 +991,6 @@
       paperBoat.add(boatHull, boatSail);
       islandGroup.add(paperBoat);
 
-      // Welcome Wooden Signboard near Arch
       const signGroup = new THREE.Group();
       signGroup.position.set(2.3, 0, 7.6);
       signGroup.rotation.y = -0.35;
@@ -1012,7 +1005,6 @@
       signGroup.add(signPost, signBoard);
       islandGroup.add(signGroup);
 
-      // Cozy Maroon-Roofed & Gold-Trimmed Cottage
       const cottage = new THREE.Group();
       cottage.position.set(0, 0, -4.6);
 
@@ -1062,7 +1054,6 @@
       });
       islandGroup.add(cottage);
 
-      // Sakura & Emerald Trees
       function addTree(x, z, isSakura = true, scale = 1) {
         const t = new THREE.Group();
         t.position.set(x, 0, z);
@@ -1090,7 +1081,6 @@
       addTree(-4.2, -7.2, false, 0.95);
       addTree(4.6, -7.0, true, 1.0);
 
-      // Falling Sakura Petals
       const petalGeo = new THREE.CircleGeometry(0.075, 6);
       const petalMat = new THREE.MeshBasicMaterial({ color: '#f7b2c7', side: THREE.DoubleSide });
       for (let i = 0; i < 36; i++) {
@@ -1101,7 +1091,6 @@
         sakuraPetals.push(p);
       }
 
-      // Golden Key (Near Sakura tree on the right)
       keyMesh = new THREE.Group();
       keyMesh.position.set(6.5, 0.85, -1.5);
       const goldMat = new THREE.MeshStandardMaterial({ color: '#f7ecc6', metalness: 0.9, roughness: 0.15, emissive: '#d97706', emissiveIntensity: 0.55 });
@@ -1114,7 +1103,6 @@
       keyMesh.add(ring, shaft, bit);
       islandGroup.add(keyMesh);
 
-      // Companion Character: Afa (Pipaww)
       afaMesh = createChibiCharacter({
         hasHijab: false,
         hasGlasses: true,
@@ -1129,7 +1117,6 @@
       afaMesh.rotation.y = 0.5;
       islandGroup.add(afaMesh);
 
-      // White Cat "Mochi" with Maroon Ribbon
       mochiGroup = new THREE.Group();
       mochiGroup.position.set(-2.1, 0, 1.8);
       const catMat = new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.5 });
@@ -1151,7 +1138,6 @@
       mochiGroup.add(catBody, catHead, bow, mochiTail);
       islandGroup.add(mochiGroup);
 
-      // Beach Swing (Southwest Coast)
       const swingGroup = new THREE.Group();
       swingGroup.position.set(-6.2, 0, 6.2);
       swingGroup.rotation.y = 0.7;
@@ -1180,7 +1166,6 @@
       swingGroup.add(beachSwingSeat);
       islandGroup.add(swingGroup);
 
-      // Maroon & Gold Retro Jukebox Stage (East)
       const jukebox = new THREE.Group();
       jukebox.position.set(4.5, 0, 3.2);
       jukebox.rotation.y = -0.6;
@@ -1197,7 +1182,6 @@
       jukebox.add(jbBody, jbTop);
       islandGroup.add(jukebox);
 
-      // Register Island Interactables
       interactables.push(
         {
           id: 'key', scene: 'island', pos: new THREE.Vector3(6.5, 0, -1.5), radius: 2.2,
@@ -1264,7 +1248,7 @@
             openModal('Afa (Pipaww) & Mochi 🐱', '🤍', `
               <div class="glass-cream rounded-2xl p-4 space-y-2.5">
                 <div class="font-bold" style="color: #5e0f25;">Afa (Pipaww):</div>
-                <p>"Selamat ulang tahun ke-22, cantikku! Aku sudah siapin kue ulang tahun 22 lilin, foto-foto kita di dinding, surat lengkapku, mesin Tetris, dan photobooth di dalam rumah. Mau aku temenin keliling pulau sambil gandengan?"</p>
+                <p>"Selamat ulang tahun ke-22, cantikku! Aku sudah siapin kue ulang tahun 22 lilin, foto-foto kita di dinding, surat lengkapku, mesin Tetris, dan photobooth pro di dalam rumah. Mau aku temenin keliling pulau?"</p>
                 <div class="text-xs italic p-2.5 rounded-xl" style="background: rgba(94, 15, 37, 0.08); color: #5e0f25;">
                   💬 Ingat chat kita: "${randomQuote}"
                 </div>
@@ -1274,7 +1258,7 @@
               </div>
               <div class="rounded-2xl p-4" style="background: rgba(94, 15, 37, 0.55); border: 1px solid rgba(232, 217, 168, 0.3);">
                 <div class="font-bold mb-1" style="color: var(--gold);">Mochi 🐱:</div>
-                <p class="text-xs" style="color: #faf3e6;">"Meoww~ Selamat ulang tahun ke-22 Kak Nadhifa! Jangan lupa cek Teleskop di dermaga barat juga ya!"</p>
+                <p class="text-xs" style="color: #faf3e6;">"Meoww~ Selamat ulang tahun ke-22 Kak Nadhifa! Di photobooth bisa atur jeda antar foto, pilih frame, dan ganti filter biar hasilnya makin kece!"</p>
               </div>
             `);
           }
@@ -1353,7 +1337,6 @@
       rightWall.position.set(6.5, 2.1, 0);
       houseGroup.add(backWall, backWainscot, backGoldLine, leftWall, rightWall);
 
-      // Warm Glowing Interior Windows on Side Walls
       const indoorWinMat = new THREE.MeshStandardMaterial({ color: '#fff3c4', emissive: '#f59e0b', emissiveIntensity: 0.45 });
       [-2.2, 2.2].forEach(wz => {
         const wL = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.35, 1.1), indoorWinMat);
@@ -1363,7 +1346,6 @@
         houseGroup.add(wL, wR);
       });
 
-      // Maroon & Gold Round Rug
       const rugOuter = new THREE.Mesh(
         new THREE.CylinderGeometry(3.35, 3.35, 0.03, 36),
         new THREE.MeshStandardMaterial({ color: '#e8d9a8', roughness: 0.85 })
@@ -1377,7 +1359,6 @@
       rugInner.receiveShadow = true;
       houseGroup.add(rugOuter, rugInner);
 
-      // 3 Gold-Framed Wall Memory Frames
       [-3.3, 0, 3.3].forEach((fx) => {
         const frame = new THREE.Mesh(new THREE.BoxGeometry(2.05, 1.55, 0.14), goldTrimMat);
         frame.position.set(fx, 2.45, -5.3);
@@ -1391,7 +1372,6 @@
       });
       applyWallPhotos(0);
 
-      // Center Table + Maroon & Gold 2-Tier Cake with 22 Candles
       const table = new THREE.Mesh(
         new THREE.CylinderGeometry(1.4, 1.3, 0.75, 24),
         new THREE.MeshStandardMaterial({ color: '#470b1d', roughness: 0.55 })
@@ -1413,7 +1393,6 @@
       cakeTop.position.set(0, 1.26, -0.5);
       houseGroup.add(cakeBase, cakeTop);
 
-      // 22 Glowing Birthday Candles
       const cStickMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8' });
       const flameMat = new THREE.MeshBasicMaterial({ color: '#fb923c' });
       for (let i = 0; i < 22; i++) {
@@ -1433,7 +1412,6 @@
         houseGroup.add(stick, flame);
       }
 
-      // Arcade Tetris Cabinet (Left)
       const arcade = new THREE.Group();
       arcade.position.set(-4.5, 0, -2.5);
       arcade.rotation.y = 0.45;
@@ -1447,7 +1425,6 @@
       arcade.add(arcBody, arcTrim, screen);
       houseGroup.add(arcade);
 
-      // Photobooth Station (Right)
       const booth = new THREE.Group();
       booth.position.set(4.5, 0, -2.5);
       booth.rotation.y = -0.45;
@@ -1460,7 +1437,6 @@
       booth.add(boothBox, lens);
       houseGroup.add(booth);
 
-      // Secret Letter Desk (Front Left)
       const desk = new THREE.Group();
       desk.position.set(-3.8, 0, 2.4);
       const deskTop = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.85, 1.1), new THREE.MeshStandardMaterial({ color: '#470b1d', roughness: 0.65 }));
@@ -1473,12 +1449,10 @@
       desk.add(deskTop, envelope, waxSeal);
       houseGroup.add(desk);
 
-      // Exit Mat (South)
       const exitMat = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.06, 1.0), goldTrimMat);
       exitMat.position.set(0, 0.03, 4.6);
       houseGroup.add(exitMat);
 
-      // Register House Interactables
       interactables.push(
         {
           id: 'wallgallery', scene: 'house', pos: new THREE.Vector3(0, 0, -4.1), radius: 2.3,
@@ -1522,7 +1496,7 @@
         },
         {
           id: 'photobooth', scene: 'house', pos: new THREE.Vector3(4.2, 0, -2.2), radius: 2.3,
-          icon: '📸', label: 'Photobooth: Tiga Jepret',
+          icon: '📸', label: 'Photobooth Pro (Jeda, Frame & Filter)',
           action: () => {
             completeQuest('photobooth');
             openPhotoboothModal();
@@ -1590,20 +1564,20 @@
     // 9. COLLISION DETECTION & SCENE CONTROLS
     // ==========================================
     const islandObstacles = [
-      { x: 0, z: -4.6, rx: 2.55, rz: 2.05 }, // Cottage
+      { x: 0, z: -4.6, rx: 2.55, rz: 2.05 },
       { x: -6.8, z: -3.5, r: 0.65 },
       { x: 7.2, z: -3.2, r: 0.65 },
       { x: -7.5, z: 3.8, r: 0.65 },
       { x: 7.4, z: 4.2, r: 0.65 },
-      { x: -6.2, z: 6.2, r: 1.1 },          // Swing frame
-      { x: 4.5, z: 3.2, r: 0.85 }           // Jukebox
+      { x: -6.2, z: 6.2, r: 1.1 },
+      { x: 4.5, z: 3.2, r: 0.85 }
     ];
 
     const houseObstacles = [
-      { x: 0, z: -0.5, r: 1.65 },           // Cake table
-      { x: -4.5, z: -2.5, r: 1.0 },         // Tetris
-      { x: 4.5, z: -2.5, r: 1.0 },          // Photobooth
-      { x: -3.8, z: 2.4, rx: 1.1, rz: 0.75 } // Letter desk
+      { x: 0, z: -0.5, r: 1.65 },
+      { x: -4.5, z: -2.5, r: 1.0 },
+      { x: 4.5, z: -2.5, r: 1.0 },
+      { x: -3.8, z: 2.4, rx: 1.1, rz: 0.75 }
     ];
 
     function resolveCollisions(pos) {
@@ -1693,7 +1667,7 @@
       document.getElementById('btn-companion-follow').classList.add('hidden');
       document.getElementById('location-badge').textContent = '🏠';
       document.getElementById('location-name').textContent = 'Rumah Hangat Kita';
-      document.getElementById('quest-text').textContent = 'Dekati Foto Dinding, Kue 22, Surat, Tetris & Photobooth!';
+      document.getElementById('quest-text').textContent = 'Dekati Foto Dinding, Kue 22, Surat, Tetris & Photobooth Pro!';
       showToast('🏠 Selamat datang di dalam Rumah Hangat Kita!');
     }
 
@@ -1711,7 +1685,6 @@
       document.getElementById('quest-text').textContent = 'Nikmati suasana pulau atau masuk kembali ke rumah.';
     }
 
-    // 3-Mode Lighting Switcher (Senja Emas -> Malam Bintang -> Siang Hangat)
     document.getElementById('btn-theme').addEventListener('click', () => {
       state.lightMode = (state.lightMode + 1) % 3;
       if (state.lightMode === 0) {
@@ -1788,7 +1761,6 @@
     });
     window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
-    // Smooth Analog Joystick Setup
     const joyZone = document.getElementById('joystick-zone');
     const joyKnob = document.getElementById('joystick-knob');
     let joyActive = false;
@@ -1833,7 +1805,6 @@
     joyZone.addEventListener('touchend', resetJoy);
     joyZone.addEventListener('touchcancel', resetJoy);
 
-    // Tap-to-Walk Raycaster
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     let pointerDownPos = { x: 0, y: 0 };
@@ -1866,7 +1837,7 @@
     });
 
     // ==========================================
-    // 11. MODALS: QUESTS, GALLERY, MUSIC, TETRIS, PHOTOBOOTH, FINALE
+    // 11. MODALS: QUESTS, GALLERY, MUSIC, TETRIS, PHOTOBOOTH PRO, FINALE
     // ==========================================
     const modalBackdrop = document.getElementById('modal-backdrop');
     const modalTitle = document.getElementById('modal-title');
@@ -1885,6 +1856,7 @@
       modalBackdrop.classList.add('hidden');
       modalBackdrop.classList.remove('flex');
       if (window.tetrisInterval) clearInterval(window.tetrisInterval);
+      if (window.pbAbort) window.pbAbort();
       if (window.camStream) {
         window.camStream.getTracks().forEach(t => t.stop());
         window.camStream = null;
@@ -1903,7 +1875,6 @@
       window.toastTimer = setTimeout(() => t.classList.add('opacity-0'), 3000);
     }
 
-    // Quest Checklist Modal
     document.getElementById('btn-quest-list').addEventListener('click', () => {
       audio.playSfx('pop');
       const itemsHTML = QUEST_INFO.map(q => {
@@ -1921,7 +1892,6 @@
       `);
     });
 
-    // Galeri & Semestaku Modal
     function openGalleryModal() {
       audio.playSfx('pop');
       const days = Math.floor((new Date() - new Date(STATS_DATA.start || '2025-06-29')) / 864e5);
@@ -1931,6 +1901,19 @@
           <img src="${src}" alt="Kenangan ${i+1}" class="w-full h-full object-cover" loading="lazy" />
         </div>
       `).join('');
+
+      const savedStripsHTML = state.savedStrips.length ? `
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--gold);">Hasil Photobooth Sesi Ini (${state.savedStrips.length})</div>
+          <div class="flex gap-2.5 overflow-x-auto pb-2">
+            ${state.savedStrips.map((url, idx) => `
+              <a href="${url}" download="photobooth-nadhifa-${idx+1}.png" class="shrink-0 block rounded-xl overflow-hidden border-2 border-[#e8d9a8]">
+                <img src="${url}" class="h-36 w-auto object-contain bg-[#1c050b]" alt="Strip ${idx+1}" />
+              </a>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
 
       const sampleChatHTML = (CHATS_DATA.length && typeof chatCardHTML === 'function')
         ? `<div class="flex justify-center py-2">${chatCardHTML(CHATS_DATA[0])}</div>`
@@ -1956,6 +1939,8 @@
           </div>
         </div>
 
+        ${savedStripsHTML}
+
         ${photoGrid ? `
           <div>
             <div class="text-xs font-bold uppercase tracking-wider mb-2" style="color: var(--gold);">Potret Kenangan Kita (${fotos.length} Foto)</div>
@@ -1968,7 +1953,6 @@
     }
     document.getElementById('btn-galeri').addEventListener('click', openGalleryModal);
 
-    // Music Modal
     function openMusicModal() {
       audio.playSfx('pop');
       openModal('Dua Lagu Untuk Nadhifa 🎵', '📻', `
@@ -2002,7 +1986,7 @@
       `);
     }
 
-    // Mini-Game Tetris Modal (With Ghost Drop Shadow & Touch Swipe)
+    // Mini-Game Tetris Modal
     function openTetrisModal() {
       audio.playSfx('pop');
       openModal('Arcade Tetris Nadhifa 🕹️', '👾', `
@@ -2079,8 +2063,6 @@
       function draw() {
         ctx.fillStyle = '#1c050b';
         ctx.fillRect(0, 0, cvs.width, cvs.height);
-
-        // Subtle Grid
         ctx.strokeStyle = 'rgba(232, 217, 168, 0.06)';
         for (let r = 0; r < ROWS; r++) {
           for (let c = 0; c < COLS; c++) {
@@ -2091,16 +2073,12 @@
             }
           }
         }
-
-        // Ghost Drop Preview
         let ghostDy = 0;
         while (!collide(0, ghostDy + 1, piece.shape)) ghostDy++;
         ctx.fillStyle = 'rgba(232, 217, 168, 0.16)';
         piece.shape.forEach((row, r) => row.forEach((v, c) => {
           if (v) ctx.fillRect((piece.x + c) * SQ + 1, (piece.y + r + ghostDy) * SQ + 1, SQ - 2, SQ - 2);
         }));
-
-        // Active Piece
         piece.shape.forEach((row, r) => row.forEach((v, c) => {
           if (v) {
             ctx.fillStyle = piece.color;
@@ -2120,7 +2098,6 @@
       document.getElementById('t-down').onclick = () => { if (!collide(0, 1, piece.shape)) piece.y++; else merge(); draw(); };
       document.getElementById('t-rot').onclick = rotatePiece;
 
-      // Touch Swipe on Canvas
       let tx = 0, ty = 0;
       cvs.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
       cvs.addEventListener('touchend', e => {
@@ -2145,104 +2122,465 @@
       draw();
     }
 
-    // Photobooth "Tiga jepret, satu kenangan" Modal (With Screen Flash)
+    // ==========================================
+    // PHOTOBOOTH PRO (NON-BURST GAP, ASPECT-FIT ANTI-GEPENG, FRAMES & FILTERS)
+    // ==========================================
+    const PB_FRAMES = {
+      maroon: {
+        name: 'Marun & Emas 22nd',
+        bg: '#340a19',
+        border: '#e8d9a8',
+        slotBg: '#1c050b',
+        titleColor: '#f7ecc6',
+        subColor: '#faf3e6',
+        tag: '👑 Edisi ke-22 • 28.11.2026'
+      },
+      cream: {
+        name: 'Krim Klasik',
+        bg: '#faf3e6',
+        border: '#5e0f25',
+        slotBg: '#efe3cd',
+        titleColor: '#5e0f25',
+        subColor: '#47242c',
+        tag: '🤍 Semesta Nadhifa & Afa'
+      },
+      film: {
+        name: 'Film Roll Gelap',
+        bg: '#16070c',
+        border: '#c4566e',
+        slotBg: '#0c0306',
+        titleColor: '#e8d9a8',
+        subColor: '#d4b8c0',
+        tag: '🎞️ 35MM • Nadhifa 22nd'
+      },
+      rose: {
+        name: 'Mawar Senja',
+        bg: '#5e0f25',
+        border: '#f7ecc6',
+        slotBg: '#2e0712',
+        titleColor: '#f7ecc6',
+        subColor: '#ffd6e2',
+        tag: '🌹 Tiga Jepret, Satu Kenangan'
+      }
+    };
+
+    const PB_FILTERS = {
+      none: { label: 'Normal', cssClass: 'pb-filter-none', canvasFilter: 'none' },
+      warm: { label: 'Warm Gold', cssClass: 'pb-filter-warm', canvasFilter: 'sepia(0.28) saturate(1.25) contrast(1.05) brightness(1.04)' },
+      cream: { label: 'Soft Cream', cssClass: 'pb-filter-cream', canvasFilter: 'sepia(0.18) contrast(0.95) brightness(1.08) saturate(0.92)' },
+      noir: { label: 'Noir', cssClass: 'pb-filter-noir', canvasFilter: 'grayscale(1) contrast(1.22) brightness(0.96)' },
+      rose: { label: 'Rose Blush', cssClass: 'pb-filter-rose', canvasFilter: 'sepia(0.22) hue-rotate(-14deg) saturate(1.3) brightness(1.03)' },
+      vintage: { label: 'Vintage', cssClass: 'pb-filter-vintage', canvasFilter: 'sepia(0.42) contrast(1.08) brightness(0.95) saturate(0.85)' }
+    };
+
+    // Anti-gepeng cover-crop helper for any video or image source
+    function drawCoverFit(ctx, source, srcW, srcH, dx, dy, dw, dh, mirror = false, filterStr = 'none') {
+      if (!srcW || !srcH) return;
+      const srcAspect = srcW / srcH;
+      const dstAspect = dw / dh;
+
+      let sx = 0, sy = 0, sw = srcW, sh = srcH;
+      if (srcAspect > dstAspect) {
+        sw = srcH * dstAspect;
+        sx = (srcW - sw) / 2;
+      } else if (srcAspect < dstAspect) {
+        sh = srcW / dstAspect;
+        sy = (srcH - sh) / 2;
+      }
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(dx, dy, dw, dh);
+      ctx.clip();
+      ctx.filter = filterStr;
+
+      if (mirror) {
+        ctx.translate(dx + dw, dy);
+        ctx.scale(-1, 1);
+        ctx.drawImage(source, sx, sy, sw, sh, 0, 0, dw, dh);
+      } else {
+        ctx.drawImage(source, sx, sy, sw, sh, dx, dy, dw, dh);
+      }
+      ctx.restore();
+    }
+
+    function renderStripCanvas(stripCvs, shots, frameKey, filterKey, layoutMode, customCaption) {
+      const f = PB_FRAMES[frameKey] || PB_FRAMES.maroon;
+      const flt = PB_FILTERS[filterKey] || PB_FILTERS.none;
+      const ctx = stripCvs.getContext('2d');
+
+      const isGrid = layoutMode === 'grid4';
+      const W = isGrid ? 520 : 320;
+      const padX = 24;
+      const topPad = 24;
+      const gap = 16;
+
+      let slotW, slotH, totalH, slots;
+      if (isGrid) {
+        slotW = (W - padX * 2 - gap) / 2;
+        slotH = Math.round(slotW * 0.75); // exact 4:3 anti-gepeng slot
+        totalH = topPad + slotH * 2 + gap + 92;
+        slots = [
+          { x: padX, y: topPad, w: slotW, h: slotH },
+          { x: padX + slotW + gap, y: topPad, w: slotW, h: slotH },
+          { x: padX, y: topPad + slotH + gap, w: slotW, h: slotH },
+          { x: padX + slotW + gap, y: topPad + slotH + gap, w: slotW, h: slotH }
+        ];
+      } else {
+        const count = shots.length || 3;
+        slotW = W - padX * 2;
+        slotH = Math.round(slotW * 0.68);
+        totalH = topPad + slotH * count + gap * (count - 1) + 92;
+        slots = Array.from({ length: count }, (_, i) => ({
+          x: padX,
+          y: topPad + i * (slotH + gap),
+          w: slotW,
+          h: slotH
+        }));
+      }
+
+      stripCvs.width = W;
+      stripCvs.height = totalH;
+
+      // Outer Frame Background
+      ctx.fillStyle = f.bg;
+      ctx.fillRect(0, 0, W, totalH);
+
+      // Decorative Double Border
+      ctx.strokeStyle = f.border;
+      ctx.lineWidth = 4;
+      ctx.strokeRect(8, 8, W - 16, totalH - 16);
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(14, 14, W - 28, totalH - 28);
+
+      // Draw Captured Photos with exact aspect-fit (zero distortion)
+      slots.forEach((sl, idx) => {
+        ctx.fillStyle = f.slotBg;
+        ctx.fillRect(sl.x, sl.y, sl.w, sl.h);
+
+        const shot = shots[idx];
+        if (shot) {
+          drawCoverFit(ctx, shot.canvas, shot.canvas.width, shot.canvas.height, sl.x, sl.y, sl.w, sl.h, false, flt.canvasFilter);
+        }
+
+        ctx.strokeStyle = f.border;
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(sl.x, sl.y, sl.w, sl.h);
+
+        // Slot number badge
+        ctx.fillStyle = f.bg;
+        ctx.fillRect(sl.x + 8, sl.y + 8, 26, 20);
+        ctx.strokeStyle = f.border;
+        ctx.lineWidth = 1;
+        ctx.strokeRect(sl.x + 8, sl.y + 8, 26, 20);
+        ctx.fillStyle = f.titleColor;
+        ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`#${idx + 1}`, sl.x + 21, sl.y + 22);
+      });
+
+      // Footer Caption & Birthday Stamp
+      const footerY = totalH - 64;
+      ctx.fillStyle = f.titleColor;
+      ctx.font = 'italic bold 18px Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(customCaption || 'Tiga jepret, satu kenangan ✨', W / 2, footerY);
+
+      ctx.fillStyle = f.subColor;
+      ctx.font = '11px Inter, sans-serif';
+      ctx.fillText(`${f.tag} • ${flt.label}`, W / 2, footerY + 22);
+    }
+
     function openPhotoboothModal() {
       audio.playSfx('pop');
-      openModal('Tiga Jepret, Satu Kenangan 📸', '🎞️', `
-        <div class="flex flex-col items-center gap-3 text-center">
-          <p class="text-xs opacity-85">Siapkan senyum termanismu! Kamera akan mengambil <b>3 jepretan</b> otomatis dengan kilatan cahaya lalu menyusunnya menjadi strip Polaroid marun & emas.</p>
-          <div class="relative w-full max-w-[280px] aspect-[4/3] rounded-2xl overflow-hidden bg-[#1c050b] border-2 border-[#e8d9a8] shadow-md">
-            <video id="pb-video" autoplay playsinline muted class="w-full h-full object-cover scale-x-[-1]"></video>
-            <div id="pb-countdown" class="absolute inset-0 flex items-center justify-center font-serif-title font-bold text-6xl drop-shadow-lg" style="color: var(--gold);"></div>
+      let cancelled = false;
+      let paused = false;
+      let skipCountdown = false;
+
+      window.pbAbort = () => { cancelled = true; };
+
+      openModal('Photobooth Pro • Nadhifa 22nd 📸', '🎞️', `
+        <div class="space-y-3.5 text-xs">
+          <!-- Controls Row: Layout, Gap Delay, Frame, Filter -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <label class="rounded-xl p-2" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
+              <span class="block text-[10px] uppercase opacity-75 mb-1">Mode Foto</span>
+              <select id="pb-layout" class="w-full bg-[#260610] text-[#faf3e6] rounded-lg px-2 py-1.5 border border-[#e8d9a8]/30 text-xs">
+                <option value="strip3">3 Foto Strip</option>
+                <option value="grid4">4 Foto Grid</option>
+              </select>
+            </label>
+
+            <label class="rounded-xl p-2" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
+              <span class="block text-[10px] uppercase opacity-75 mb-1">Jeda Antar Foto</span>
+              <select id="pb-gap" class="w-full bg-[#260610] text-[#faf3e6] rounded-lg px-2 py-1.5 border border-[#e8d9a8]/30 text-xs">
+                <option value="1200">1.2 Detik</option>
+                <option value="2500" selected>2.5 Detik (Santai)</option>
+                <option value="4000">4.0 Detik (Ganti Pose)</option>
+              </select>
+            </label>
+
+            <label class="rounded-xl p-2" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
+              <span class="block text-[10px] uppercase opacity-75 mb-1">Pilih Frame</span>
+              <select id="pb-frame" class="w-full bg-[#260610] text-[#faf3e6] rounded-lg px-2 py-1.5 border border-[#e8d9a8]/30 text-xs">
+                <option value="maroon">Marun & Emas</option>
+                <option value="cream">Krim Klasik</option>
+                <option value="film">Film Roll Gelap</option>
+                <option value="rose">Mawar Senja</option>
+              </select>
+            </label>
+
+            <label class="rounded-xl p-2" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
+              <span class="block text-[10px] uppercase opacity-75 mb-1">Filter Kamera</span>
+              <select id="pb-filter" class="w-full bg-[#260610] text-[#faf3e6] rounded-lg px-2 py-1.5 border border-[#e8d9a8]/30 text-xs">
+                <option value="none">Normal</option>
+                <option value="warm">Warm Gold</option>
+                <option value="cream">Soft Cream</option>
+                <option value="noir">Noir</option>
+                <option value="rose">Rose Blush</option>
+                <option value="vintage">Vintage</option>
+              </select>
+            </label>
           </div>
-          <button id="btn-snap-start" class="btn-gold px-6 py-3 rounded-full text-xs uppercase cursor-pointer">
-            Mulai Foto (3x Jepret) ✨
-          </button>
-          <canvas id="pb-strip" width="260" height="585" class="hidden rounded-xl shadow-lg border-2 border-[#e8d9a8]"></canvas>
-          <a id="btn-download-strip" download="tiga-jepret-nadhifa-22.png" class="hidden btn-maroon px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer">
-            Unduh Strip Polaroid 📥
-          </a>
+
+          <!-- Custom Caption Input -->
+          <div class="flex items-center gap-2">
+            <input id="pb-caption" type="text" maxlength="42" value="Tiga jepret, satu kenangan ✨"
+                   placeholder="Tulis caption manis di bawah frame..."
+                   class="flex-1 rounded-xl px-3 py-2 text-xs bg-[#260610] text-[#faf3e6] border border-[#e8d9a8]/35 outline-none focus:border-[#f7ecc6]" />
+          </div>
+
+          <!-- Live Preview Stage (4:3 Anti-Gepeng) -->
+          <div class="flex flex-col items-center gap-2.5">
+            <div class="relative w-full max-w-[300px] aspect-[4/3] rounded-2xl overflow-hidden bg-[#1c050b] border-2 border-[#e8d9a8] shadow-lg">
+              <video id="pb-video" autoplay playsinline muted class="w-full h-full object-cover scale-x-[-1] pb-filter-none"></video>
+              <div id="pb-status-pill" class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full text-[10px] font-bold" style="background: rgba(24,4,10,0.78); color: var(--gold); border: 1px solid rgba(232,217,168,0.35);">
+                Siap Sesi
+              </div>
+              <div id="pb-countdown" class="absolute inset-0 flex flex-col items-center justify-center font-serif-title font-bold text-5xl drop-shadow-lg pointer-events-none" style="color: var(--gold);"></div>
+            </div>
+
+            <!-- Slot Thumbnails (Click any slot to Retake!) -->
+            <div id="pb-slots-bar" class="flex items-center justify-center gap-2 flex-wrap"></div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
+              <button id="btn-snap-start" class="btn-gold px-5 py-2.5 rounded-full text-xs uppercase cursor-pointer">
+                Mulai Sesi Foto ✨
+              </button>
+              <button id="btn-pb-now" class="hidden btn-maroon px-4 py-2.5 rounded-full text-xs font-bold cursor-pointer">
+                ⚡ Jepret Sekarang
+              </button>
+              <button id="btn-pb-pause" class="hidden btn-maroon px-4 py-2.5 rounded-full text-xs font-bold cursor-pointer">
+                ⏸ Jeda
+              </button>
+            </div>
+          </div>
+
+          <!-- Final Strip Output & Download -->
+          <div class="flex flex-col items-center gap-2.5 pt-1">
+            <canvas id="pb-strip" class="hidden max-w-[290px] w-full h-auto rounded-xl shadow-xl border-2 border-[#e8d9a8]"></canvas>
+            <a id="btn-download-strip" download="photobooth-nadhifa-22.png" class="hidden btn-gold px-6 py-2.5 rounded-full text-xs uppercase cursor-pointer">
+              Unduh Hasil Foto PNG 📥
+            </a>
+          </div>
         </div>
       `);
 
       const video = document.getElementById('pb-video');
-      navigator.mediaDevices?.getUserMedia({ video: { facingMode: 'user' } })
+      const layoutSel = document.getElementById('pb-layout');
+      const gapSel = document.getElementById('pb-gap');
+      const frameSel = document.getElementById('pb-frame');
+      const filterSel = document.getElementById('pb-filter');
+      const captionInp = document.getElementById('pb-caption');
+      const stripCvs = document.getElementById('pb-strip');
+      const dlBtn = document.getElementById('btn-download-strip');
+      const slotsBar = document.getElementById('pb-slots-bar');
+      const statusPill = document.getElementById('pb-status-pill');
+      const cdEl = document.getElementById('pb-countdown');
+      const startBtn = document.getElementById('btn-snap-start');
+      const nowBtn = document.getElementById('btn-pb-now');
+      const pauseBtn = document.getElementById('btn-pb-pause');
+
+      let shots = [];
+
+      navigator.mediaDevices?.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } } })
         .then(stream => { window.camStream = stream; video.srcObject = stream; })
         .catch(() => {});
 
-      document.getElementById('btn-snap-start').addEventListener('click', async function() {
-        this.disabled = true;
-        this.classList.add('opacity-50');
-        const shots = [];
-        const cdEl = document.getElementById('pb-countdown');
-        const flashEl = document.getElementById('flash-overlay');
-
-        for (let s = 0; s < 3; s++) {
-          for (let c = 3; c >= 1; c--) {
-            cdEl.textContent = c;
-            audio.playSfx('pop');
-            await new Promise(r => setTimeout(r, 650));
-          }
-          cdEl.textContent = '📸';
-          audio.playSfx('snap');
-          flashEl.style.opacity = '0.9';
-          setTimeout(() => { flashEl.style.opacity = '0'; }, 160);
-
-          const tempCvs = document.createElement('canvas');
-          tempCvs.width = 220; tempCvs.height = 150;
-          const tctx = tempCvs.getContext('2d');
-          if (video.srcObject) {
-            tctx.translate(220, 0);
-            tctx.scale(-1, 1);
-            tctx.drawImage(video, 0, 0, 220, 150);
-          } else {
-            const bgColors = ['#5e0f25', '#340a19', '#7a1636'];
-            tctx.fillStyle = bgColors[s];
-            tctx.fillRect(0, 0, 220, 150);
-            tctx.strokeStyle = '#e8d9a8';
-            tctx.lineWidth = 4;
-            tctx.strokeRect(8, 8, 204, 134);
-            tctx.fillStyle = '#e8d9a8';
-            tctx.font = 'italic bold 18px Georgia, serif';
-            tctx.textAlign = 'center';
-            tctx.fillText(['Nadhifa 22nd 👑', 'Happy Birthday 🎂', 'Semestaku 🤍'][s], 110, 82);
-          }
-          shots.push(tempCvs);
-          await new Promise(r => setTimeout(r, 380));
+      const syncFilterClass = () => {
+        const flt = PB_FILTERS[filterSel.value] || PB_FILTERS.none;
+        video.className = `w-full h-full object-cover scale-x-[-1] ${flt.cssClass}`;
+        if (shots.length) {
+          renderStripCanvas(stripCvs, shots, frameSel.value, filterSel.value, layoutSel.value, captionInp.value.trim());
+          dlBtn.href = stripCvs.toDataURL('image/png');
         }
-        cdEl.textContent = '';
+      };
 
-        const strip = document.getElementById('pb-strip');
-        const sctx = strip.getContext('2d');
-        sctx.fillStyle = '#340a19';
-        sctx.fillRect(0, 0, 260, 585);
-        sctx.strokeStyle = '#e8d9a8';
-        sctx.lineWidth = 4;
-        sctx.strokeRect(6, 6, 248, 573);
+      filterSel.addEventListener('change', syncFilterClass);
+      frameSel.addEventListener('change', syncFilterClass);
+      captionInp.addEventListener('input', syncFilterClass);
 
-        shots.forEach((sh, i) => {
-          sctx.drawImage(sh, 20, 20 + i * 165, 220, 150);
-          sctx.strokeStyle = '#e8d9a8';
-          sctx.lineWidth = 2;
-          sctx.strokeRect(20, 20 + i * 165, 220, 150);
+      function captureSingleFrame() {
+        const flashEl = document.getElementById('flash-overlay');
+        audio.playSfx('snap');
+        flashEl.style.opacity = '0.92';
+        setTimeout(() => { flashEl.style.opacity = '0'; }, 160);
+
+        const capCvs = document.createElement('canvas');
+        const vw = video.videoWidth || 640;
+        const vh = video.videoHeight || 480;
+        // Preserve exact 4:3 un-distorted capture dimensions
+        capCvs.width = 640;
+        capCvs.height = 480;
+        const cctx = capCvs.getContext('2d');
+
+        if (video.srcObject && vw > 0 && vh > 0) {
+          drawCoverFit(cctx, video, vw, vh, 0, 0, 640, 480, true, 'none');
+        } else {
+          const idx = shots.length;
+          const bgColors = ['#5e0f25', '#340a19', '#7a1636', '#470b1d'];
+          cctx.fillStyle = bgColors[idx % bgColors.length];
+          cctx.fillRect(0, 0, 640, 480);
+          cctx.strokeStyle = '#e8d9a8';
+          cctx.lineWidth = 8;
+          cctx.strokeRect(20, 20, 600, 440);
+          cctx.fillStyle = '#e8d9a8';
+          cctx.font = 'italic bold 40px Georgia, serif';
+          cctx.textAlign = 'center';
+          cctx.fillText(['Nadhifa 22nd 👑', 'Happy Birthday 🎂', 'Semestaku 🤍', 'Selalu Bahagia ✨'][idx % 4], 320, 235);
+        }
+        return { canvas: capCvs, dataUrl: capCvs.toDataURL('image/png') };
+      }
+
+      function renderSlotsBar(totalCount) {
+        slotsBar.innerHTML = Array.from({ length: totalCount }, (_, i) => {
+          const sh = shots[i];
+          return `
+            <button type="button" data-slot="${i}" title="Klik untuk ulangi foto #${i+1}"
+                    class="pb-retake-btn w-14 h-11 rounded-lg overflow-hidden border ${sh ? 'border-[#e8d9a8]' : 'border-[#e8d9a8]/30'} bg-[#1c050b] flex items-center justify-center text-[10px] font-bold cursor-pointer relative">
+              ${sh
+                ? `<img src="${sh.dataUrl}" class="w-full h-full object-cover ${PB_FILTERS[filterSel.value].cssClass}" alt="Slot ${i+1}" />`
+                : `<span class="opacity-60">#${i+1}</span>`
+              }
+            </button>
+          `;
+        }).join('');
+
+        slotsBar.querySelectorAll('.pb-retake-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const idx = Number(btn.dataset.slot);
+            if (!shots[idx]) return;
+            for (let c = 3; c >= 1; c--) {
+              if (cancelled) return;
+              cdEl.textContent = c;
+              audio.playSfx('pop');
+              await new Promise(r => setTimeout(r, 550));
+            }
+            cdEl.textContent = '📸';
+            const fresh = captureSingleFrame();
+            shots[idx] = fresh;
+            await new Promise(r => setTimeout(r, 250));
+            cdEl.textContent = '';
+            renderSlotsBar(totalCount);
+            renderStripCanvas(stripCvs, shots, frameSel.value, filterSel.value, layoutSel.value, captionInp.value.trim());
+            dlBtn.href = stripCvs.toDataURL('image/png');
+            showToast(`📸 Foto #${idx + 1} berhasil diulang!`);
+          });
         });
+      }
 
-        sctx.fillStyle = '#e8d9a8';
-        sctx.font = 'italic bold 15px Georgia, serif';
-        sctx.textAlign = 'center';
-        sctx.fillText('Tiga jepret, satu kenangan ✨', 130, 538);
-        sctx.fillStyle = '#faf3e6';
-        sctx.font = '11px Inter, sans-serif';
-        sctx.fillText('Nadhifa 22nd Birthday • 28.11.2026', 130, 560);
+      async function waitWithPause(ms) {
+        let elapsed = 0;
+        const step = 100;
+        while (elapsed < ms) {
+          if (cancelled) return false;
+          if (skipCountdown) {
+            skipCountdown = false;
+            return true;
+          }
+          if (!paused) {
+            elapsed += step;
+          }
+          await new Promise(r => setTimeout(r, step));
+        }
+        return true;
+      }
 
-        strip.classList.remove('hidden');
-        const dl = document.getElementById('btn-download-strip');
-        dl.href = strip.toDataURL('image/png');
-        dl.classList.remove('hidden');
-        this.textContent = 'Foto Ulang 🔄';
-        this.disabled = false;
-        this.classList.remove('opacity-50');
+      nowBtn.addEventListener('click', () => { skipCountdown = true; });
+      pauseBtn.addEventListener('click', () => {
+        paused = !paused;
+        pauseBtn.textContent = paused ? '▶ Lanjut' : '⏸ Jeda';
+        statusPill.textContent = paused ? 'Dijeda — Atur Pose' : 'Berjalan...';
       });
+
+      startBtn.addEventListener('click', async function() {
+        const totalCount = layoutSel.value === 'grid4' ? 4 : 3;
+        const gapMs = Number(gapSel.value) || 2500;
+
+        shots = [];
+        paused = false;
+        skipCountdown = false;
+        startBtn.disabled = true;
+        startBtn.classList.add('opacity-50');
+        nowBtn.classList.remove('hidden');
+        pauseBtn.classList.remove('hidden');
+        pauseBtn.textContent = '⏸ Jeda';
+        stripCvs.classList.add('hidden');
+        dlBtn.classList.add('hidden');
+        renderSlotsBar(totalCount);
+
+        for (let s = 0; s < totalCount; s++) {
+          if (cancelled) return;
+          statusPill.textContent = `Foto ${s + 1} dari ${totalCount}`;
+
+          for (let c = 3; c >= 1; c--) {
+            if (cancelled) return;
+            cdEl.innerHTML = `<span>${c}</span><span class="text-xs font-sans tracking-wider uppercase mt-1 opacity-90">Siap Pose #${s + 1}</span>`;
+            audio.playSfx('pop');
+            const ok = await waitWithPause(680);
+            if (!ok) return;
+          }
+
+          cdEl.innerHTML = `<span>📸</span>`;
+          const captured = captureSingleFrame();
+          shots.push(captured);
+          renderSlotsBar(totalCount);
+
+          const okSnap = await waitWithPause(320);
+          if (!okSnap) return;
+
+          // Non-burst gap between shots so user can relax & switch pose naturally
+          if (s < totalCount - 1) {
+            const gapSecs = (gapMs / 1000).toFixed(1);
+            statusPill.textContent = `Jeda Pose (${gapSecs}d) sebelum Foto #${s + 2}`;
+            cdEl.innerHTML = `<span class="text-2xl font-sans font-bold px-4 py-1.5 rounded-full" style="background: rgba(24,4,10,0.75); color: var(--gold);">Ganti Pose ✨</span>`;
+            const okGap = await waitWithPause(gapMs);
+            if (!okGap) return;
+          }
+        }
+
+        cdEl.innerHTML = '';
+        nowBtn.classList.add('hidden');
+        pauseBtn.classList.add('hidden');
+        statusPill.textContent = 'Selesai • Klik slot untuk retake';
+
+        renderStripCanvas(stripCvs, shots, frameSel.value, filterSel.value, layoutSel.value, captionInp.value.trim());
+        const dataUrl = stripCvs.toDataURL('image/png');
+        state.savedStrips.unshift(dataUrl);
+
+        stripCvs.classList.remove('hidden');
+        dlBtn.href = dataUrl;
+        dlBtn.classList.remove('hidden');
+        startBtn.textContent = 'Sesi Foto Baru 🔄';
+        startBtn.disabled = false;
+        startBtn.classList.remove('opacity-50');
+      });
+
+      layoutSel.addEventListener('change', () => {
+        renderSlotsBar(layoutSel.value === 'grid4' ? 4 : 3);
+      });
+      renderSlotsBar(3);
     }
 
     // Closing Celebration Finale Modal
@@ -2293,7 +2631,6 @@
       const dt = Math.min(clock.getDelta(), 0.05);
       const elapsed = clock.getElapsedTime();
 
-      // Animate Ocean Ripples, Paper Boat & Falling Sakura Petals
       if (waterMesh && islandGroup.visible) {
         const pos = waterMesh.geometry.attributes.position;
         for (let i = 0; i < pos.count; i++) {
@@ -2321,12 +2658,10 @@
         });
       }
 
-      // Animate Target Ring Pulse
       if (targetRing.visible) {
         targetRing.scale.setScalar(1 + Math.sin(elapsed * 7) * 0.14);
       }
 
-      // Animate Key, Cat Tail, Swing & 22 Candle Flames
       if (keyMesh && keyMesh.visible) {
         keyMesh.rotation.y = elapsed * 2.2;
         keyMesh.position.y = 0.85 + Math.sin(elapsed * 3.5) * 0.12;
@@ -2347,11 +2682,9 @@
         });
       }
 
-      // Fireflies Gentle Drift
       fireflies.rotation.y = elapsed * 0.06;
       fireflies.position.y = Math.sin(elapsed * 1.2) * 0.25;
 
-      // Update Burst Particles
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.position.addScaledVector(p.userData.vel, dt);
@@ -2363,7 +2696,6 @@
         }
       }
 
-      // Swinging State Handling
       if (state.isSwinging) {
         const { leftLeg, rightLeg, headGroup } = player.userData;
         const kick = Math.sin(state.swingTime) * 0.28;
@@ -2390,7 +2722,6 @@
         return;
       }
 
-      // Camera-Relative Input Vector
       let rawX = joyVec.x;
       let rawZ = joyVec.z;
       if (keys['w'] || keys['arrowup']) rawZ -= 1;
@@ -2453,7 +2784,6 @@
         headGroup.position.y = 1.24 + Math.sin(elapsed * 2.5) * 0.02;
       }
 
-      // Companion Follow Logic (Afa & Mochi gently follow Nadhifa on Island)
       if (state.sceneMode === 'island' && afaMesh && mochiGroup) {
         if (state.companionFollow) {
           const desiredAfa = new THREE.Vector3(
@@ -2485,22 +2815,17 @@
           } else {
             mochiGroup.position.y *= 0.85;
           }
-        } else {
-          // Gentle head look toward Nadhifa when nearby
-          if (afaMesh.position.distanceTo(player.position) < 4.5) {
-            const lookAng = Math.atan2(player.position.x - afaMesh.position.x, player.position.z - afaMesh.position.z);
-            afaMesh.rotation.y = THREE.MathUtils.lerp(afaMesh.rotation.y, lookAng, 3 * dt);
-          }
+        } else if (afaMesh.position.distanceTo(player.position) < 4.5) {
+          const lookAng = Math.atan2(player.position.x - afaMesh.position.x, player.position.z - afaMesh.position.z);
+          afaMesh.rotation.y = THREE.MathUtils.lerp(afaMesh.rotation.y, lookAng, 3 * dt);
         }
       }
 
-      // Smooth Camera Follow
       const camOffset = new THREE.Vector3().subVectors(camera.position, controls.target);
       controls.target.lerp(new THREE.Vector3(player.position.x, player.position.y + 0.9, player.position.z), 0.11);
       camera.position.copy(controls.target).add(camOffset);
       controls.update();
 
-      // Proximity Interaction Check
       let closest = null;
       let minDist = Infinity;
       for (const item of interactables) {
