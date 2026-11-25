@@ -112,7 +112,6 @@
       transition: transform 0.05s linear;
     }
 
-    /* Photobooth Filter Classes for Live Video Preview */
     .pb-filter-none { filter: none; }
     .pb-filter-warm { filter: sepia(0.28) saturate(1.25) contrast(1.05) brightness(1.04); }
     .pb-filter-cream { filter: sepia(0.18) contrast(0.95) brightness(1.08) saturate(0.92); }
@@ -123,13 +122,8 @@
 </head>
 <body>
 
-  <!-- Real Audio Player -->
   <audio id="mp3-player" preload="metadata"></audio>
-
-  <!-- Camera Flash Overlay for Photobooth -->
   <div id="flash-overlay" class="fixed inset-0 z-50 bg-white pointer-events-none opacity-0 transition-opacity duration-150"></div>
-
-  <!-- 3D Viewport -->
   <div id="canvas-container"></div>
 
   <!-- Intro Splash Overlay -->
@@ -213,7 +207,7 @@
     </div>
   </div>
 
-  <!-- Contextual Prompt Button (Bottom Center) -->
+  <!-- Contextual Prompt Button -->
   <div id="interact-prompt" class="fixed bottom-36 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-2">
     <button id="btn-interact" class="btn-gold pointer-events-auto px-6 py-3 rounded-full text-xs sm:text-sm uppercase flex items-center gap-2 animate-float cursor-pointer border-2 border-[#5e0f25]">
       <span id="interact-icon">✨</span>
@@ -221,12 +215,12 @@
     </button>
   </div>
 
-  <!-- Smooth Analog Joystick for Touch/Mobile -->
+  <!-- Smooth Analog Joystick -->
   <div id="joystick-zone" class="sm:hidden opacity-0 transition-opacity duration-500">
     <div id="joystick-knob"></div>
   </div>
 
-  <!-- Quick Scene Switcher, Companion & Gallery (Bottom Right) -->
+  <!-- Bottom Right HUD -->
   <div id="hud-bottom-right" class="fixed bottom-5 right-5 z-20 flex flex-col items-end gap-2 opacity-0 transition-opacity duration-500">
     <button id="btn-finale-shortcut" class="hidden btn-gold px-4 py-2.5 rounded-2xl text-xs uppercase cursor-pointer pulse-gold">
       👑 Perayaan Lengkap!
@@ -259,13 +253,12 @@
     Pesan notifikasi
   </div>
 
-  <!-- Load Real Project Media & Chats -->
   <script src="media.js"></script>
   <script src="chats.js"></script>
 
   <script>
     // ==========================================
-    // 0. PROJECT DATA (SYNCED WITH HADIAH-NADHIFA-MAIN)
+    // 0. PROJECT DATA
     // ==========================================
     const MEDIA_DATA = window.MEDIA || { fotos: [], videos: [], sync: [] };
     const CHATS_DATA = window.CHATS || [];
@@ -620,7 +613,7 @@
     const lanternBulbs = [];
 
     // ==========================================
-    // 5. CHARACTER BUILDER (CUTE CHIBI NADHIFA & AFA)
+    // 5. CHARACTER BUILDER (CHIBI STYLE • NADIFA TANPA JILBAB • TANPA KUCING)
     // ==========================================
     function createChibiCharacter(opts) {
       const group = new THREE.Group();
@@ -632,9 +625,9 @@
       shadow.position.y = 0.02;
       group.add(shadow);
 
-      const skinMat = new THREE.MeshStandardMaterial({ color: '#ffe2ce', roughness: 0.52 });
-      const shoeMat = new THREE.MeshStandardMaterial({ color: opts.shoeColor || '#2a0812', roughness: 0.45 });
-      const pantsMat = new THREE.MeshStandardMaterial({ color: opts.pantsColor || '#1e1b24', roughness: 0.72 });
+      const skinMat = new THREE.MeshStandardMaterial({ color: '#ffdfc9', roughness: 0.52 });
+      const shoeMat = new THREE.MeshStandardMaterial({ color: opts.shoeColor || '#1c1921', roughness: 0.45 });
+      const pantsMat = new THREE.MeshStandardMaterial({ color: opts.pantsColor || '#1d2230', roughness: 0.72 });
 
       const legGeo = new THREE.CylinderGeometry(0.085, 0.078, 0.34, 14);
       const leftLeg = new THREE.Group();
@@ -662,21 +655,12 @@
       torso.castShadow = true;
       group.add(torso);
 
-      if (!opts.hasHijab) {
-        const collarMat = new THREE.MeshStandardMaterial({ color: '#101828', roughness: 0.6 });
+      if (!opts.hasSkirt) {
+        const collarMat = new THREE.MeshStandardMaterial({ color: opts.collarColor || '#1e3563', roughness: 0.55 });
         const collar = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.032, 10, 20), collarMat);
         collar.rotation.x = Math.PI / 2;
         collar.position.set(0, 0.85, 0.01);
         group.add(collar);
-      }
-
-      if (opts.hasHijab) {
-        const btnMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.85, roughness: 0.2 });
-        [0.74, 0.62, 0.50].forEach(by => {
-          const btn = new THREE.Mesh(new THREE.SphereGeometry(0.025, 10, 10), btnMat);
-          btn.position.set(0, by, 0.25);
-          group.add(btn);
-        });
       }
 
       if (opts.hasSkirt) {
@@ -759,8 +743,8 @@
       if (opts.hasGlasses) {
         const glassMat = new THREE.MeshStandardMaterial({
           color: opts.glassColor || '#5c341d',
-          metalness: 0.35,
-          roughness: 0.25
+          metalness: 0.32,
+          roughness: 0.28
         });
         const lensMat = new THREE.MeshPhysicalMaterial({
           color: '#ffffff',
@@ -772,11 +756,11 @@
           const rimGroup = new THREE.Group();
           rimGroup.position.set(gx, 0.008, 0.398);
           rimGroup.rotation.y = gx > 0 ? 0.22 : -0.22;
-          if (opts.catEyeGlasses) rimGroup.rotation.z = gx > 0 ? 0.12 : -0.12;
-          const rim = new THREE.Mesh(new THREE.TorusGeometry(0.086, 0.011, 10, 24), glassMat);
-          if (opts.catEyeGlasses) rim.scale.set(1.12, 0.92, 1);
-          const lens = new THREE.Mesh(new THREE.CircleGeometry(0.082, 20), lensMat);
-          if (opts.catEyeGlasses) lens.scale.set(1.12, 0.92, 1);
+          if (opts.catEyeGlasses) rimGroup.rotation.z = gx > 0 ? 0.13 : -0.13;
+          const rim = new THREE.Mesh(new THREE.TorusGeometry(0.088, 0.012, 10, 24), glassMat);
+          if (opts.catEyeGlasses) rim.scale.set(1.14, 0.92, 1);
+          const lens = new THREE.Mesh(new THREE.CircleGeometry(0.084, 20), lensMat);
+          if (opts.catEyeGlasses) lens.scale.set(1.14, 0.92, 1);
           rimGroup.add(rim, lens);
           headGroup.add(rimGroup);
         });
@@ -785,27 +769,42 @@
         headGroup.add(bridge);
       }
 
-      if (opts.hasHijab) {
-        const hijabMat = new THREE.MeshStandardMaterial({ color: opts.hijabColor || '#18151e', roughness: 0.72 });
-        const hood = new THREE.Mesh(new THREE.SphereGeometry(0.435, 28, 24), hijabMat);
-        hood.scale.set(1.06, 1.04, 1.08);
-        hood.position.set(0, 0.02, -0.075);
-        hood.castShadow = true;
-        headGroup.add(hood);
+      const hairMat = new THREE.MeshStandardMaterial({ color: opts.hairColor || '#151210', roughness: 0.62 });
+      const hairBack = new THREE.Mesh(new THREE.SphereGeometry(0.425, 26, 24), hairMat);
+      hairBack.scale.set(1.06, 1.02, 1.06);
+      hairBack.position.set(0, 0.04, -0.075);
+      hairBack.castShadow = true;
+      headGroup.add(hairBack);
 
-        const faceFrame = new THREE.Mesh(new THREE.TorusGeometry(0.365, 0.055, 14, 32), hijabMat);
-        faceFrame.scale.set(1.04, 1.02, 1.15);
-        faceFrame.position.set(0, 0.01, 0.085);
-        headGroup.add(faceFrame);
+      const hairTop = new THREE.Mesh(
+        new THREE.SphereGeometry(0.415, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.44),
+        hairMat
+      );
+      hairTop.position.set(0, 0.05, -0.01);
+      hairTop.rotation.x = -0.12;
+      headGroup.add(hairTop);
 
-        const neckScarf = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.36, 0.24, 20), hijabMat);
-        neckScarf.position.set(0, -0.34, -0.02);
-        headGroup.add(neckScarf);
+      const leftBang = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), hairMat);
+      leftBang.scale.set(1.15, 0.85, 0.55);
+      leftBang.position.set(-0.16, 0.26, 0.30);
+      leftBang.rotation.z = 0.38;
 
-        const chestDrape = new THREE.Mesh(new THREE.ConeGeometry(0.34, 0.42, 20), hijabMat);
-        chestDrape.scale.set(1.05, 1, 0.72);
-        chestDrape.position.set(0, 0.72, 0.11);
-        group.add(chestDrape);
+      const rightBang = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), hairMat);
+      rightBang.scale.set(1.15, 0.85, 0.55);
+      rightBang.position.set(0.16, 0.26, 0.30);
+      rightBang.rotation.z = -0.38;
+
+      [-0.38, 0.38].forEach(sx => {
+        const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.06, opts.longHair ? 0.34 : 0.22, 0.14), hairMat);
+        sideHair.position.set(sx, opts.longHair ? -0.04 : 0.02, 0.04);
+        headGroup.add(sideHair);
+      });
+
+      if (opts.longHair) {
+        const backFlow = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.36, 0.52, 18), hairMat);
+        backFlow.position.set(0, -0.16, -0.16);
+        backFlow.rotation.x = 0.12;
+        headGroup.add(backFlow);
 
         const crownMat = new THREE.MeshStandardMaterial({
           color: '#f7ecc6',
@@ -815,51 +814,20 @@
           emissiveIntensity: 0.25
         });
         const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.10, 0.11, 8), crownMat);
-        crown.position.set(0, 0.48, -0.04);
+        crown.position.set(0, 0.48, -0.02);
         headGroup.add(crown);
-      } else {
-        const hairMat = new THREE.MeshStandardMaterial({ color: opts.hairColor || '#171412', roughness: 0.65 });
-        const hairBack = new THREE.Mesh(new THREE.SphereGeometry(0.425, 26, 24), hairMat);
-        hairBack.scale.set(1.06, 1.02, 1.06);
-        hairBack.position.set(0, 0.04, -0.075);
-        hairBack.castShadow = true;
-        headGroup.add(hairBack);
-
-        const hairTop = new THREE.Mesh(
-          new THREE.SphereGeometry(0.415, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.44),
-          hairMat
-        );
-        hairTop.position.set(0, 0.05, -0.01);
-        hairTop.rotation.x = -0.12;
-        headGroup.add(hairTop);
-
-        const leftBang = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), hairMat);
-        leftBang.scale.set(1.15, 0.85, 0.55);
-        leftBang.position.set(-0.16, 0.26, 0.30);
-        leftBang.rotation.z = 0.38;
-
-        const rightBang = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), hairMat);
-        rightBang.scale.set(1.15, 0.85, 0.55);
-        rightBang.position.set(0.16, 0.26, 0.30);
-        rightBang.rotation.z = -0.38;
-
-        [-0.38, 0.38].forEach(sx => {
-          const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.14), hairMat);
-          sideHair.position.set(sx, 0.02, 0.04);
-          headGroup.add(sideHair);
-        });
-
-        headGroup.add(leftBang, rightBang);
       }
 
+      headGroup.add(leftBang, rightBang);
       group.add(headGroup);
       group.userData = { leftLeg, rightLeg, leftArm, rightArm, headGroup };
       return group;
     }
 
+    // Nadhifa: Tanpa hijab, rambut gelap panjang sebahu + mahkota emas + cat-eye glasses + atasan marun & rok hitam
     const player = createChibiCharacter({
-      hasHijab: true,
-      hijabColor: '#18151e',
+      longHair: true,
+      hairColor: '#161213',
       hasGlasses: true,
       catEyeGlasses: true,
       glassColor: '#6b3e23',
@@ -883,7 +851,7 @@
     // ==========================================
     // 6. BUILD ISLAND 3D WORLD
     // ==========================================
-    let waterMesh, keyMesh, afaMesh, mochiGroup, mochiTail, beachSwingSeat, paperBoat;
+    let waterMesh, keyMesh, afaMesh, beachSwingSeat, paperBoat;
     const sakuraPetals = [];
 
     function buildIsland() {
@@ -1103,40 +1071,21 @@
       keyMesh.add(ring, shaft, bit);
       islandGroup.add(keyMesh);
 
+      // Afa: Kacamata hitam, rambut gelap rapi, polo/kemeja navy seperti di foto couple
       afaMesh = createChibiCharacter({
-        hasHijab: false,
+        longHair: false,
         hasGlasses: true,
         catEyeGlasses: false,
-        glassColor: '#1f1d24',
-        shirtColor: '#16284c',
-        pantsColor: '#18181f',
+        glassColor: '#141318',
+        shirtColor: '#15274a',
+        collarColor: '#1e3a6e',
+        pantsColor: '#181a22',
         shoeColor: '#f5f5f4',
-        hairColor: '#161311'
+        hairColor: '#151210'
       });
-      afaMesh.position.set(-3.2, 0, 1.4);
+      afaMesh.position.set(-2.8, 0, 1.5);
       afaMesh.rotation.y = 0.5;
       islandGroup.add(afaMesh);
-
-      mochiGroup = new THREE.Group();
-      mochiGroup.position.set(-2.1, 0, 1.8);
-      const catMat = new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.5 });
-      const catBody = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 16), catMat);
-      catBody.position.y = 0.28;
-      catBody.castShadow = true;
-      const catHead = new THREE.Mesh(new THREE.SphereGeometry(0.24, 16, 16), catMat);
-      catHead.position.set(0, 0.62, 0.08);
-      [-0.12, 0.12].forEach(ex => {
-        const ear = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.15, 4), catMat);
-        ear.position.set(ex, 0.84, 0.08);
-        mochiGroup.add(ear);
-      });
-      const bow = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.08, 0.08), new THREE.MeshStandardMaterial({ color: '#5e0f25' }));
-      bow.position.set(0, 0.44, 0.22);
-      mochiTail = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 0.38, 8), catMat);
-      mochiTail.position.set(0, 0.35, -0.26);
-      mochiTail.rotation.x = -0.6;
-      mochiGroup.add(catBody, catHead, bow, mochiTail);
-      islandGroup.add(mochiGroup);
 
       const swingGroup = new THREE.Group();
       swingGroup.position.set(-6.2, 0, 6.2);
@@ -1240,12 +1189,12 @@
         },
         {
           id: 'afa', scene: 'island', pos: () => afaMesh.position, radius: 2.3,
-          icon: '💬', label: 'Ngobrol sama Afa & Mochi',
+          icon: '💬', label: 'Ngobrol sama Afa',
           action: () => {
             audio.playSfx('pop');
             spawnHearts(new THREE.Vector3(afaMesh.position.x, 1.8, afaMesh.position.z), 15);
             const randomQuote = STAR_QUOTES.length ? STAR_QUOTES[Math.floor(Math.random() * STAR_QUOTES.length)].x : 'Aku selalu sayang kamu, Nadhifa!';
-            openModal('Afa (Pipaww) & Mochi 🐱', '🤍', `
+            openModal('Afa (Pipaww) 🤍', '💬', `
               <div class="glass-cream rounded-2xl p-4 space-y-2.5">
                 <div class="font-bold" style="color: #5e0f25;">Afa (Pipaww):</div>
                 <p>"Selamat ulang tahun ke-22, cantikku! Aku sudah siapin kue ulang tahun 22 lilin, foto-foto kita di dinding, surat lengkapku, mesin Tetris, dan photobooth pro di dalam rumah. Mau aku temenin keliling pulau?"</p>
@@ -1253,12 +1202,8 @@
                   💬 Ingat chat kita: "${randomQuote}"
                 </div>
                 <button onclick="toggleCompanionFollow(); closeModal();" class="btn-gold w-full py-2.5 rounded-full text-xs uppercase cursor-pointer mt-1">
-                  ${state.companionFollow ? '🛑 Berhenti Mengikuti' : '🤝 Ajak Afa & Mochi Ikut Jalan'}
+                  ${state.companionFollow ? '🛑 Berhenti Mengikuti' : '🤝 Ajak Afa Ikut Jalan'}
                 </button>
-              </div>
-              <div class="rounded-2xl p-4" style="background: rgba(94, 15, 37, 0.55); border: 1px solid rgba(232, 217, 168, 0.3);">
-                <div class="font-bold mb-1" style="color: var(--gold);">Mochi 🐱:</div>
-                <p class="text-xs" style="color: #faf3e6;">"Meoww~ Selamat ulang tahun ke-22 Kak Nadhifa! Di photobooth bisa atur jeda antar foto, pilih frame, dan ganti filter biar hasilnya makin kece!"</p>
               </div>
             `);
           }
@@ -1529,7 +1474,7 @@
     buildHouse();
 
     // ==========================================
-    // 8. PARTICLE SYSTEM (GOLDEN FIREFLIES & HEARTS)
+    // 8. PARTICLE SYSTEM
     // ==========================================
     const fireflyGeo = new THREE.BufferGeometry();
     const fireflyCount = 110;
@@ -1610,9 +1555,9 @@
       document.getElementById('follow-label').textContent = state.companionFollow ? 'Sedang Bergandengan' : 'Ajak Afa Jalan';
       if (state.companionFollow) {
         spawnHearts(new THREE.Vector3(player.position.x, 1.6, player.position.z), 16);
-        showToast('🤝 Afa & Mochi sekarang ikut berjalan bersamamu!');
+        showToast('🤝 Afa sekarang ikut berjalan bersamamu!');
       } else {
-        showToast('✨ Afa & Mochi beristirahat sejenak.');
+        showToast('✨ Afa beristirahat sejenak.');
       }
     }
     window.toggleCompanionFollow = toggleCompanionFollow;
@@ -1737,7 +1682,7 @@
     });
 
     // ==========================================
-    // 10. MOVEMENT (CAMERA-RELATIVE WASD, ANALOG JOYSTICK & TAP)
+    // 10. MOVEMENT
     // ==========================================
     const keys = {};
     const joyVec = { x: 0, z: 0 };
@@ -1986,7 +1931,6 @@
       `);
     }
 
-    // Mini-Game Tetris Modal
     function openTetrisModal() {
       audio.playSfx('pop');
       openModal('Arcade Tetris Nadhifa 🕹️', '👾', `
@@ -2123,7 +2067,7 @@
     }
 
     // ==========================================
-    // PHOTOBOOTH PRO (NON-BURST GAP, ASPECT-FIT ANTI-GEPENG, FRAMES & FILTERS)
+    // PHOTOBOOTH PRO
     // ==========================================
     const PB_FRAMES = {
       maroon: {
@@ -2173,7 +2117,6 @@
       vintage: { label: 'Vintage', cssClass: 'pb-filter-vintage', canvasFilter: 'sepia(0.42) contrast(1.08) brightness(0.95) saturate(0.85)' }
     };
 
-    // Anti-gepeng cover-crop helper for any video or image source
     function drawCoverFit(ctx, source, srcW, srcH, dx, dy, dw, dh, mirror = false, filterStr = 'none') {
       if (!srcW || !srcH) return;
       const srcAspect = srcW / srcH;
@@ -2218,7 +2161,7 @@
       let slotW, slotH, totalH, slots;
       if (isGrid) {
         slotW = (W - padX * 2 - gap) / 2;
-        slotH = Math.round(slotW * 0.75); // exact 4:3 anti-gepeng slot
+        slotH = Math.round(slotW * 0.75);
         totalH = topPad + slotH * 2 + gap + 92;
         slots = [
           { x: padX, y: topPad, w: slotW, h: slotH },
@@ -2242,18 +2185,15 @@
       stripCvs.width = W;
       stripCvs.height = totalH;
 
-      // Outer Frame Background
       ctx.fillStyle = f.bg;
       ctx.fillRect(0, 0, W, totalH);
 
-      // Decorative Double Border
       ctx.strokeStyle = f.border;
       ctx.lineWidth = 4;
       ctx.strokeRect(8, 8, W - 16, totalH - 16);
       ctx.lineWidth = 1.2;
       ctx.strokeRect(14, 14, W - 28, totalH - 28);
 
-      // Draw Captured Photos with exact aspect-fit (zero distortion)
       slots.forEach((sl, idx) => {
         ctx.fillStyle = f.slotBg;
         ctx.fillRect(sl.x, sl.y, sl.w, sl.h);
@@ -2267,7 +2207,6 @@
         ctx.lineWidth = 2.5;
         ctx.strokeRect(sl.x, sl.y, sl.w, sl.h);
 
-        // Slot number badge
         ctx.fillStyle = f.bg;
         ctx.fillRect(sl.x + 8, sl.y + 8, 26, 20);
         ctx.strokeStyle = f.border;
@@ -2279,7 +2218,6 @@
         ctx.fillText(`#${idx + 1}`, sl.x + 21, sl.y + 22);
       });
 
-      // Footer Caption & Birthday Stamp
       const footerY = totalH - 64;
       ctx.fillStyle = f.titleColor;
       ctx.font = 'italic bold 18px Georgia, serif';
@@ -2301,7 +2239,6 @@
 
       openModal('Photobooth Pro • Nadhifa 22nd 📸', '🎞️', `
         <div class="space-y-3.5 text-xs">
-          <!-- Controls Row: Layout, Gap Delay, Frame, Filter -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <label class="rounded-xl p-2" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
               <span class="block text-[10px] uppercase opacity-75 mb-1">Mode Foto</span>
@@ -2343,14 +2280,12 @@
             </label>
           </div>
 
-          <!-- Custom Caption Input -->
           <div class="flex items-center gap-2">
             <input id="pb-caption" type="text" maxlength="42" value="Tiga jepret, satu kenangan ✨"
                    placeholder="Tulis caption manis di bawah frame..."
                    class="flex-1 rounded-xl px-3 py-2 text-xs bg-[#260610] text-[#faf3e6] border border-[#e8d9a8]/35 outline-none focus:border-[#f7ecc6]" />
           </div>
 
-          <!-- Live Preview Stage (4:3 Anti-Gepeng) -->
           <div class="flex flex-col items-center gap-2.5">
             <div class="relative w-full max-w-[300px] aspect-[4/3] rounded-2xl overflow-hidden bg-[#1c050b] border-2 border-[#e8d9a8] shadow-lg">
               <video id="pb-video" autoplay playsinline muted class="w-full h-full object-cover scale-x-[-1] pb-filter-none"></video>
@@ -2360,10 +2295,8 @@
               <div id="pb-countdown" class="absolute inset-0 flex flex-col items-center justify-center font-serif-title font-bold text-5xl drop-shadow-lg pointer-events-none" style="color: var(--gold);"></div>
             </div>
 
-            <!-- Slot Thumbnails (Click any slot to Retake!) -->
             <div id="pb-slots-bar" class="flex items-center justify-center gap-2 flex-wrap"></div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-wrap items-center justify-center gap-2 pt-1">
               <button id="btn-snap-start" class="btn-gold px-5 py-2.5 rounded-full text-xs uppercase cursor-pointer">
                 Mulai Sesi Foto ✨
@@ -2377,7 +2310,6 @@
             </div>
           </div>
 
-          <!-- Final Strip Output & Download -->
           <div class="flex flex-col items-center gap-2.5 pt-1">
             <canvas id="pb-strip" class="hidden max-w-[290px] w-full h-auto rounded-xl shadow-xl border-2 border-[#e8d9a8]"></canvas>
             <a id="btn-download-strip" download="photobooth-nadhifa-22.png" class="hidden btn-gold px-6 py-2.5 rounded-full text-xs uppercase cursor-pointer">
@@ -2430,7 +2362,6 @@
         const capCvs = document.createElement('canvas');
         const vw = video.videoWidth || 640;
         const vh = video.videoHeight || 480;
-        // Preserve exact 4:3 un-distorted capture dimensions
         capCvs.width = 640;
         capCvs.height = 480;
         const cctx = capCvs.getContext('2d');
@@ -2550,7 +2481,6 @@
           const okSnap = await waitWithPause(320);
           if (!okSnap) return;
 
-          // Non-burst gap between shots so user can relax & switch pose naturally
           if (s < totalCount - 1) {
             const gapSecs = (gapMs / 1000).toFixed(1);
             statusPill.textContent = `Jeda Pose (${gapSecs}d) sebelum Foto #${s + 2}`;
@@ -2583,7 +2513,6 @@
       renderSlotsBar(3);
     }
 
-    // Closing Celebration Finale Modal
     function openFinaleModal() {
       audio.playSfx('key');
       spawnHearts(new THREE.Vector3(player.position.x, 1.8, player.position.z), 40);
@@ -2666,7 +2595,6 @@
         keyMesh.rotation.y = elapsed * 2.2;
         keyMesh.position.y = 0.85 + Math.sin(elapsed * 3.5) * 0.12;
       }
-      if (mochiTail) mochiTail.rotation.z = Math.sin(elapsed * 5) * 0.35;
       if (beachSwingSeat) {
         if (state.isSwinging) {
           state.swingTime += dt * 2.7;
@@ -2784,7 +2712,7 @@
         headGroup.position.y = 1.24 + Math.sin(elapsed * 2.5) * 0.02;
       }
 
-      if (state.sceneMode === 'island' && afaMesh && mochiGroup) {
+      if (state.sceneMode === 'island' && afaMesh) {
         if (state.companionFollow) {
           const desiredAfa = new THREE.Vector3(
             player.position.x - Math.sin(player.rotation.y) * 1.15 - Math.cos(player.rotation.y) * 0.65,
@@ -2804,16 +2732,6 @@
             afaMesh.userData.leftLeg.rotation.x *= 0.85;
             afaMesh.userData.rightLeg.rotation.x *= 0.85;
             afaMesh.position.y *= 0.85;
-          }
-
-          const desiredMochi = new THREE.Vector3(afaMesh.position.x + 0.85, 0, afaMesh.position.z + 0.55);
-          if (mochiGroup.position.distanceTo(desiredMochi) > 0.25) {
-            const mDir = desiredMochi.clone().sub(mochiGroup.position).normalize();
-            mochiGroup.position.addScaledVector(mDir, 3.8 * dt);
-            mochiGroup.rotation.y = Math.atan2(mDir.x, mDir.z);
-            mochiGroup.position.y = Math.abs(Math.sin(elapsed * 14)) * 0.08;
-          } else {
-            mochiGroup.position.y *= 0.85;
           }
         } else if (afaMesh.position.distanceTo(player.position) < 4.5) {
           const lookAng = Math.atan2(player.position.x - afaMesh.position.x, player.position.z - afaMesh.position.z);
