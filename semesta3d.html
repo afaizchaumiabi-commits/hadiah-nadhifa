@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Pulau Semesta Nadhifa 3D • Edisi ke-22 🤍</title>
+  <title>Gugusan Pulau Semesta Nadhifa 3D • Edisi ke-22 🤍</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -140,30 +140,30 @@
         Pulau Semesta Nadhifa
       </h1>
       <p class="text-sm leading-relaxed mb-5" style="color: #e4d5da;">
-        Semesta kecil 3D yang kubangun khusus di hari ulang tahunmu ke-22. Temukan <b>Kunci Emas</b>, gandeng tangan Afa, tiup 22 lilin, dan abadikan kenangan kita di photobooth.
+        Gugusan <b>4 Pulau</b> yang terhubung jembatan kayu &amp; perahu layar di hari ulang tahunmu ke-22. Naik perahu keliling laut, nyalakan kembang api, main kuis kenangan, &amp; buka rumah kita!
       </p>
 
       <div class="grid grid-cols-3 gap-2 text-xs mb-6">
         <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
+          <div class="text-lg mb-1">⛵</div>
+          <div class="font-semibold" style="color: var(--gold);">Naik Perahu</div>
+          <div class="text-[11px] opacity-75">Berlayar 4 Pulau</div>
+        </div>
+        <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
+          <div class="text-lg mb-1">🎆</div>
+          <div class="font-semibold" style="color: var(--gold);">Kembang Api</div>
+          <div class="text-[11px] opacity-75">&amp; 4 Side Quest</div>
+        </div>
+        <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
           <div class="text-lg mb-1">🧭</div>
-          <div class="font-semibold" style="color: var(--gold);">Joystick / Ketuk</div>
-          <div class="text-[11px] opacity-75">Jelajahi Pulau</div>
-        </div>
-        <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
-          <div class="text-lg mb-1">🔄</div>
-          <div class="font-semibold" style="color: var(--gold);">Geser Layar</div>
-          <div class="text-[11px] opacity-75">Putar & Zoom 3D</div>
-        </div>
-        <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
-          <div class="text-lg mb-1">📸</div>
-          <div class="font-semibold" style="color: var(--gold);">Photobooth Pro</div>
-          <div class="text-[11px] opacity-75">Jeda, Frame & Filter</div>
+          <div class="font-semibold" style="color: var(--gold);">Radar Map</div>
+          <div class="text-[11px] opacity-75">Peta Gugusan</div>
         </div>
       </div>
 
       <div class="flex flex-col gap-2.5">
         <button id="btn-start" class="btn-gold w-full py-3.5 rounded-full text-xs uppercase cursor-pointer">
-          Masuk ke Pulau Semesta 🤍
+          Masuk ke Gugusan Pulau 🤍
         </button>
         <a href="index.html" class="text-xs py-2 opacity-75 hover:opacity-100 transition-opacity" style="color: var(--gold);">
           ← Kembali ke Kartu Utama
@@ -174,36 +174,43 @@
 
   <!-- Top HUD Bar -->
   <div id="hud-top" class="fixed top-0 left-0 right-0 z-20 p-3 sm:p-4 flex flex-wrap items-start justify-between gap-2 pointer-events-none opacity-0 transition-opacity duration-500">
-    <div class="glass-maroon rounded-2xl px-3.5 py-2.5 flex items-center gap-3 pointer-events-auto max-w-[94vw] sm:max-w-md">
+    <div class="glass-maroon rounded-2xl px-3.5 py-2.5 flex items-center gap-3 pointer-events-auto max-w-[94vw] sm:max-w-lg">
       <div id="location-badge" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
            style="background: linear-gradient(135deg, #8a1a3d, #5e0f25); border: 1px solid rgba(232, 217, 168, 0.45);">
         🏝️
       </div>
       <div class="min-w-0">
         <div class="flex items-center gap-1.5 flex-wrap">
-          <span id="location-name" class="font-serif-title font-bold text-sm truncate" style="color: var(--gold);">Pulau Semesta</span>
+          <span id="location-name" class="font-serif-title font-bold text-sm truncate" style="color: var(--gold);">Pulau Utama Semesta</span>
           <span id="key-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: rgba(232, 217, 168, 0.16); color: var(--gold); border: 1px solid rgba(232, 217, 168, 0.35);">🔑 Belum Ada</span>
           <button id="btn-quest-list" class="text-[10px] font-bold px-2 py-0.5 rounded-full cursor-pointer hover:brightness-110" style="background: rgba(196, 86, 110, 0.38); color: #faf3e6; border: 1px solid rgba(232, 217, 168, 0.3);">
-            <span id="quest-progress">0/6 Misi</span> ▾
+            <span id="quest-progress">0/6 Misi</span> • <span id="sidequest-progress">0/4 Side</span> ▾
           </button>
         </div>
-        <p id="quest-text" class="text-xs truncate mt-0.5" style="color: #e4d5da;">Misi: Cari Kunci Emas di dekat pohon sakura timur!</p>
+        <p id="quest-text" class="text-xs truncate mt-0.5" style="color: #e4d5da;">Jelajahi 4 pulau via jembatan atau naik perahu di dermaga selatan!</p>
       </div>
     </div>
 
-    <div class="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
-      <a href="index.html" class="glass-maroon px-3 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1" title="Kartu Utama">
-        <span>🎂</span> <span class="hidden md:inline">Kartu</span>
-      </a>
-      <button id="btn-theme" class="glass-maroon px-3 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer" title="Ganti Suasana Cahaya">
-        <span id="theme-icon">🌅</span> <span id="theme-label" class="hidden sm:inline">Senja Emas</span>
-      </button>
-      <button id="btn-cam-reset" class="glass-maroon p-2.5 rounded-2xl text-xs cursor-pointer" title="Reset Sudut Kamera">
-        🎥
-      </button>
-      <button id="btn-music-toggle" class="btn-gold px-3.5 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 cursor-pointer">
-        <span id="music-icon">🎵</span> <span id="music-label" class="hidden sm:inline">About You</span>
-      </button>
+    <div class="flex flex-col items-end gap-2 pointer-events-auto">
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <a href="index.html" class="glass-maroon px-3 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1" title="Kartu Utama">
+          <span>🎂</span> <span class="hidden md:inline">Kartu</span>
+        </a>
+        <button id="btn-theme" class="glass-maroon px-3 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer" title="Ganti Suasana Cahaya">
+          <span id="theme-icon">🌅</span> <span id="theme-label" class="hidden sm:inline">Senja Emas</span>
+        </button>
+        <button id="btn-cam-reset" class="glass-maroon p-2.5 rounded-2xl text-xs cursor-pointer" title="Reset Sudut Kamera">
+          🎥
+        </button>
+        <button id="btn-music-toggle" class="btn-gold px-3.5 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 cursor-pointer">
+          <span id="music-icon">🎵</span> <span id="music-label" class="hidden sm:inline">About You</span>
+        </button>
+      </div>
+
+      <!-- Mini-Map Radar -->
+      <div id="minimap-wrap" class="glass-maroon rounded-2xl p-1.5 shadow-lg">
+        <canvas id="minimap-canvas" width="126" height="104" class="rounded-xl block"></canvas>
+      </div>
     </div>
   </div>
 
@@ -229,7 +236,7 @@
       <span id="follow-icon">🤝</span> <span id="follow-label">Ajak Afa Jalan</span>
     </button>
     <button id="btn-galeri" class="glass-maroon px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2 cursor-pointer" style="color: var(--gold);">
-      <span>🖼️</span> Galeri & Semestaku
+      <span>🖼️</span> Galeri &amp; Semestaku
     </button>
   </div>
 
@@ -283,11 +290,32 @@
       "Semoga di usia yang baru ini kamu bisa semakin mengenal diri kamu sendiri, semakin percaya sama kemampuan kamu, semakin berani mengambil kesempatan baik, dan semakin yakin bahwa kamu pantas mendapatkan banyak hal baik dalam hidup.",
       "Aku berdoa semoga Allah selalu menjaga kamu di mana pun kamu berada, memberikan kesehatan untuk tubuh kamu, ketenangan untuk hati dan pikiran kamu, melancarkan setiap urusan kamu, melapangkan rezeki kamu, memudahkan pekerjaan dan segala cita cita kamu, mempertemukan kamu dengan orang orang yang tulus, serta menjauhkan kamu dari hal hal yang bisa menyakiti dan membuat kamu kehilangan kebahagiaan, semoga setiap doa yang selama ini kamu simpan diam diam bisa menemukan jalannya untuk terkabul, semoga hal hal yang sedang kamu usahakan diberikan hasil terbaik, dan semoga kamu selalu punya alasan untuk tersenyum setiap harinya.",
       "Aku juga berharap kamu bisa lebih sering memberikan waktu untuk diri sendiri, nggak harus selalu kuat, nggak harus selalu menyelesaikan semuanya dalam satu waktu, nggak harus selalu memikirkan perasaan semua orang sampai lupa memperhatikan diri kamu sendiri, kalau kamu lelah, istirahatlah sayang, kalau kamu sedih, kamu boleh menangis, kalau ada sesuatu yang mengganggu pikiran kamu, kamu boleh cerita, kamu nggak perlu merasa harus menyimpan semuanya sendirian, aku ingin kamu bisa menjalani hidup dengan lebih ringan dan merasa bahwa kamu juga layak mendapatkan perhatian, pengertian, dan kasih sayang.",
-      "Terima kasih sudah menjadi kamu yang aku kenal sekarang, terima kasih untuk semua cerita kecil yang kamu bagikan, semua perhatian yang kamu berikan, semua candaan yang membuat aku tertawa, semua waktu yang kita habiskan bersama, bahkan untuk hal hal sederhana yang mungkin terlihat biasa tetapi selalu punya arti buat aku, aku suka mendengarkan cerita kamu tentang kegiatan sehari hari, tentang pekerjaan, makanan yang kamu inginkan, hal yang membuat kamu kesal, hal yang membuat kamu senang, sampai cerita random yang tiba tiba muncul di tengah obrolan kita, aku ingin terus mengenal kamu lebih dalam, melihat kamu tumbuh, mendukung apa yang ingin kamu capai, dan menemani kamu melewati berbagai bagian kehidupan yang akan datang.",
+      "Terima kasih sudah menjadi kamu yang aku kenal sekarang, terima kasih untuk semua cerita kecil yang kamu bagikan, semua perhatian yang kamu berikan, semua candaan yang membuat aku tertawa, semua waktu yang kita habiskan bersama, bahkan untuk hal hal sederhana yang mungkin terlihat biasa tetapi selalu punya arti buat aku, aku suka mendrwengarkan cerita kamu tentang kegiatan sehari hari, tentang pekerjaan, makanan yang kamu inginkan, hal yang membuat kamu kesal, hal yang membuat kamu senang, sampai cerita random yang tiba tiba muncul di tengah obrolan kita, aku ingin terus mengenal kamu lebih dalam, melihat kamu tumbuh, mendukung apa yang ingin kamu capai, dan menemani kamu melewati berbagai bagian kehidupan yang akan datang.",
       "Aku tahu hubungan kita juga nggak selalu berjalan sempurna, ada kalanya kita berbeda pendapat, salah memahami satu sama lain, atau tanpa sengaja membuat satu sama lain merasa sedih, tapi aku berharap kita terus punya kemauan untuk saling mendengarkan, saling memahami, dan memperbaiki hal hal yang masih perlu diperbaiki, aku nggak berharap kamu menjadi seseorang yang sempurna, aku juga nggak akan menjanjikan bahwa aku selalu bisa melakukan semuanya dengan benar, tetapi aku ingin terus belajar menjadi pasangan yang lebih baik untuk kamu, seseorang yang bisa kamu ajak berbagi cerita, seseorang yang menghargai perasaan kamu, seseorang yang mendukung langkah kamu, dan seseorang yang bisa membuat kamu merasa dicintai dengan baik.",
       "Semoga di usia 22 tahun ini ada lebih banyak kebahagiaan yang datang kepada kamu, lebih banyak pengalaman yang menyenangkan, lebih banyak kesempatan untuk melakukan hal yang kamu sukai, lebih banyak waktu bersama orang orang yang kamu cintai, dan lebih banyak pencapaian yang bisa kamu banggakan, semoga kamu bisa mewujudkan keinginan keinginan kamu satu per satu, termasuk keinginan kecil yang mungkin belum sempat kamu ceritakan kepada siapa pun, aku ingin melihat kamu bahagia dengan kehidupan yang sedang kamu bangun.",
       "Sayanggg, jangan pernah merasa bahwa kamu harus menjadi orang lain supaya pantas dicintai, aku mencintai kamu sebagai diri kamu sendiri, dengan segala cerita, kebiasaan, kelebihan, kekurangan, mimpi, dan proses yang sedang kamu jalani, terima kasih sudah hadir dalam hidup aku, terima kasih sudah memberikan aku kesempatan untuk mengenal dan menyayangi kamu sejauh ini.",
       "Sekali lagi selamat ulang tahun yang ke 22 tahun sayangkuuu, perempuan kesayangan aku, manusia yang selalu ingin aku bahagiakan, semoga panjang umur, sehat selalu, bahagia selalu, dilancarkan segala urusannya, dimudahkan semua langkahnya, dan semoga Allah selalu melindungi kamu dalam setiap perjalanan hidup kamu, nikmati hari spesial kamu yaa cintakuuu, kamu pantas mendapatkan kebahagiaan dan kasih sayang sebanyak banyaknya, hari ini aku ingin kamu merasa disayangi, dihargai, dan dirayakan, aku sayang kamu, hari ini, besok, dan di setiap hari yang masih bisa kita jalani bersama, HAPPY BIRTHDAY MY LOVELYYYY, i love you so so much, sayanggggg 🤍"
+    ];
+
+    const MEMORY_QUIZ = [
+      {
+        q: "Tanggal berapakah obrolan pertama kita dimulai?",
+        options: ["14 Februari 2025", "29 Juni 2025", "28 November 2025"],
+        ans: 1,
+        note: "Betul! Sejak 29 Juni 2025 sampai hari ini sudah puluhan ribu pesan kita kirimkan."
+      },
+      {
+        q: "Berapa usia Nadhifa yang dirayakan di Pulau Semesta ini?",
+        options: ["21 Tahun", "22 Tahun", "23 Tahun"],
+        ans: 1,
+        note: "Selamat ulang tahun ke-22 sayangku! (28 November 2004 – 28 November 2026)"
+      },
+      {
+        q: "Dua lagu spesial yang diputar di semesta ini adalah...",
+        options: ["About You & Kita Usahakan Rumah Itu", "Perfect & Evaluasi", "Fix You & Monokrom"],
+        ans: 0,
+        note: "The 1975 – About You dan Sal Priadi – Kita Usahakan Rumah Itu 🎵"
+      }
     ];
 
     // ==========================================
@@ -338,6 +366,9 @@
           this.playTone(587.33, 0.12, 'sine', 0.08);
         } else if (kind === 'snap') {
           this.playTone(880, 0.09, 'square', 0.06);
+        } else if (kind === 'firework') {
+          this.playTone(180, 0.25, 'sawtooth', 0.07);
+          setTimeout(() => [660, 880, 1174].forEach((f, i) => setTimeout(() => this.playTone(f, 0.32, 'triangle', 0.09), i * 50)), 220);
         }
       }
 
@@ -487,10 +518,10 @@
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#3b1224');
-    scene.fog = new THREE.FogExp2('#3b1224', 0.012);
+    scene.fog = new THREE.FogExp2('#3b1224', 0.008);
 
-    const camera = new THREE.PerspectiveCamera(44, window.innerWidth / window.innerHeight, 0.1, 220);
-    camera.position.set(0, 11.5, 16.5);
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 280);
+    camera.position.set(0, 13.5, 19.5);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -506,20 +537,20 @@
     controls.dampingFactor = 0.065;
     controls.maxPolarAngle = Math.PI / 2.15;
     controls.minDistance = 5.5;
-    controls.maxDistance = 28;
+    controls.maxDistance = 38;
 
     const hemiLight = new THREE.HemisphereLight('#ffeedd', '#4a1d2d', 0.92);
     hemiLight.position.set(0, 25, 0);
     scene.add(hemiLight);
 
     const sunLight = new THREE.DirectionalLight('#ffe4b5', 1.48);
-    sunLight.position.set(14, 22, 12);
+    sunLight.position.set(16, 24, 14);
     sunLight.castShadow = true;
     sunLight.shadow.mapSize.width = 2048;
     sunLight.shadow.mapSize.height = 2048;
     sunLight.shadow.camera.near = 2;
-    sunLight.shadow.camera.far = 55;
-    const d = 18;
+    sunLight.shadow.camera.far = 75;
+    const d = 32;
     sunLight.shadow.camera.left = -d;
     sunLight.shadow.camera.right = d;
     sunLight.shadow.camera.top = d;
@@ -528,44 +559,60 @@
     scene.add(sunLight);
 
     const rimLight = new THREE.DirectionalLight('#e8d9a8', 0.58);
-    rimLight.position.set(-12, 10, -14);
+    rimLight.position.set(-14, 10, -14);
     scene.add(rimLight);
 
     const starGeo = new THREE.BufferGeometry();
-    const starCount = 420;
+    const starCount = 560;
     const starPos = new Float32Array(starCount * 3);
     for (let i = 0; i < starCount; i++) {
-      const r = 45 + Math.random() * 45;
+      const r = 55 + Math.random() * 60;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI * 0.45;
       starPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      starPos[i * 3 + 1] = 12 + r * Math.cos(phi);
+      starPos[i * 3 + 1] = 14 + r * Math.cos(phi);
       starPos[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
     }
     starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-    const starMat = new THREE.PointsMaterial({ color: '#f7ecc6', size: 0.42, transparent: true, opacity: 0.85 });
+    const starMat = new THREE.PointsMaterial({ color: '#f7ecc6', size: 0.45, transparent: true, opacity: 0.85 });
     const starField = new THREE.Points(starGeo, starMat);
     scene.add(starField);
 
     const moonMesh = new THREE.Mesh(
-      new THREE.SphereGeometry(2.4, 24, 24),
+      new THREE.SphereGeometry(2.6, 24, 24),
       new THREE.MeshBasicMaterial({ color: '#f7ecc6' })
     );
-    moonMesh.position.set(-22, 26, -32);
+    moonMesh.position.set(-26, 28, -36);
     scene.add(moonMesh);
 
     // ==========================================
-    // 4. GAME STATE & 6-QUEST TRACKER
+    // 4. GAME STATE: 4 ISLANDS + BOAT + QUESTS + SIDE QUESTS
     // ==========================================
+    const ISLAND_CENTERS = [
+      { name: 'Pulau Utama Semesta', badge: '🏝️', x: 0, z: 0, r: 11.4 },
+      { name: 'Pulau Senja & Dermaga', badge: '🌅', x: -21, z: 1.5, r: 7.0 },
+      { name: 'Pulau Sakura & Kenangan', badge: '🌸', x: 21, z: -1.0, r: 7.0 },
+      { name: 'Pulau Lentera & Kembang Api', badge: '🎆', x: 0, z: -20.5, r: 6.4 }
+    ];
+
+    const BRIDGES = [
+      { dir: 'x', xMin: -14.3, xMax: -10.6, zCenter: 1.5, halfW: 1.35 },
+      { dir: 'x', xMin: 10.6, xMax: 14.3, zCenter: -1.0, halfW: 1.35 },
+      { dir: 'z', zMin: -14.4, zMax: -10.6, xCenter: 0, halfW: 1.35 }
+    ];
+
     const state = {
       sceneMode: 'island',
+      currentIslandName: 'Pulau Utama Semesta',
       lightMode: 0,
       hasKey: false,
       companionFollow: false,
       isSwinging: false,
+      isSailing: false,
       swingTime: 0,
       swingBoost: 0,
       candlesLit: true,
+      campfireLit: false,
       targetPos: null,
       nearbyAction: null,
       wallPhotoOffset: 0,
@@ -577,29 +624,55 @@
         photobooth: false,
         tetris: false
       },
+      sideQuests: {
+        campfire: false,
+        bottle: false,
+        quiz: false,
+        fireworks: false
+      },
       finaleShown: false,
       savedStrips: []
     };
 
     const QUEST_INFO = [
-      { id: 'key', label: 'Temukan Kunci Emas di bawah pohon sakura timur' },
-      { id: 'telescope', label: 'Intip Bintang Harapan di Teleskop Dermaga' },
+      { id: 'key', label: 'Temukan Kunci Emas di Pulau Sakura (Timur)' },
+      { id: 'telescope', label: 'Intip Teleskop di Dermaga Pulau Senja (Barat)' },
       { id: 'cake', label: 'Tiup 22 Lilin Kue Ulang Tahun di dalam rumah' },
       { id: 'letter', label: 'Baca Surat Lengkap dari Afa' },
-      { id: 'photobooth', label: 'Ambil Foto di Photobooth Pro (Jeda, Frame & Filter)' },
+      { id: 'photobooth', label: 'Ambil Foto di Photobooth Pro' },
       { id: 'tetris', label: 'Mainkan Arcade Tetris Nadhifa' }
     ];
 
-    function completeQuest(key) {
-      if (state.quests[key]) return;
-      state.quests[key] = true;
-      const doneCount = Object.values(state.quests).filter(Boolean).length;
-      document.getElementById('quest-progress').textContent = `${doneCount}/6 Misi`;
-      if (doneCount === 6 && !state.finaleShown) {
+    const SIDEQUEST_INFO = [
+      { id: 'campfire', label: 'Nyalakan Api Unggun Hangat di Pulau Senja' },
+      { id: 'bottle', label: 'Buka Botol Harapan di Pantai Barat' },
+      { id: 'quiz', label: 'Main Kuis Kenangan Kita di Pulau Sakura' },
+      { id: 'fireworks', label: 'Luncurkan Kembang Api 22nd di Pulau Lentera' }
+    ];
+
+    function refreshQuestHud() {
+      const doneMain = Object.values(state.quests).filter(Boolean).length;
+      const doneSide = Object.values(state.sideQuests).filter(Boolean).length;
+      document.getElementById('quest-progress').textContent = `${doneMain}/6 Misi`;
+      document.getElementById('sidequest-progress').textContent = `${doneSide}/4 Side`;
+      if (doneMain === 6 && !state.finaleShown) {
         state.finaleShown = true;
         document.getElementById('btn-finale-shortcut').classList.remove('hidden');
         setTimeout(() => openFinaleModal(), 950);
       }
+    }
+
+    function completeQuest(key) {
+      if (state.quests[key]) return;
+      state.quests[key] = true;
+      refreshQuestHud();
+    }
+
+    function completeSideQuest(key) {
+      const firstTime = !state.sideQuests[key];
+      state.sideQuests[key] = true;
+      refreshQuestHud();
+      if (firstTime) showToast('🌟 Side Quest selesai! Bonus kenangan terbuka.');
     }
 
     const islandGroup = new THREE.Group();
@@ -824,7 +897,6 @@
       return group;
     }
 
-    // Nadhifa: Tanpa hijab, rambut gelap panjang sebahu + mahkota emas + cat-eye glasses + atasan marun & rok hitam
     const player = createChibiCharacter({
       longHair: true,
       hairColor: '#161213',
@@ -836,7 +908,7 @@
       skirtColor: '#18151e',
       shoeColor: '#e8d9a8'
     });
-    player.position.set(0, 0, 7.6);
+    player.position.set(0, 0, 7.2);
     scene.add(player);
 
     const targetRing = new THREE.Mesh(
@@ -849,13 +921,136 @@
     scene.add(targetRing);
 
     // ==========================================
-    // 6. BUILD ISLAND 3D WORLD
+    // 6. BUILD 4-ISLAND ARCHIPELAGO + SAILABLE BOAT + FIREWORKS
     // ==========================================
-    let waterMesh, keyMesh, afaMesh, beachSwingSeat, paperBoat;
+    let waterMesh, keyMesh, afaMesh, beachSwingSeat, paperBoat, fireFlameMesh, bottleMesh, rideableBoat;
     const sakuraPetals = [];
 
+    function buildBridgeX(x1, x2, zCenter, width) {
+      const len = Math.abs(x2 - x1);
+      const cx = (x1 + x2) / 2;
+      const bGroup = new THREE.Group();
+      bGroup.position.set(cx, 0, zCenter);
+
+      const plankMat = new THREE.MeshStandardMaterial({ color: '#6b381d', roughness: 0.82 });
+      const railMat = new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.65 });
+      const goldMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.75, roughness: 0.25 });
+
+      const deck = new THREE.Mesh(new THREE.BoxGeometry(len, 0.14, width), plankMat);
+      deck.position.y = 0.06;
+      deck.receiveShadow = true;
+      bGroup.add(deck);
+
+      [-width / 2 + 0.12, width / 2 - 0.12].forEach(rz => {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(len, 0.08, 0.08), railMat);
+        rail.position.set(0, 0.68, rz);
+        bGroup.add(rail);
+
+        for (let i = 0; i <= 4; i++) {
+          const px = -len / 2 + (i / 4) * len;
+          const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.75, 8), railMat);
+          post.position.set(px, 0.38, rz);
+          bGroup.add(post);
+
+          if (i === 0 || i === 4) {
+            const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 10), goldMat);
+            lamp.position.set(px, 0.8, rz);
+            bGroup.add(lamp);
+          }
+        }
+      });
+
+      islandGroup.add(bGroup);
+    }
+
+    function buildBridgeZ(z1, z2, xCenter, width) {
+      const len = Math.abs(z2 - z1);
+      const cz = (z1 + z2) / 2;
+      const bGroup = new THREE.Group();
+      bGroup.position.set(xCenter, 0, cz);
+
+      const plankMat = new THREE.MeshStandardMaterial({ color: '#6b381d', roughness: 0.82 });
+      const railMat = new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.65 });
+      const goldMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.75, roughness: 0.25 });
+
+      const deck = new THREE.Mesh(new THREE.BoxGeometry(width, 0.14, len), plankMat);
+      deck.position.y = 0.06;
+      deck.receiveShadow = true;
+      bGroup.add(deck);
+
+      [-width / 2 + 0.12, width / 2 - 0.12].forEach(rx => {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, len), railMat);
+        rail.position.set(rx, 0.68, 0);
+        bGroup.add(rail);
+
+        for (let i = 0; i <= 4; i++) {
+          const pz = -len / 2 + (i / 4) * len;
+          const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.75, 8), railMat);
+          post.position.set(rx, 0.38, pz);
+          bGroup.add(post);
+
+          if (i === 0 || i === 4) {
+            const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.09, 10, 10), goldMat);
+            lamp.position.set(rx, 0.8, pz);
+            bGroup.add(lamp);
+          }
+        }
+      });
+
+      islandGroup.add(bGroup);
+    }
+
+    function buildSingleIslandBase(cx, cz, radius, isMain = false) {
+      const sand = new THREE.Mesh(
+        new THREE.CylinderGeometry(radius + 1.8, radius + 3.1, 0.7, 44),
+        new THREE.MeshStandardMaterial({ map: createSandTexture(), roughness: 0.85 })
+      );
+      sand.position.set(cx, -0.35, cz);
+      sand.receiveShadow = true;
+      islandGroup.add(sand);
+
+      const grass = new THREE.Mesh(
+        new THREE.CylinderGeometry(radius, radius + 0.55, 0.4, 44),
+        new THREE.MeshStandardMaterial({ map: createGrassTexture(), roughness: 0.8 })
+      );
+      grass.position.set(cx, -0.18, cz);
+      grass.receiveShadow = true;
+      islandGroup.add(grass);
+
+      if (isMain) {
+        const stoneMat = new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.75 });
+        for (let z = 7.2; z >= -2.2; z -= 1.05) {
+          const stone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.62, 0.08, 12), stoneMat);
+          stone.position.set(cx + Math.sin(z * 0.5) * 0.25, 0.03, cz + z);
+          stone.receiveShadow = true;
+          islandGroup.add(stone);
+        }
+      }
+    }
+
+    function addTree(x, z, isSakura = true, scale = 1) {
+      const woodMat = new THREE.MeshStandardMaterial({ color: '#5c2d16', roughness: 0.8 });
+      const t = new THREE.Group();
+      t.position.set(x, 0, z);
+      t.scale.setScalar(scale);
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.32, 1.8, 10), woodMat);
+      trunk.position.y = 0.9;
+      trunk.castShadow = true;
+      t.add(trunk);
+
+      const foliageColor = isSakura ? '#e88aa6' : '#2d7a47';
+      const fMat = new THREE.MeshStandardMaterial({ color: foliageColor, roughness: 0.75 });
+      [[0, 2.3, 0, 1.15], [-0.65, 1.9, 0.4, 0.8], [0.65, 1.95, -0.3, 0.85]].forEach(([fx, fy, fz, r]) => {
+        const puff = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 1), fMat);
+        puff.position.set(fx, fy, fz);
+        puff.castShadow = true;
+        t.add(puff);
+      });
+      islandGroup.add(t);
+    }
+
     function buildIsland() {
-      const waterGeo = new THREE.PlaneGeometry(160, 160, 56, 56);
+      const waterGeo = new THREE.PlaneGeometry(260, 260, 64, 64);
       const waterMat = new THREE.MeshStandardMaterial({
         color: '#196673',
         roughness: 0.18,
@@ -867,34 +1062,23 @@
       waterMesh.position.y = -0.45;
       islandGroup.add(waterMesh);
 
-      const sand = new THREE.Mesh(
-        new THREE.CylinderGeometry(13.8, 15.4, 0.7, 48),
-        new THREE.MeshStandardMaterial({ map: createSandTexture(), roughness: 0.85 })
-      );
-      sand.position.y = -0.35;
-      sand.receiveShadow = true;
-      islandGroup.add(sand);
+      // 4 Pulau + 3 Jembatan
+      buildSingleIslandBase(0, 0, 11.2, true);
+      buildSingleIslandBase(-21, 1.5, 6.8, false);
+      buildSingleIslandBase(21, -1.0, 6.8, false);
+      buildSingleIslandBase(0, -20.5, 6.2, false);
 
-      const grass = new THREE.Mesh(
-        new THREE.CylinderGeometry(11.6, 12.2, 0.4, 48),
-        new THREE.MeshStandardMaterial({ map: createGrassTexture(), roughness: 0.8 })
-      );
-      grass.position.y = -0.18;
-      grass.receiveShadow = true;
-      islandGroup.add(grass);
+      buildBridgeX(-14.3, -10.6, 1.5, 2.7);
+      buildBridgeX(10.6, 14.3, -1.0, 2.7);
+      buildBridgeZ(-14.4, -10.6, 0, 2.7);
 
-      const stoneMat = new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.75 });
-      for (let z = 7.5; z >= -2.2; z -= 1.05) {
-        const stone = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.62, 0.08, 12), stoneMat);
-        stone.position.set(Math.sin(z * 0.5) * 0.25, 0.03, z);
-        stone.receiveShadow = true;
-        islandGroup.add(stone);
-      }
-
-      const archGroup = new THREE.Group();
-      archGroup.position.set(0, 0, 9.4);
       const pillarMat = new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.6 });
       const goldMetalMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.75, roughness: 0.22 });
+      const woodMat = new THREE.MeshStandardMaterial({ color: '#5c2d16', roughness: 0.8 });
+
+      // Arch Gerbang Pulau Utama
+      const archGroup = new THREE.Group();
+      archGroup.position.set(0, 0, 9.2);
       [-1.4, 1.4].forEach(px => {
         const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 2.7, 12), pillarMat);
         pillar.position.set(px, 1.35, 0);
@@ -907,7 +1091,8 @@
       archGroup.add(topBeam);
       islandGroup.add(archGroup);
 
-      [[-1.35, 5.2], [1.35, 5.2], [-1.35, 1.2], [1.35, 1.2], [-1.35, -2.0], [1.35, -2.0]].forEach(([lx, lz]) => {
+      // Lentera
+      [[-1.35, 5.2], [1.35, 5.2], [-1.35, 1.2], [1.35, 1.2], [-21, 4.2], [21, 2.0], [-2.5, -18.5], [2.5, -18.5]].forEach(([lx, lz]) => {
         const lantern = new THREE.Group();
         lantern.position.set(lx, 0, lz);
         const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 1.25, 8), pillarMat);
@@ -922,60 +1107,37 @@
         islandGroup.add(lantern);
       });
 
-      const pier = new THREE.Group();
-      pier.position.set(-11.4, -0.1, -1.2);
-      const woodMat = new THREE.MeshStandardMaterial({ color: '#5c2d16', roughness: 0.8 });
-      const deck = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.18, 1.8), woodMat);
-      deck.position.set(-1.1, 0.08, 0);
-      deck.castShadow = true;
-      deck.receiveShadow = true;
-      pier.add(deck);
-      [[-2.5, -0.7], [-2.5, 0.7], [-0.8, -0.7], [-0.8, 0.7]].forEach(([px, pz]) => {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.9, 8), woodMat);
-        leg.position.set(px, -0.35, pz);
-        pier.add(leg);
-      });
-      const tripod = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.22, 1.1, 8), pillarMat);
-      tripod.position.set(-2.3, 0.65, 0);
-      const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.85, 12), goldMetalMat);
-      scope.position.set(-2.35, 1.25, 0);
-      scope.rotation.z = Math.PI / 3.2;
-      pier.add(tripod, scope);
-      islandGroup.add(pier);
+      // Dermaga Selatan & Perahu Layar yang Bisa Dinaiki (x: 3.6, z: 12.6)
+      const southPier = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.16, 2.6), woodMat);
+      southPier.position.set(3.6, 0.04, 11.4);
+      islandGroup.add(southPier);
 
-      paperBoat = new THREE.Group();
-      paperBoat.position.set(-13.8, -0.35, 1.6);
-      const boatHull = new THREE.Mesh(
-        new THREE.ConeGeometry(0.42, 0.35, 4),
+      rideableBoat = new THREE.Group();
+      rideableBoat.position.set(3.6, -0.22, 13.4);
+      const hull = new THREE.Mesh(
+        new THREE.BoxGeometry(1.45, 0.42, 2.5),
+        new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.45 })
+      );
+      hull.castShadow = true;
+      const rimTrim = new THREE.Mesh(
+        new THREE.BoxGeometry(1.55, 0.1, 2.6),
+        goldMetalMat
+      );
+      rimTrim.position.y = 0.22;
+      const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 2.2, 8), woodMat);
+      mast.position.set(0, 1.1, -0.35);
+      const sail = new THREE.Mesh(
+        new THREE.ConeGeometry(0.75, 1.5, 3),
         new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.5 })
       );
-      boatHull.rotation.x = Math.PI;
-      boatHull.scale.set(1.4, 0.8, 0.8);
-      const boatSail = new THREE.Mesh(
-        new THREE.ConeGeometry(0.28, 0.45, 3),
-        new THREE.MeshStandardMaterial({ color: '#e8d9a8', roughness: 0.4 })
-      );
-      boatSail.position.y = 0.22;
-      paperBoat.add(boatHull, boatSail);
-      islandGroup.add(paperBoat);
+      sail.position.set(0, 1.25, -0.35);
+      sail.rotation.y = Math.PI / 2;
+      rideableBoat.add(hull, rimTrim, mast, sail);
+      islandGroup.add(rideableBoat);
 
-      const signGroup = new THREE.Group();
-      signGroup.position.set(2.3, 0, 7.6);
-      signGroup.rotation.y = -0.35;
-      const signPost = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 1.35, 8), woodMat);
-      signPost.position.y = 0.675;
-      const signBoard = new THREE.Mesh(
-        new THREE.BoxGeometry(1.45, 0.78, 0.1),
-        new THREE.MeshStandardMaterial({ map: createSignTexture('Pulau Semesta', '28 Nov 2026 • 22nd') })
-      );
-      signBoard.position.y = 1.25;
-      signBoard.castShadow = true;
-      signGroup.add(signPost, signBoard);
-      islandGroup.add(signGroup);
-
+      // Rumah Marun-Emas di Pulau Utama
       const cottage = new THREE.Group();
       cottage.position.set(0, 0, -4.6);
-
       const wall = new THREE.Mesh(
         new THREE.BoxGeometry(4.6, 2.7, 3.6),
         new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.75 })
@@ -1022,73 +1184,24 @@
       });
       islandGroup.add(cottage);
 
-      function addTree(x, z, isSakura = true, scale = 1) {
-        const t = new THREE.Group();
-        t.position.set(x, 0, z);
-        t.scale.setScalar(scale);
-        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.32, 1.8, 10), woodMat);
-        trunk.position.y = 0.9;
-        trunk.castShadow = true;
-        t.add(trunk);
+      // Papan Nama Pulau Utama
+      const signGroup = new THREE.Group();
+      signGroup.position.set(2.3, 0, 7.2);
+      signGroup.rotation.y = -0.35;
+      const signPost = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 1.35, 8), woodMat);
+      signPost.position.y = 0.675;
+      const signBoard = new THREE.Mesh(
+        new THREE.BoxGeometry(1.45, 0.78, 0.1),
+        new THREE.MeshStandardMaterial({ map: createSignTexture('Pulau Utama', '4 Pulau • 22nd') })
+      );
+      signBoard.position.y = 1.25;
+      signBoard.castShadow = true;
+      signGroup.add(signPost, signBoard);
+      islandGroup.add(signGroup);
 
-        const foliageColor = isSakura ? '#e88aa6' : '#2d7a47';
-        const fMat = new THREE.MeshStandardMaterial({ color: foliageColor, roughness: 0.75 });
-        [[0, 2.3, 0, 1.15], [-0.65, 1.9, 0.4, 0.8], [0.65, 1.95, -0.3, 0.85]].forEach(([fx, fy, fz, r]) => {
-          const puff = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 1), fMat);
-          puff.position.set(fx, fy, fz);
-          puff.castShadow = true;
-          t.add(puff);
-        });
-        islandGroup.add(t);
-      }
-
-      addTree(-6.8, -3.5, true, 1.15);
-      addTree(7.2, -3.2, true, 1.1);
-      addTree(-7.5, 3.8, false, 1.0);
-      addTree(7.4, 4.2, false, 1.05);
-      addTree(-4.2, -7.2, false, 0.95);
-      addTree(4.6, -7.0, true, 1.0);
-
-      const petalGeo = new THREE.CircleGeometry(0.075, 6);
-      const petalMat = new THREE.MeshBasicMaterial({ color: '#f7b2c7', side: THREE.DoubleSide });
-      for (let i = 0; i < 36; i++) {
-        const p = new THREE.Mesh(petalGeo, petalMat);
-        p.position.set((Math.random() - 0.5) * 18, 1 + Math.random() * 4.5, (Math.random() - 0.5) * 18);
-        p.userData = { speedY: 0.35 + Math.random() * 0.35, phase: Math.random() * Math.PI * 2 };
-        islandGroup.add(p);
-        sakuraPetals.push(p);
-      }
-
-      keyMesh = new THREE.Group();
-      keyMesh.position.set(6.5, 0.85, -1.5);
-      const goldMat = new THREE.MeshStandardMaterial({ color: '#f7ecc6', metalness: 0.9, roughness: 0.15, emissive: '#d97706', emissiveIntensity: 0.55 });
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.06, 12, 24), goldMat);
-      ring.position.y = 0.25;
-      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.55, 10), goldMat);
-      shaft.position.y = -0.15;
-      const bit = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.05), goldMat);
-      bit.position.set(0.09, -0.32, 0);
-      keyMesh.add(ring, shaft, bit);
-      islandGroup.add(keyMesh);
-
-      // Afa: Kacamata hitam, rambut gelap rapi, polo/kemeja navy seperti di foto couple
-      afaMesh = createChibiCharacter({
-        longHair: false,
-        hasGlasses: true,
-        catEyeGlasses: false,
-        glassColor: '#141318',
-        shirtColor: '#15274a',
-        collarColor: '#1e3a6e',
-        pantsColor: '#181a22',
-        shoeColor: '#f5f5f4',
-        hairColor: '#151210'
-      });
-      afaMesh.position.set(-2.8, 0, 1.5);
-      afaMesh.rotation.y = 0.5;
-      islandGroup.add(afaMesh);
-
+      // Ayunan Pantai di Pulau Utama
       const swingGroup = new THREE.Group();
-      swingGroup.position.set(-6.2, 0, 6.2);
+      swingGroup.position.set(-5.8, 0, 5.8);
       swingGroup.rotation.y = 0.7;
       [-1.1, 1.1].forEach(sx => {
         const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 2.4, 10), pillarMat);
@@ -1115,6 +1228,7 @@
       swingGroup.add(beachSwingSeat);
       islandGroup.add(swingGroup);
 
+      // Jukebox di Pulau Utama
       const jukebox = new THREE.Group();
       jukebox.position.set(4.5, 0, 3.2);
       jukebox.rotation.y = -0.6;
@@ -1131,9 +1245,226 @@
       jukebox.add(jbBody, jbTop);
       islandGroup.add(jukebox);
 
+      // ==========================================
+      // PULAU SENJA & DERMAGA (BARAT: -21, 1.5)
+      // ==========================================
+      const senjaSign = new THREE.Group();
+      senjaSign.position.set(-16.2, 0, 1.5);
+      senjaSign.rotation.y = 0.4;
+      const sPost = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 1.3, 8), woodMat);
+      sPost.position.y = 0.65;
+      const sBoard = new THREE.Mesh(
+        new THREE.BoxGeometry(1.5, 0.75, 0.1),
+        new THREE.MeshStandardMaterial({ map: createSignTexture('Pulau Senja', 'Dermaga & Api Unggun') })
+      );
+      sBoard.position.y = 1.2;
+      senjaSign.add(sPost, sBoard);
+      islandGroup.add(senjaSign);
+
+      const scopeGroup = new THREE.Group();
+      scopeGroup.position.set(-25.5, 0, 0.5);
+      const tripod = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.22, 1.1, 8), pillarMat);
+      tripod.position.y = 0.55;
+      const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.85, 12), goldMetalMat);
+      scope.position.set(0, 1.15, 0);
+      scope.rotation.z = Math.PI / 3.2;
+      scopeGroup.add(tripod, scope);
+      islandGroup.add(scopeGroup);
+
+      const campGroup = new THREE.Group();
+      campGroup.position.set(-21.5, 0, -1.8);
+      for (let i = 0; i < 7; i++) {
+        const ang = (i / 7) * Math.PI * 2;
+        const stone = new THREE.Mesh(
+          new THREE.DodecahedronGeometry(0.2, 0),
+          new THREE.MeshStandardMaterial({ color: '#6b6570', roughness: 0.9 })
+        );
+        stone.position.set(Math.cos(ang) * 0.65, 0.14, Math.sin(ang) * 0.65);
+        campGroup.add(stone);
+      }
+      const log1 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.1, 8), woodMat);
+      log1.rotation.z = Math.PI / 2.6;
+      log1.position.y = 0.16;
+      const log2 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.1, 8), woodMat);
+      log2.rotation.z = -Math.PI / 2.6;
+      log2.rotation.y = Math.PI / 2;
+      log2.position.y = 0.16;
+      fireFlameMesh = new THREE.Mesh(
+        new THREE.ConeGeometry(0.35, 0.85, 8),
+        new THREE.MeshBasicMaterial({ color: '#fb923c' })
+      );
+      fireFlameMesh.position.y = 0.52;
+      fireFlameMesh.visible = false;
+      campGroup.add(log1, log2, fireFlameMesh);
+      islandGroup.add(campGroup);
+
+      bottleMesh = new THREE.Group();
+      bottleMesh.position.set(-23.8, 0.12, 5.2);
+      const glassBottle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.14, 0.18, 0.45, 12),
+        new THREE.MeshStandardMaterial({ color: '#99f6e4', transparent: true, opacity: 0.72, roughness: 0.15 })
+      );
+      const cork = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.09, 0.09, 0.1, 10),
+        new THREE.MeshStandardMaterial({ color: '#b45309', roughness: 0.8 })
+      );
+      cork.position.y = 0.25;
+      bottleMesh.add(glassBottle, cork);
+      islandGroup.add(bottleMesh);
+
+      paperBoat = new THREE.Group();
+      paperBoat.position.set(-28.5, -0.35, 3.2);
+      const boatHull = new THREE.Mesh(
+        new THREE.ConeGeometry(0.45, 0.36, 4),
+        new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.5 })
+      );
+      boatHull.rotation.x = Math.PI;
+      boatHull.scale.set(1.4, 0.8, 0.8);
+      const boatSail = new THREE.Mesh(
+        new THREE.ConeGeometry(0.3, 0.48, 3),
+        new THREE.MeshStandardMaterial({ color: '#e8d9a8', roughness: 0.4 })
+      );
+      boatSail.position.y = 0.24;
+      paperBoat.add(boatHull, boatSail);
+      islandGroup.add(paperBoat);
+
+      // ==========================================
+      // PULAU SAKURA & KENANGAN (TIMUR: 21, -1.0)
+      // ==========================================
+      const sakuraSign = new THREE.Group();
+      sakuraSign.position.set(16.2, 0, -1.0);
+      sakuraSign.rotation.y = -0.35;
+      const kPost = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 1.3, 8), woodMat);
+      kPost.position.y = 0.65;
+      const kBoard = new THREE.Mesh(
+        new THREE.BoxGeometry(1.5, 0.75, 0.1),
+        new THREE.MeshStandardMaterial({ map: createSignTexture('Pulau Sakura', 'Kunci & Kuis Kita') })
+      );
+      kBoard.position.y = 1.2;
+      sakuraSign.add(kPost, kBoard);
+      islandGroup.add(sakuraSign);
+
+      keyMesh = new THREE.Group();
+      keyMesh.position.set(22.5, 0.85, -2.5);
+      const goldMat = new THREE.MeshStandardMaterial({ color: '#f7ecc6', metalness: 0.9, roughness: 0.15, emissive: '#d97706', emissiveIntensity: 0.55 });
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.06, 12, 24), goldMat);
+      ring.position.y = 0.25;
+      const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.55, 10), goldMat);
+      shaft.position.y = -0.15;
+      const bit = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.05), goldMat);
+      bit.position.set(0.09, -0.32, 0);
+      keyMesh.add(ring, shaft, bit);
+      islandGroup.add(keyMesh);
+
+      const boardGroup = new THREE.Group();
+      boardGroup.position.set(20.2, 0, 2.2);
+      boardGroup.rotation.y = -0.45;
+      [-0.7, 0.7].forEach(px => {
+        const p = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 1.5, 8), woodMat);
+        p.position.set(px, 0.75, 0);
+        boardGroup.add(p);
+      });
+      const noteBoard = new THREE.Mesh(
+        new THREE.BoxGeometry(1.65, 1.05, 0.12),
+        new THREE.MeshStandardMaterial({ map: createSignTexture('Kuis Kenangan', 'Klik untuk Main!') })
+      );
+      noteBoard.position.y = 1.25;
+      boardGroup.add(noteBoard);
+      islandGroup.add(boardGroup);
+
+      // ==========================================
+      // PULAU LENTERA & KEMBANG API (UTARA: 0, -20.5)
+      // ==========================================
+      const northSign = new THREE.Group();
+      northSign.position.set(-2.2, 0, -16.2);
+      northSign.rotation.y = 0.3;
+      const nPost = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 1.3, 8), woodMat);
+      nPost.position.y = 0.65;
+      const nBoard = new THREE.Mesh(
+        new THREE.BoxGeometry(1.55, 0.75, 0.1),
+        new THREE.MeshStandardMaterial({ map: createSignTexture('Pulau Lentera', 'Kembang Api 22nd') })
+      );
+      nBoard.position.y = 1.2;
+      northSign.add(nPost, nBoard);
+      islandGroup.add(northSign);
+
+      // Peluncur Kembang Api 22nd (0, -21.2)
+      const fwStand = new THREE.Group();
+      fwStand.position.set(0, 0, -21.2);
+      const fwBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.1, 1.3, 0.35, 18),
+        pillarMat
+      );
+      fwBase.position.y = 0.18;
+      const fwTube1 = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.9, 12), goldMetalMat);
+      fwTube1.position.set(-0.35, 0.65, 0);
+      fwTube1.rotation.z = 0.15;
+      const fwTube2 = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 1.05, 12), goldMetalMat);
+      fwTube2.position.set(0, 0.72, 0);
+      const fwTube3 = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.9, 12), goldMetalMat);
+      fwTube3.position.set(0.35, 0.65, 0);
+      fwTube3.rotation.z = -0.15;
+      fwStand.add(fwBase, fwTube1, fwTube2, fwTube3);
+      islandGroup.add(fwStand);
+
+      // Pepohonan di Keempat Pulau
+      addTree(-6.8, -3.5, true, 1.15);
+      addTree(7.2, -3.2, true, 1.1);
+      addTree(-7.5, 3.8, false, 1.0);
+      addTree(-24.2, -3.2, false, 1.05);
+      addTree(-18.5, 4.5, true, 0.95);
+      addTree(19.0, -4.5, true, 1.2);
+      addTree(24.8, 1.8, true, 1.15);
+      addTree(23.5, -4.8, false, 1.0);
+      addTree(-3.8, -22.5, true, 1.05);
+      addTree(3.8, -22.5, true, 1.05);
+
+      // Kelopak Sakura Jatuh
+      const petalGeo = new THREE.CircleGeometry(0.08, 6);
+      const petalMat = new THREE.MeshBasicMaterial({ color: '#f7b2c7', side: THREE.DoubleSide });
+      for (let i = 0; i < 56; i++) {
+        const p = new THREE.Mesh(petalGeo, petalMat);
+        p.position.set(15 + Math.random() * 14, 1 + Math.random() * 5, -8 + Math.random() * 14);
+        p.userData = { speedY: 0.35 + Math.random() * 0.35, phase: Math.random() * Math.PI * 2 };
+        islandGroup.add(p);
+        sakuraPetals.push(p);
+      }
+
+      // Afa: Kacamata hitam, rambut gelap rapi, polo navy
+      afaMesh = createChibiCharacter({
+        longHair: false,
+        hasGlasses: true,
+        catEyeGlasses: false,
+        glassColor: '#141318',
+        shirtColor: '#15274a',
+        collarColor: '#1e3a6e',
+        pantsColor: '#181a22',
+        shoeColor: '#f5f5f4',
+        hairColor: '#151210'
+      });
+      afaMesh.position.set(-2.8, 0, 1.5);
+      afaMesh.rotation.y = 0.5;
+      islandGroup.add(afaMesh);
+
+      // Interaksi di Gugusan 4 Pulau
       interactables.push(
         {
-          id: 'key', scene: 'island', pos: new THREE.Vector3(6.5, 0, -1.5), radius: 2.2,
+          id: 'boat', scene: 'island', pos: () => rideableBoat.position, radius: 2.8,
+          icon: '⛵', label: 'Naik Perahu Keliling Laut',
+          action: () => toggleBoatSailing()
+        },
+        {
+          id: 'fireworks', scene: 'island', pos: new THREE.Vector3(0, 0, -21.2), radius: 2.5,
+          icon: '🎆', label: 'Nyalakan Kembang Api 22nd!',
+          action: () => {
+            audio.playSfx('firework');
+            completeSideQuest('fireworks');
+            launchFireworksShow();
+            showToast('🎆 Selamat Ulang Tahun ke-22, Nadhifa! Kembang api meluncur!');
+          }
+        },
+        {
+          id: 'key', scene: 'island', pos: new THREE.Vector3(22.5, 0, -2.5), radius: 2.3,
           icon: '🔑', label: 'Ambil Kunci Emas',
           action: () => {
             if (state.hasKey) return;
@@ -1141,31 +1472,66 @@
             keyMesh.visible = false;
             completeQuest('key');
             audio.playSfx('key');
-            spawnHearts(new THREE.Vector3(6.5, 1.2, -1.5), 22);
+            spawnHearts(new THREE.Vector3(22.5, 1.2, -2.5), 24);
             document.getElementById('key-status').textContent = '🔑 Kunci Emas';
             document.getElementById('key-status').style.background = 'rgba(232, 217, 168, 0.92)';
             document.getElementById('key-status').style.color = '#2a0812';
-            document.getElementById('quest-text').textContent = 'Misi: Masuk ke Rumah Marun-Emas di utara pulau!';
-            showToast('✨ Kunci Emas ditemukan! Pintu rumah sekarang terbuka.');
+            document.getElementById('quest-text').textContent = 'Kunci Emas didapat! Kembali ke Rumah Marun di Pulau Utama.';
+            showToast('✨ Kunci Emas ditemukan di Pulau Sakura!');
           }
         },
         {
-          id: 'telescope', scene: 'island', pos: new THREE.Vector3(-10.2, 0, -1.2), radius: 2.4,
+          id: 'quiz', scene: 'island', pos: new THREE.Vector3(20.2, 0, 2.2), radius: 2.4,
+          icon: '🧠', label: 'Main Kuis Kenangan Kita',
+          action: () => openMemoryQuizModal()
+        },
+        {
+          id: 'telescope', scene: 'island', pos: new THREE.Vector3(-25.5, 0, 0.5), radius: 2.4,
           icon: '🔭', label: 'Intip Teleskop Dermaga',
           action: () => {
             audio.playSfx('key');
             completeQuest('telescope');
-            spawnHearts(new THREE.Vector3(-10.5, 1.8, -1.2), 18);
+            spawnHearts(new THREE.Vector3(-25.5, 1.8, 0.5), 18);
             const q = STAR_QUOTES[Math.floor(Math.random() * STAR_QUOTES.length)];
-            openModal('Teleskop Bintang Semesta 🔭', '✨', `
+            openModal('Teleskop Bintang Pulau Senja 🔭', '✨', `
               <div class="glass-cream rounded-2xl p-5 text-center space-y-3">
                 <div class="text-4xl">🌙✨💫</div>
                 <h3 class="font-serif-title italic font-bold text-xl" style="color: #5e0f25;">Bintang Paling Terang Malam Ini</h3>
-                <p class="text-sm leading-relaxed">Dari ribuan bintang di langit Pulau Semesta, ada satu jejak obrolan kita yang bersinar paling terang:</p>
+                <p class="text-sm leading-relaxed">Dari dermaga Pulau Senja, satu pesan kita bersinar paling terang:</p>
                 <blockquote class="p-3.5 rounded-2xl italic font-cg text-lg" style="background: rgba(94, 15, 37, 0.08); color: #5e0f25;">
                   "${q.x}"
                   <div class="text-xs font-sans not-italic opacity-70 mt-1">— Pukul ${q.t}</div>
                 </blockquote>
+              </div>
+            `);
+          }
+        },
+        {
+          id: 'campfire', scene: 'island', pos: new THREE.Vector3(-21.5, 0, -1.8), radius: 2.4,
+          icon: '🔥', label: 'Nyalakan Api Unggun Hangat',
+          action: () => {
+            audio.playSfx('key');
+            state.campfireLit = !state.campfireLit;
+            fireFlameMesh.visible = state.campfireLit;
+            completeSideQuest('campfire');
+            spawnHearts(new THREE.Vector3(-21.5, 1.3, -1.8), 18);
+            showToast(state.campfireLit ? '🔥 Api unggun menyala hangat di Pulau Senja!' : '🌙 Api unggun beristirahat.');
+          }
+        },
+        {
+          id: 'bottle', scene: 'island', pos: new THREE.Vector3(-23.8, 0, 5.2), radius: 2.3,
+          icon: '🍾', label: 'Buka Botol Harapan',
+          action: () => {
+            audio.playSfx('pop');
+            completeSideQuest('bottle');
+            spawnHearts(new THREE.Vector3(-23.8, 1.2, 5.2), 16);
+            openModal('Botol Harapan di Pantai Barat 🍾', '🌊', `
+              <div class="glass-cream rounded-2xl p-5 space-y-3">
+                <h3 class="font-serif-title italic font-bold text-xl" style="color: #5e0f25;">Pesan Dalam Botol</h3>
+                <p class="text-sm leading-relaxed">"Kalau suatu hari kamu capek sama keramaian atau tugas-tugasmu, ingat ya: kamu nggak harus selalu kuat sendirian. Cerita aja pelan-pelan, aku selalu dengerin."</p>
+                <div class="text-xs font-bold p-2.5 rounded-xl" style="background: rgba(94, 15, 37, 0.1); color: #5e0f25;">
+                  🌊 Side Quest Botol Harapan selesai!
+                </div>
               </div>
             `);
           }
@@ -1178,8 +1544,7 @@
               audio.playSfx('pop');
               openModal('Pintu Masih Terkunci 🔒', '🚪', `
                 <div class="glass-cream rounded-2xl p-4 space-y-2">
-                  <p>Pintunya masih terkunci rapat, sayang! Kata Afa, <b>Kunci Emas</b>-nya berkilau di dekat pohon sakura di sebelah kanan (timur) pulau.</p>
-                  <p class="text-xs font-bold" style="color: #7a1636;">Petunjuk: Jalan ke kanan pulau untuk mengambil Kunci Emas dulu ya!</p>
+                  <p>Pintunya masih terkunci, sayang! <b>Kunci Emas</b> ada di <b>Pulau Sakura</b> (seberangi jembatan kayu ke arah kanan/timur).</p>
                 </div>
               `);
               return;
@@ -1197,7 +1562,7 @@
             openModal('Afa (Pipaww) 🤍', '💬', `
               <div class="glass-cream rounded-2xl p-4 space-y-2.5">
                 <div class="font-bold" style="color: #5e0f25;">Afa (Pipaww):</div>
-                <p>"Selamat ulang tahun ke-22, cantikku! Aku sudah siapin kue ulang tahun 22 lilin, foto-foto kita di dinding, surat lengkapku, mesin Tetris, dan photobooth pro di dalam rumah. Mau aku temenin keliling pulau?"</p>
+                <p>"Selamat ulang tahun ke-22, cantikku! Sekarang ada 4 pulau dan perahu layar di dermaga selatan yang bisa kita naiki bareng. Coba juga nyalakan kembang api di Pulau Lentera ya!"</p>
                 <div class="text-xs italic p-2.5 rounded-xl" style="background: rgba(94, 15, 37, 0.08); color: #5e0f25;">
                   💬 Ingat chat kita: "${randomQuote}"
                 </div>
@@ -1209,7 +1574,7 @@
           }
         },
         {
-          id: 'swing', scene: 'island', pos: new THREE.Vector3(-6.2, 0, 6.2), radius: 2.4,
+          id: 'swing', scene: 'island', pos: new THREE.Vector3(-5.8, 0, 5.8), radius: 2.4,
           icon: '🎠', label: 'Naik Ayunan Pantai',
           action: () => toggleSwing()
         },
@@ -1422,7 +1787,7 @@
             openModal('Selamat Ulang Tahun ke-22, Nadhifa! 🎂', '🕯️', `
               <div class="glass-cream rounded-2xl p-5 text-center space-y-3">
                 <div class="text-5xl">${state.candlesLit ? '🎂🕯️' : '🎂✨'}</div>
-                <h3 class="font-serif-title italic font-bold text-xl" style="color: #5e0f25;">Pejamkan mata & buat satu harapan...</h3>
+                <h3 class="font-serif-title italic font-bold text-xl" style="color: #5e0f25;">Pejamkan mata &amp; buat satu harapan...</h3>
                 <p class="text-sm leading-relaxed">Semoga semua doa dan keinginan baik yang kamu simpan diam-diam menemukan jalannya untuk terkabul di usia 22 tahun ini. Aku selalu bersyukur bisa merayakan hari spesialmu!</p>
                 <div class="text-xs font-bold py-2.5 px-3 rounded-xl" style="background: rgba(94, 15, 37, 0.1); color: #5e0f25;">
                   ${state.candlesLit ? '22 lilin menyala kembali! Klik interaksi lagi untuk meniupnya.' : 'Semua 22 lilin padam! Semoga semua doamu terkabul 🤍'}
@@ -1474,18 +1839,18 @@
     buildHouse();
 
     // ==========================================
-    // 8. PARTICLE SYSTEM
+    // 8. PARTICLE & FIREWORKS SYSTEM
     // ==========================================
     const fireflyGeo = new THREE.BufferGeometry();
-    const fireflyCount = 110;
+    const fireflyCount = 170;
     const fireflyPos = new Float32Array(fireflyCount * 3);
     for (let i = 0; i < fireflyCount; i++) {
-      fireflyPos[i * 3] = (Math.random() - 0.5) * 26;
+      fireflyPos[i * 3] = (Math.random() - 0.5) * 60;
       fireflyPos[i * 3 + 1] = 0.5 + Math.random() * 5.5;
-      fireflyPos[i * 3 + 2] = (Math.random() - 0.5) * 26;
+      fireflyPos[i * 3 + 2] = (Math.random() - 0.5) * 52;
     }
     fireflyGeo.setAttribute('position', new THREE.BufferAttribute(fireflyPos, 3));
-    const fireflyMat = new THREE.PointsMaterial({ color: '#f7ecc6', size: 0.19, transparent: true, opacity: 0.9 });
+    const fireflyMat = new THREE.PointsMaterial({ color: '#f7ecc6', size: 0.2, transparent: true, opacity: 0.9 });
     const fireflies = new THREE.Points(fireflyGeo, fireflyMat);
     scene.add(fireflies);
 
@@ -1498,24 +1863,163 @@
         m.position.copy(origin);
         m.userData = {
           vel: new THREE.Vector3((Math.random() - 0.5) * 2.8, 1.6 + Math.random() * 2.6, (Math.random() - 0.5) * 2.8),
-          life: 1.0
+          life: 1.0,
+          gravity: 0
         };
         scene.add(m);
         particles.push(m);
       }
     }
 
+    function launchFireworksShow() {
+      const bursts = [
+        new THREE.Vector3(-2.5, 6.2, -21.5),
+        new THREE.Vector3(2.5, 6.8, -20.5),
+        new THREE.Vector3(0, 7.6, -22.2)
+      ];
+      const palette = ['#f7ecc6', '#ff7597', '#fbbf24', '#60a5fa', '#faf3e6'];
+      bursts.forEach((center, bIdx) => {
+        setTimeout(() => {
+          const geo = new THREE.SphereGeometry(0.11, 8, 8);
+          for (let i = 0; i < 42; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const speed = 2.6 + Math.random() * 2.4;
+            const mat = new THREE.MeshBasicMaterial({ color: palette[(i + bIdx) % palette.length] });
+            const spark = new THREE.Mesh(geo, mat);
+            spark.position.copy(center);
+            spark.userData = {
+              vel: new THREE.Vector3(
+                Math.sin(phi) * Math.cos(theta) * speed,
+                Math.cos(phi) * speed + 1.2,
+                Math.sin(phi) * Math.sin(theta) * speed
+              ),
+              life: 1.35,
+              gravity: 2.2
+            };
+            scene.add(spark);
+            particles.push(spark);
+          }
+        }, bIdx * 340);
+      });
+    }
+
     // ==========================================
-    // 9. COLLISION DETECTION & SCENE CONTROLS
+    // 9. BOAT SAILING, BOUNDS, COLLISIONS & MINIMAP
     // ==========================================
+    function toggleBoatSailing() {
+      if (state.isSwinging) toggleSwing();
+      state.isSailing = !state.isSailing;
+      state.targetPos = null;
+      targetRing.visible = false;
+      const { leftLeg, rightLeg, leftArm, rightArm } = player.userData;
+
+      if (state.isSailing) {
+        audio.playSfx('door');
+        rideableBoat.add(player);
+        player.position.set(0, 0.25, 0.15);
+        player.rotation.set(0, Math.PI, 0);
+        leftLeg.rotation.x = -Math.PI / 2.4;
+        rightLeg.rotation.x = -Math.PI / 2.4;
+        leftArm.rotation.x = -0.35;
+        rightArm.rotation.x = -0.35;
+        document.getElementById('location-badge').textContent = '⛵';
+        document.getElementById('location-name').textContent = 'Berlayar di Laut Semesta';
+        showToast('⛵ Kamu sedang mengemudikan perahu! Arahkan untuk keliling laut.');
+      } else {
+        scene.add(player);
+        // Cari daratan pulau terdekat untuk mendarat
+        let bestIsl = ISLAND_CENTERS[0];
+        let bestD = Infinity;
+        for (const isl of ISLAND_CENTERS) {
+          const d = Math.hypot(rideableBoat.position.x - isl.x, rideableBoat.position.z - isl.z);
+          if (d < bestD) { bestD = d; bestIsl = isl; }
+        }
+        const dirToCenter = new THREE.Vector2(bestIsl.x - rideableBoat.position.x, bestIsl.z - rideableBoat.position.z);
+        if (dirToCenter.length() > 0.01) dirToCenter.normalize();
+        player.position.set(
+          bestIsl.x - dirToCenter.x * (bestIsl.r - 1.2),
+          0,
+          bestIsl.z - dirToCenter.y * (bestIsl.r - 1.2)
+        );
+        leftLeg.rotation.x = 0;
+        rightLeg.rotation.x = 0;
+        leftArm.rotation.x = 0;
+        rightArm.rotation.x = 0;
+        updateCurrentIslandName();
+        showToast(`🏝️ Merapat ke ${bestIsl.name}!`);
+      }
+    }
+
+    function clampToArchipelago(pos) {
+      for (const b of BRIDGES) {
+        if (b.dir === 'x') {
+          if (pos.x >= b.xMin - 0.3 && pos.x <= b.xMax + 0.3 && Math.abs(pos.z - b.zCenter) <= b.halfW + 0.35) {
+            pos.z = THREE.MathUtils.clamp(pos.z, b.zCenter - b.halfW + 0.25, b.zCenter + b.halfW - 0.25);
+            return;
+          }
+        } else if (b.dir === 'z') {
+          if (pos.z >= b.zMin - 0.3 && pos.z <= b.zMax + 0.3 && Math.abs(pos.x - b.xCenter) <= b.halfW + 0.35) {
+            pos.x = THREE.MathUtils.clamp(pos.x, b.xCenter - b.halfW + 0.25, b.xCenter + b.halfW - 0.25);
+            return;
+          }
+        }
+      }
+
+      let bestDist = Infinity;
+      let bestIsland = ISLAND_CENTERS[0];
+      for (const isl of ISLAND_CENTERS) {
+        const d = Math.hypot(pos.x - isl.x, pos.z - isl.z);
+        if (d < bestDist) {
+          bestDist = d;
+          bestIsland = isl;
+        }
+      }
+
+      const maxR = bestIsland.r - 0.45;
+      if (bestDist > maxR && bestDist > 0.001) {
+        pos.x = bestIsland.x + ((pos.x - bestIsland.x) / bestDist) * maxR;
+        pos.z = bestIsland.z + ((pos.z - bestIsland.z) / bestDist) * maxR;
+      }
+    }
+
+    function updateCurrentIslandName() {
+      if (state.sceneMode !== 'island' || state.isSailing) return;
+      for (const b of BRIDGES) {
+        const onBridge = b.dir === 'x'
+          ? (player.position.x >= b.xMin && player.position.x <= b.xMax && Math.abs(player.position.z - b.zCenter) <= b.halfW + 0.6)
+          : (player.position.z >= b.zMin && player.position.z <= b.zMax && Math.abs(player.position.x - b.xCenter) <= b.halfW + 0.6);
+        if (onBridge) {
+          if (state.currentIslandName !== 'Jembatan Kayu') {
+            state.currentIslandName = 'Jembatan Kayu';
+            document.getElementById('location-badge').textContent = '🌉';
+            document.getElementById('location-name').textContent = 'Jembatan Kayu';
+          }
+          return;
+        }
+      }
+      for (const isl of ISLAND_CENTERS) {
+        if (Math.hypot(player.position.x - isl.x, player.position.z - isl.z) <= isl.r) {
+          if (state.currentIslandName !== isl.name) {
+            state.currentIslandName = isl.name;
+            document.getElementById('location-badge').textContent = isl.badge;
+            document.getElementById('location-name').textContent = isl.name;
+          }
+          return;
+        }
+      }
+    }
+
     const islandObstacles = [
       { x: 0, z: -4.6, rx: 2.55, rz: 2.05 },
       { x: -6.8, z: -3.5, r: 0.65 },
       { x: 7.2, z: -3.2, r: 0.65 },
       { x: -7.5, z: 3.8, r: 0.65 },
-      { x: 7.4, z: 4.2, r: 0.65 },
-      { x: -6.2, z: 6.2, r: 1.1 },
-      { x: 4.5, z: 3.2, r: 0.85 }
+      { x: -5.8, z: 5.8, r: 1.1 },
+      { x: 4.5, z: 3.2, r: 0.85 },
+      { x: -21.5, z: -1.8, r: 0.85 },
+      { x: 20.2, z: 2.2, r: 0.85 },
+      { x: 0, z: -21.2, r: 1.25 }
     ];
 
     const houseObstacles = [
@@ -1547,6 +2051,82 @@
           }
         }
       }
+    }
+
+    // Mini-Map Renderer
+    const mmCvs = document.getElementById('minimap-canvas');
+    const mmCtx = mmCvs.getContext('2d');
+    function drawMinimap() {
+      if (state.sceneMode !== 'island') return;
+      const w = mmCvs.width, h = mmCvs.height;
+      mmCtx.fillStyle = '#123942';
+      mmCtx.fillRect(0, 0, w, h);
+
+      const toMap = (wx, wz) => ({
+        x: w / 2 + wx * 1.9,
+        y: h / 2 + 12 + wz * 1.9
+      });
+
+      // Jembatan
+      mmCtx.strokeStyle = '#9c5a34';
+      mmCtx.lineWidth = 4;
+      BRIDGES.forEach(b => {
+        mmCtx.beginPath();
+        if (b.dir === 'x') {
+          const p1 = toMap(b.xMin, b.zCenter);
+          const p2 = toMap(b.xMax, b.zCenter);
+          mmCtx.moveTo(p1.x, p1.y);
+          mmCtx.lineTo(p2.x, p2.y);
+        } else {
+          const p1 = toMap(b.xCenter, b.zMin);
+          const p2 = toMap(b.xCenter, b.zMax);
+          mmCtx.moveTo(p1.x, p1.y);
+          mmCtx.lineTo(p2.x, p2.y);
+        }
+        mmCtx.stroke();
+      });
+
+      // 4 Pulau
+      ISLAND_CENTERS.forEach(isl => {
+        const c = toMap(isl.x, isl.z);
+        mmCtx.fillStyle = '#489352';
+        mmCtx.beginPath();
+        mmCtx.arc(c.x, c.y, isl.r * 1.9, 0, Math.PI * 2);
+        mmCtx.fill();
+        mmCtx.strokeStyle = '#edd5a3';
+        mmCtx.lineWidth = 1.5;
+        mmCtx.stroke();
+      });
+
+      // Titik Kunci Emas (jika belum diambil)
+      if (!state.hasKey && keyMesh) {
+        const kp = toMap(keyMesh.position.x, keyMesh.position.z);
+        mmCtx.fillStyle = '#fbbf24';
+        mmCtx.beginPath();
+        mmCtx.arc(kp.x, kp.y, 2.8, 0, Math.PI * 2);
+        mmCtx.fill();
+      }
+
+      // Titik Afa
+      if (afaMesh) {
+        const ap = toMap(afaMesh.position.x, afaMesh.position.z);
+        mmCtx.fillStyle = '#60a5fa';
+        mmCtx.beginPath();
+        mmCtx.arc(ap.x, ap.y, 2.8, 0, Math.PI * 2);
+        mmCtx.fill();
+      }
+
+      // Titik Nadhifa / Perahu
+      const worldP = new THREE.Vector3();
+      player.getWorldPosition(worldP);
+      const pp = toMap(worldP.x, worldP.z);
+      mmCtx.fillStyle = '#f7ecc6';
+      mmCtx.beginPath();
+      mmCtx.arc(pp.x, pp.y, 3.4, 0, Math.PI * 2);
+      mmCtx.fill();
+      mmCtx.strokeStyle = '#5e0f25';
+      mmCtx.lineWidth = 1.2;
+      mmCtx.stroke();
     }
 
     function toggleCompanionFollow() {
@@ -1584,11 +2164,11 @@
         rightArm.rotation.z = 0.18;
         headGroup.position.y = 1.24;
 
-        spawnHearts(new THREE.Vector3(-6.2, 1.8, 6.2), 18);
+        spawnHearts(new THREE.Vector3(-5.8, 1.8, 5.8), 18);
         showToast('🎠 Asyik! Ketuk layar / tekan Spasi untuk mengayun lebih tinggi!');
       } else {
         scene.add(player);
-        player.position.set(-4.7, 0, 6.6);
+        player.position.set(-4.5, 0, 6.2);
         player.rotation.set(0, 0.7, 0);
         leftLeg.rotation.x = 0;
         rightLeg.rotation.x = 0;
@@ -1602,6 +2182,7 @@
 
     function enterHouse() {
       if (state.isSwinging) toggleSwing();
+      if (state.isSailing) toggleBoatSailing();
       audio.playSfx('door');
       state.sceneMode = 'house';
       islandGroup.visible = false;
@@ -1610,6 +2191,7 @@
       state.targetPos = null;
       targetRing.visible = false;
       document.getElementById('btn-companion-follow').classList.add('hidden');
+      document.getElementById('minimap-wrap').classList.add('hidden');
       document.getElementById('location-badge').textContent = '🏠';
       document.getElementById('location-name').textContent = 'Rumah Hangat Kita';
       document.getElementById('quest-text').textContent = 'Dekati Foto Dinding, Kue 22, Surat, Tetris & Photobooth Pro!';
@@ -1625,16 +2207,16 @@
       state.targetPos = null;
       targetRing.visible = false;
       document.getElementById('btn-companion-follow').classList.remove('hidden');
-      document.getElementById('location-badge').textContent = '🏝️';
-      document.getElementById('location-name').textContent = 'Pulau Semesta';
-      document.getElementById('quest-text').textContent = 'Nikmati suasana pulau atau masuk kembali ke rumah.';
+      document.getElementById('minimap-wrap').classList.remove('hidden');
+      updateCurrentIslandName();
+      document.getElementById('quest-text').textContent = 'Jelajahi 4 pulau via jembatan atau naik perahu di dermaga selatan!';
     }
 
     document.getElementById('btn-theme').addEventListener('click', () => {
       state.lightMode = (state.lightMode + 1) % 3;
       if (state.lightMode === 0) {
         scene.background = new THREE.Color('#3b1224');
-        scene.fog = new THREE.FogExp2('#3b1224', 0.012);
+        scene.fog = new THREE.FogExp2('#3b1224', 0.008);
         sunLight.color.set('#ffe4b5');
         sunLight.intensity = 1.48;
         hemiLight.color.set('#ffeedd');
@@ -1646,7 +2228,7 @@
         document.getElementById('theme-label').textContent = 'Senja Emas';
       } else if (state.lightMode === 1) {
         scene.background = new THREE.Color('#140612');
-        scene.fog = new THREE.FogExp2('#140612', 0.013);
+        scene.fog = new THREE.FogExp2('#140612', 0.0085);
         sunLight.color.set('#c7d2fe');
         sunLight.intensity = 0.85;
         hemiLight.color.set('#93c5fd');
@@ -1658,7 +2240,7 @@
         document.getElementById('theme-label').textContent = 'Malam Bintang';
       } else {
         scene.background = new THREE.Color('#f7d9b9');
-        scene.fog = new THREE.FogExp2('#f7d9b9', 0.011);
+        scene.fog = new THREE.FogExp2('#f7d9b9', 0.0075);
         sunLight.color.set('#fff6e5');
         sunLight.intensity = 1.55;
         hemiLight.color.set('#ffffff');
@@ -1672,8 +2254,10 @@
     });
 
     document.getElementById('btn-cam-reset').addEventListener('click', () => {
-      camera.position.set(player.position.x, player.position.y + 11, player.position.z + 13.5);
-      controls.target.copy(player.position);
+      const worldP = new THREE.Vector3();
+      player.getWorldPosition(worldP);
+      camera.position.set(worldP.x, worldP.y + 13, worldP.z + 16);
+      controls.target.copy(worldP);
     });
 
     document.getElementById('btn-music-toggle').addEventListener('click', () => {
@@ -1692,7 +2276,7 @@
         if (e.code === 'Space' || e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') {
           e.preventDefault();
           state.swingBoost = Math.min(state.swingBoost + 0.24, 0.85);
-          spawnHearts(new THREE.Vector3(-6.2, 1.9, 6.2), 6);
+          spawnHearts(new THREE.Vector3(-5.8, 1.9, 5.8), 6);
           return;
         }
         if (e.key === 'Escape' || e.key.toLowerCase() === 's' || e.key === 'ArrowDown') {
@@ -1763,7 +2347,7 @@
       if (dist > 8) return;
       if (state.isSwinging) {
         state.swingBoost = Math.min(state.swingBoost + 0.22, 0.85);
-        spawnHearts(new THREE.Vector3(-6.2, 1.9, 6.2), 6);
+        spawnHearts(new THREE.Vector3(-5.8, 1.9, 5.8), 6);
         return;
       }
       pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1772,9 +2356,15 @@
       const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
       const hit = new THREE.Vector3();
       if (raycaster.ray.intersectPlane(plane, hit)) {
-        const limit = state.sceneMode === 'island' ? 10.3 : 5.2;
-        hit.x = THREE.MathUtils.clamp(hit.x, -limit, limit);
-        hit.z = THREE.MathUtils.clamp(hit.z, -limit, limit);
+        if (state.isSailing) {
+          hit.x = THREE.MathUtils.clamp(hit.x, -38, 38);
+          hit.z = THREE.MathUtils.clamp(hit.z, -36, 28);
+        } else if (state.sceneMode === 'island') {
+          clampToArchipelago(hit);
+        } else {
+          hit.x = THREE.MathUtils.clamp(hit.x, -5.2, 5.2);
+          hit.z = THREE.MathUtils.clamp(hit.z, -5.2, 5.2);
+        }
         state.targetPos = hit;
         targetRing.position.set(hit.x, 0.04, hit.z);
         targetRing.visible = true;
@@ -1782,7 +2372,7 @@
     });
 
     // ==========================================
-    // 11. MODALS: QUESTS, GALLERY, MUSIC, TETRIS, PHOTOBOOTH PRO, FINALE
+    // 11. MODALS: QUESTS, QUIZ, GALLERY, MUSIC, TETRIS, PHOTOBOOTH PRO, FINALE
     // ==========================================
     const modalBackdrop = document.getElementById('modal-backdrop');
     const modalTitle = document.getElementById('modal-title');
@@ -1820,20 +2410,92 @@
       window.toastTimer = setTimeout(() => t.classList.add('opacity-0'), 3000);
     }
 
+    function openMemoryQuizModal() {
+      audio.playSfx('pop');
+      let step = 0;
+      let correctCount = 0;
+
+      function renderStep() {
+        if (step >= MEMORY_QUIZ.length) {
+          completeSideQuest('quiz');
+          spawnHearts(new THREE.Vector3(20.2, 1.8, 2.2), 24);
+          openModal('Kuis Kenangan Kita Selesai! 🤍', '🧠', `
+            <div class="glass-cream rounded-2xl p-5 text-center space-y-3">
+              <div class="text-4xl">🏆🤍✨</div>
+              <h3 class="font-serif-title italic font-bold text-xl" style="color: #5e0f25;">Skor Kamu: ${correctCount}/${MEMORY_QUIZ.length}</h3>
+              <p class="text-sm leading-relaxed">Setiap tanggal, lagu, dan pesan kecil kita selalu punya tempat spesial di semesta ini.</p>
+            </div>
+          `);
+          return;
+        }
+        const item = MEMORY_QUIZ[step];
+        const optsHTML = item.options.map((opt, idx) => `
+          <button type="button" data-idx="${idx}" class="quiz-opt-btn btn-maroon w-full text-left px-4 py-3 rounded-2xl text-xs font-semibold cursor-pointer">
+            ${opt}
+          </button>
+        `).join('');
+
+        openModal(`Kuis Kenangan (${step + 1}/${MEMORY_QUIZ.length}) 🧠`, '🌸', `
+          <div class="glass-cream rounded-2xl p-4 space-y-3">
+            <h3 class="font-serif-title font-bold text-base" style="color: #5e0f25;">${item.q}</h3>
+            <div class="space-y-2">${optsHTML}</div>
+            <div id="quiz-feedback" class="hidden text-xs p-3 rounded-xl font-medium" style="background: rgba(94, 15, 37, 0.1); color: #5e0f25;"></div>
+          </div>
+        `);
+
+        document.querySelectorAll('.quiz-opt-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const chosen = Number(btn.dataset.idx);
+            const fb = document.getElementById('quiz-feedback');
+            if (chosen === item.ans) {
+              correctCount++;
+              audio.playSfx('key');
+              fb.textContent = `✅ ${item.note}`;
+            } else {
+              audio.playSfx('pop');
+              fb.textContent = `🤍 Jawaban yang tepat: ${item.options[item.ans]}. ${item.note}`;
+            }
+            fb.classList.remove('hidden');
+            setTimeout(() => {
+              step++;
+              renderStep();
+            }, 1450);
+          });
+        });
+      }
+
+      renderStep();
+    }
+
     document.getElementById('btn-quest-list').addEventListener('click', () => {
       audio.playSfx('pop');
-      const itemsHTML = QUEST_INFO.map(q => {
+      const mainHTML = QUEST_INFO.map(q => {
         const done = state.quests[q.id];
         return `
-          <div class="flex items-center gap-3 p-3 rounded-2xl" style="background: ${done ? 'rgba(232, 217, 168, 0.16)' : 'rgba(94, 15, 37, 0.5)'}; border: 1px solid rgba(232, 217, 168, 0.25);">
-            <span class="text-lg">${done ? '✅' : '⬜'}</span>
+          <div class="flex items-center gap-3 p-2.5 rounded-2xl" style="background: ${done ? 'rgba(232, 217, 168, 0.16)' : 'rgba(94, 15, 37, 0.5)'}; border: 1px solid rgba(232, 217, 168, 0.25);">
+            <span class="text-base">${done ? '✅' : '⬜'}</span>
             <span class="text-xs ${done ? 'line-through opacity-75' : 'font-medium'}">${q.label}</span>
           </div>
         `;
       }).join('');
-      openModal('Daftar Misi Pulau Semesta 👑', '📜', `
-        <p class="text-xs opacity-80">Selesaikan ke-6 misi manis ini untuk membuka ucapan penutup spesial ulang tahunmu ke-22:</p>
-        <div class="space-y-2">${itemsHTML}</div>
+
+      const sideHTML = SIDEQUEST_INFO.map(sq => {
+        const done = state.sideQuests[sq.id];
+        return `
+          <div class="flex items-center gap-3 p-2.5 rounded-2xl" style="background: ${done ? 'rgba(232, 217, 168, 0.16)' : 'rgba(94, 15, 37, 0.35)'}; border: 1px solid rgba(232, 217, 168, 0.2);">
+            <span class="text-base">${done ? '🌟' : '▫️'}</span>
+            <span class="text-xs ${done ? 'line-through opacity-75' : 'font-medium'}">${sq.label}</span>
+          </div>
+        `;
+      }).join('');
+
+      openModal('Misi Utama & Side Quest 👑', '📜', `
+        <div class="space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider" style="color: var(--gold);">Misi Utama (6)</div>
+          <div class="space-y-1.5">${mainHTML}</div>
+          <div class="text-xs font-bold uppercase tracking-wider pt-2" style="color: var(--gold);">Side Quest Gugusan 4 Pulau (4)</div>
+          <div class="space-y-1.5">${sideHTML}</div>
+        </div>
       `);
     });
 
@@ -1925,7 +2587,7 @@
           </div>
 
           <a href="lagu.html" class="btn-maroon block text-center w-full py-3 rounded-full text-xs font-bold uppercase tracking-wider mt-2">
-            Buka Halaman Lirik & Roll Kenangan →
+            Buka Halaman Lirik &amp; Roll Kenangan →
           </a>
         </div>
       `);
@@ -2260,7 +2922,7 @@
             <label class="rounded-xl p-2" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
               <span class="block text-[10px] uppercase opacity-75 mb-1">Pilih Frame</span>
               <select id="pb-frame" class="w-full bg-[#260610] text-[#faf3e6] rounded-lg px-2 py-1.5 border border-[#e8d9a8]/30 text-xs">
-                <option value="maroon">Marun & Emas</option>
+                <option value="maroon">Marun &amp; Emas</option>
                 <option value="cream">Krim Klasik</option>
                 <option value="film">Film Roll Gelap</option>
                 <option value="rose">Mawar Senja</option>
@@ -2515,13 +3177,13 @@
 
     function openFinaleModal() {
       audio.playSfx('key');
-      spawnHearts(new THREE.Vector3(player.position.x, 1.8, player.position.z), 40);
+      launchFireworksShow();
       openModal('Semua Misi Semesta Selesai! 🤍', '👑', `
         <div class="glass-cream rounded-2xl p-5 text-center space-y-3">
           <div class="text-4xl">🎂✨🤍</div>
           <h3 class="font-serif-title italic font-bold text-2xl" style="color: #5e0f25;">Selamat Ulang Tahun ke-22, Nadhifa</h3>
           <p class="text-sm leading-relaxed">
-            Kamu sudah menjelajahi seluruh Pulau Semesta, menemukan kunci rumah kita, mengintip bintang di dermaga, meniup 22 lilin, membaca suratku, dan mengabadikan senyummu. Terima kasih sudah hadir dan jadi bagian paling berharga di hari-hariku.
+            Kamu sudah menjelajahi seluruh gugusan 4 Pulau Semesta, menyeberangi jembatan kayu &amp; berlayar dengan perahu, menemukan kunci rumah kita, mengintip bintang di dermaga, meniup 22 lilin, membaca suratku, dan mengabadikan senyummu. Terima kasih sudah hadir dan jadi bagian paling berharga di hari-hariku.
           </p>
         </div>
         <div class="flex flex-col gap-2.5 pt-1">
@@ -2574,15 +3236,28 @@
           paperBoat.rotation.z = Math.sin(elapsed * 1.7) * 0.08;
         }
 
+        if (rideableBoat) {
+          rideableBoat.position.y = -0.22 + Math.sin(elapsed * 2.2) * 0.045;
+          rideableBoat.rotation.z = Math.sin(elapsed * 1.6) * 0.05;
+        }
+
+        if (fireFlameMesh && fireFlameMesh.visible) {
+          fireFlameMesh.scale.set(
+            1 + Math.sin(elapsed * 16) * 0.14,
+            1 + Math.cos(elapsed * 19) * 0.22,
+            1 + Math.sin(elapsed * 15) * 0.14
+          );
+        }
+
         sakuraPetals.forEach(p => {
           p.position.y -= p.userData.speedY * dt;
           p.position.x += Math.sin(elapsed * 1.4 + p.userData.phase) * 0.28 * dt;
           p.rotation.x += 1.5 * dt;
           p.rotation.y += 1.2 * dt;
           if (p.position.y < 0.05) {
-            p.position.y = 4.8 + Math.random() * 1.5;
-            p.position.x = (Math.random() - 0.5) * 18;
-            p.position.z = (Math.random() - 0.5) * 18;
+            p.position.y = 5.0 + Math.random() * 1.5;
+            p.position.x = 15 + Math.random() * 14;
+            p.position.z = -8 + Math.random() * 14;
           }
         });
       }
@@ -2610,13 +3285,14 @@
         });
       }
 
-      fireflies.rotation.y = elapsed * 0.06;
+      fireflies.rotation.y = elapsed * 0.05;
       fireflies.position.y = Math.sin(elapsed * 1.2) * 0.25;
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
+        if (p.userData.gravity) p.userData.vel.y -= p.userData.gravity * dt;
         p.position.addScaledVector(p.userData.vel, dt);
-        p.userData.life -= dt * 0.9;
+        p.userData.life -= dt * 0.85;
         p.scale.setScalar(Math.max(p.userData.life, 0.01));
         if (p.userData.life <= 0) {
           scene.remove(p);
@@ -2646,6 +3322,7 @@
           document.getElementById('interact-label').textContent = 'Turun dari Ayunan';
           promptEl.classList.remove('opacity-0', 'translate-y-2');
         }
+        drawMinimap();
         renderer.render(scene, camera);
         return;
       }
@@ -2657,6 +3334,7 @@
       if (keys['a'] || keys['arrowleft']) rawX -= 1;
       if (keys['d'] || keys['arrowright']) rawX += 1;
 
+      const activeMover = state.isSailing ? rideableBoat : player;
       const moveVec = new THREE.Vector3();
       if (Math.hypot(rawX, rawZ) > 0.05) {
         const camAngle = Math.atan2(
@@ -2668,9 +3346,9 @@
         moveVec.x = rawX * cos + rawZ * sin;
         moveVec.z = -rawX * sin + rawZ * cos;
       } else if (state.targetPos) {
-        const diff = new THREE.Vector3().subVectors(state.targetPos, player.position);
+        const diff = new THREE.Vector3().subVectors(state.targetPos, activeMover.position);
         diff.y = 0;
-        if (diff.length() > 0.18) {
+        if (diff.length() > 0.22) {
           moveVec.copy(diff).normalize();
         } else {
           state.targetPos = null;
@@ -2678,7 +3356,65 @@
         }
       }
 
-      const speed = 4.8;
+      if (state.isSailing) {
+        const boatSpeed = 6.8;
+        if (moveVec.lengthSq() > 0.001) {
+          moveVec.normalize();
+          const nextPos = rideableBoat.position.clone().addScaledVector(moveVec, boatSpeed * dt);
+          nextPos.x = THREE.MathUtils.clamp(nextPos.x, -38, 38);
+          nextPos.z = THREE.MathUtils.clamp(nextPos.z, -36, 28);
+
+          // Jangan tabrak bagian dalam daratan pulau
+          let hitLand = false;
+          for (const isl of ISLAND_CENTERS) {
+            if (Math.hypot(nextPos.x - isl.x, nextPos.z - isl.z) < isl.r + 1.4) {
+              hitLand = true;
+              break;
+            }
+          }
+          if (!hitLand) {
+            rideableBoat.position.x = nextPos.x;
+            rideableBoat.position.z = nextPos.z;
+          }
+
+          const targetAngle = Math.atan2(moveVec.x, moveVec.z);
+          let diffAngle = targetAngle - rideableBoat.rotation.y;
+          while (diffAngle > Math.PI) diffAngle -= Math.PI * 2;
+          while (diffAngle < -Math.PI) diffAngle += Math.PI * 2;
+          rideableBoat.rotation.y += diffAngle * 8 * dt;
+        }
+
+        const camOffset = new THREE.Vector3().subVectors(camera.position, controls.target);
+        controls.target.lerp(new THREE.Vector3(rideableBoat.position.x, 0.9, rideableBoat.position.z), 0.12);
+        camera.position.copy(controls.target).add(camOffset);
+        controls.update();
+
+        // Cek apakah perahu dekat dengan salah satu pulau untuk merapat
+        let nearAnyIsland = false;
+        for (const isl of ISLAND_CENTERS) {
+          if (Math.hypot(rideableBoat.position.x - isl.x, rideableBoat.position.z - isl.z) < isl.r + 4.2) {
+            nearAnyIsland = true;
+            break;
+          }
+        }
+        const promptEl = document.getElementById('interact-prompt');
+        const boatAction = interactables.find(i => i.id === 'boat');
+        if (nearAnyIsland && boatAction) {
+          state.nearbyAction = boatAction;
+          document.getElementById('interact-icon').textContent = '🏝️';
+          document.getElementById('interact-label').textContent = 'Merapat & Turun Perahu';
+          promptEl.classList.remove('opacity-0', 'translate-y-2');
+        } else {
+          state.nearbyAction = null;
+          promptEl.classList.add('opacity-0', 'translate-y-2');
+        }
+
+        drawMinimap();
+        renderer.render(scene, camera);
+        return;
+      }
+
+      const speed = 5.4;
       const isMoving = moveVec.lengthSq() > 0.001;
       const { leftLeg, rightLeg, leftArm, rightArm, headGroup } = player.userData;
 
@@ -2686,10 +3422,14 @@
         moveVec.normalize();
         player.position.addScaledVector(moveVec, speed * dt);
 
-        const bound = state.sceneMode === 'island' ? 10.4 : 5.2;
-        player.position.x = THREE.MathUtils.clamp(player.position.x, -bound, bound);
-        player.position.z = THREE.MathUtils.clamp(player.position.z, -bound, bound);
+        if (state.sceneMode === 'island') {
+          clampToArchipelago(player.position);
+        } else {
+          player.position.x = THREE.MathUtils.clamp(player.position.x, -5.2, 5.2);
+          player.position.z = THREE.MathUtils.clamp(player.position.z, -5.2, 5.2);
+        }
         resolveCollisions(player.position);
+        updateCurrentIslandName();
 
         const targetAngle = Math.atan2(moveVec.x, moveVec.z);
         let diffAngle = targetAngle - player.rotation.y;
@@ -2722,7 +3462,7 @@
           const distAfa = afaMesh.position.distanceTo(desiredAfa);
           if (distAfa > 0.25) {
             const dir = desiredAfa.clone().sub(afaMesh.position).normalize();
-            afaMesh.position.addScaledVector(dir, Math.min(distAfa, 4.2 * dt));
+            afaMesh.position.addScaledVector(dir, Math.min(distAfa, 4.8 * dt));
             afaMesh.rotation.y = Math.atan2(dir.x, dir.z);
             const s = Math.sin(elapsed * 11) * 0.55;
             afaMesh.userData.leftLeg.rotation.x = s;
@@ -2768,6 +3508,7 @@
         promptEl.classList.add('opacity-0', 'translate-y-2');
       }
 
+      drawMinimap();
       renderer.render(scene, camera);
     }
 
