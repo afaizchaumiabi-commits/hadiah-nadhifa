@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Pulau Semesta Nadhifa 3D 🤍</title>
+  <title>Pulau Semesta Nadhifa 3D • Edisi ke-22 🤍</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -12,30 +12,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ink: #1c050b;
-      --night: #340a19;
+      --ink: #18040a;
+      --night: #2e0815;
       --wine: #5e0f25;
       --wine-light: #8a1a3d;
       --rose: #c4566e;
       --gold: #e8d9a8;
-      --gold-bright: #f4e8bd;
+      --gold-bright: #f7ecc6;
       --paper: #faf3e6;
       --serif: 'Playfair Display', Georgia, serif;
       --cg: 'Cormorant Garamond', Georgia, serif;
       --sans: 'Inter', system-ui, sans-serif;
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: var(--sans); background: var(--ink); color: var(--paper); }
-    #canvas-container { position: fixed; inset: 0; z-index: 1; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      overflow: hidden; font-family: var(--sans);
+      background: var(--ink); color: var(--paper);
+    }
+    #canvas-container { position: fixed; inset: 0; z-index: 1; touch-action: none; }
     .font-serif-title { font-family: var(--serif); }
     .font-cg { font-family: var(--cg); }
 
     .glass-maroon {
-      background: rgba(42, 8, 18, 0.84);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(36, 7, 16, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(232, 217, 168, 0.34);
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.48);
       color: var(--paper);
     }
     .glass-cream {
@@ -44,43 +48,86 @@
       color: #2f1c1f;
     }
     .btn-gold {
-      background: linear-gradient(135deg, #f4e8bd 0%, #e8d9a8 60%, #d6c27e 100%);
-      color: #2a0812;
+      background: linear-gradient(135deg, #f7ecc6 0%, #e8d9a8 55%, #d1bc75 100%);
+      color: #260610;
       font-weight: 700;
-      letter-spacing: 0.08em;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      letter-spacing: 0.06em;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
     }
+    .btn-gold:hover { filter: brightness(1.04); }
     .btn-gold:active { transform: scale(0.95); }
+
     .btn-maroon {
-      background: linear-gradient(135deg, #7a1636 0%, #5e0f25 100%);
+      background: linear-gradient(135deg, #7a1636 0%, #520c20 100%);
       color: var(--gold);
-      border: 1px solid rgba(232, 217, 168, 0.4);
-      transition: transform 0.16s ease;
+      border: 1px solid rgba(232, 217, 168, 0.42);
+      transition: transform 0.16s ease, filter 0.16s ease;
     }
+    .btn-maroon:hover { filter: brightness(1.08); }
     .btn-maroon:active { transform: scale(0.95); }
 
     @keyframes floatSlow {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-6px); }
     }
-    .animate-float { animation: floatSlow 2.6s ease-in-out infinite; }
+    .animate-float { animation: floatSlow 2.5s ease-in-out infinite; }
+
+    @keyframes pulseRing {
+      0% { transform: scale(0.92); opacity: 0.85; }
+      50% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(0.92); opacity: 0.85; }
+    }
+    .pulse-gold { animation: pulseRing 2.2s infinite ease-in-out; }
 
     #modal-body::-webkit-scrollbar { width: 5px; }
-    #modal-body::-webkit-scrollbar-thumb { background: rgba(232, 217, 168, 0.4); border-radius: 999px; }
+    #modal-body::-webkit-scrollbar-thumb { background: rgba(232, 217, 168, 0.42); border-radius: 999px; }
+
+    /* Virtual Joystick */
+    #joystick-zone {
+      position: fixed;
+      bottom: 22px;
+      left: 22px;
+      width: 118px;
+      height: 118px;
+      border-radius: 999px;
+      background: rgba(36, 7, 16, 0.58);
+      border: 1.5px solid rgba(232, 217, 168, 0.38);
+      backdrop-filter: blur(10px);
+      z-index: 20;
+      touch-action: none;
+    }
+    #joystick-knob {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 46px;
+      height: 46px;
+      margin-left: -23px;
+      margin-top: -23px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 35% 35%, #f7ecc6, #d4be78);
+      border: 2px solid #5e0f25;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+      pointer-events: none;
+      transition: transform 0.05s linear;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Real Audio Players -->
+  <!-- Real Audio Player -->
   <audio id="mp3-player" preload="metadata"></audio>
+
+  <!-- Camera Flash Overlay for Photobooth -->
+  <div id="flash-overlay" class="fixed inset-0 z-50 bg-white pointer-events-none opacity-0 transition-opacity duration-200"></div>
 
   <!-- 3D Viewport -->
   <div id="canvas-container"></div>
 
-  <!-- Intro Splash Overlay (Maroon & Gold Theme) -->
+  <!-- Intro Splash Overlay -->
   <div id="intro-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-700"
-       style="background: radial-gradient(90% 70% at 50% 45%, #470b1d 0%, #2a0812 55%, #1b050c 100%);">
+       style="background: radial-gradient(95% 75% at 50% 42%, #4e0c20 0%, #260610 58%, #140308 100%);">
     <div class="glass-maroon max-w-md w-full rounded-3xl p-7 text-center relative overflow-hidden">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase mb-4"
            style="background: rgba(232, 217, 168, 0.14); border: 1px solid rgba(232, 217, 168, 0.35); color: var(--gold);">
@@ -91,25 +138,25 @@
       <h1 class="font-serif-title italic font-bold text-3xl sm:text-4xl mb-2" style="color: var(--gold);">
         Pulau Semesta Nadhifa
       </h1>
-      <p class="text-sm leading-relaxed mb-5" style="color: #dfd0d5;">
-        Dunia kecil 3D yang kubuat khusus untukmu. Jelajahi pulau, temukan <b>Kunci Emas</b>, masuk ke rumah hangat kita, tiup 22 lilin, dan abadikan momen di photobooth.
+      <p class="text-sm leading-relaxed mb-5" style="color: #e4d5da;">
+        Semesta kecil 3D yang kubangun khusus di hari ulang tahunmu ke-22. Temukan <b>Kunci Emas</b>, gandeng tangan Afa, tiup 22 lilin, dan abadikan kenangan kita.
       </p>
 
       <div class="grid grid-cols-3 gap-2 text-xs mb-6">
         <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
-          <div class="text-lg mb-1">🕹️</div>
-          <div class="font-semibold" style="color: var(--gold);">WASD / Ketuk</div>
-          <div class="text-[11px] opacity-75">Jalan di Pulau</div>
+          <div class="text-lg mb-1">🧭</div>
+          <div class="font-semibold" style="color: var(--gold);">Joystick / Ketuk</div>
+          <div class="text-[11px] opacity-75">Jelajahi Pulau</div>
         </div>
         <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
           <div class="text-lg mb-1">🔄</div>
           <div class="font-semibold" style="color: var(--gold);">Geser Layar</div>
-          <div class="text-[11px] opacity-75">Putar Kamera 3D</div>
+          <div class="text-[11px] opacity-75">Putar & Zoom 3D</div>
         </div>
         <div class="rounded-2xl p-2.5" style="background: rgba(94, 15, 37, 0.65); border: 1px solid rgba(232, 217, 168, 0.25);">
           <div class="text-lg mb-1">✨</div>
-          <div class="font-semibold" style="color: var(--gold);">Dekati Objek</div>
-          <div class="text-[11px] opacity-75">Buka Kejutan</div>
+          <div class="font-semibold" style="color: var(--gold);">6 Kejutan</div>
+          <div class="text-[11px] opacity-75">Misi Ulang Tahun</div>
         </div>
       </div>
 
@@ -127,18 +174,20 @@
   <!-- Top HUD Bar -->
   <div id="hud-top" class="fixed top-0 left-0 right-0 z-20 p-3 sm:p-4 flex flex-wrap items-start justify-between gap-2 pointer-events-none opacity-0 transition-opacity duration-500">
     <!-- Location & Quest Pill -->
-    <div class="glass-maroon rounded-2xl px-3.5 py-2.5 flex items-center gap-3 pointer-events-auto max-w-[92vw] sm:max-w-md">
+    <div class="glass-maroon rounded-2xl px-3.5 py-2.5 flex items-center gap-3 pointer-events-auto max-w-[94vw] sm:max-w-md">
       <div id="location-badge" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0"
            style="background: linear-gradient(135deg, #8a1a3d, #5e0f25); border: 1px solid rgba(232, 217, 168, 0.45);">
         🏝️
       </div>
       <div class="min-w-0">
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-1.5 flex-wrap">
           <span id="location-name" class="font-serif-title font-bold text-sm truncate" style="color: var(--gold);">Pulau Semesta</span>
           <span id="key-status" class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: rgba(232, 217, 168, 0.16); color: var(--gold); border: 1px solid rgba(232, 217, 168, 0.35);">🔑 Belum Ada</span>
-          <span id="quest-progress" class="text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: rgba(196, 86, 110, 0.3); color: #faf3e6;">0/5 Misi</span>
+          <button id="btn-quest-list" class="text-[10px] font-bold px-2 py-0.5 rounded-full cursor-pointer hover:brightness-110" style="background: rgba(196, 86, 110, 0.38); color: #faf3e6; border: 1px solid rgba(232, 217, 168, 0.3);">
+            <span id="quest-progress">0/6 Misi</span> ▾
+          </button>
         </div>
-        <p id="quest-text" class="text-xs truncate mt-0.5" style="color: #dfd0d5;">Misi: Cari Kunci Emas di dekat pohon sakura kanan!</p>
+        <p id="quest-text" class="text-xs truncate mt-0.5" style="color: #e4d5da;">Misi: Cari Kunci Emas di dekat pohon sakura timur!</p>
       </div>
     </div>
 
@@ -160,30 +209,25 @@
   </div>
 
   <!-- Contextual Prompt Button (Bottom Center) -->
-  <div id="interact-prompt" class="fixed bottom-32 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-2">
+  <div id="interact-prompt" class="fixed bottom-36 sm:bottom-10 left-1/2 -translate-x-1/2 z-20 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-2">
     <button id="btn-interact" class="btn-gold pointer-events-auto px-6 py-3 rounded-full text-xs sm:text-sm uppercase flex items-center gap-2 animate-float cursor-pointer border-2 border-[#5e0f25]">
       <span id="interact-icon">✨</span>
       <span id="interact-label">Interaksi</span>
     </button>
   </div>
 
-  <!-- Mobile / Touch D-Pad (Bottom Left) -->
-  <div id="touch-controls" class="fixed bottom-5 left-5 z-20 grid grid-cols-3 gap-1.5 w-32 h-32 sm:hidden opacity-0 transition-opacity duration-500">
-    <div></div>
-    <button data-dir="up" class="dpad-btn glass-maroon rounded-xl flex items-center justify-center font-bold text-sm" style="color: var(--gold);">▲</button>
-    <div></div>
-    <button data-dir="left" class="dpad-btn glass-maroon rounded-xl flex items-center justify-center font-bold text-sm" style="color: var(--gold);">◀</button>
-    <div class="glass-maroon rounded-xl flex items-center justify-center text-xs">🤍</div>
-    <button data-dir="right" class="dpad-btn glass-maroon rounded-xl flex items-center justify-center font-bold text-sm" style="color: var(--gold);">▶</button>
-    <div></div>
-    <button data-dir="down" class="dpad-btn glass-maroon rounded-xl flex items-center justify-center font-bold text-sm" style="color: var(--gold);">▼</button>
-    <div></div>
+  <!-- Smooth Analog Joystick for Touch/Mobile -->
+  <div id="joystick-zone" class="sm:hidden opacity-0 transition-opacity duration-500">
+    <div id="joystick-knob"></div>
   </div>
 
-  <!-- Quick Scene Switcher & Gallery (Bottom Right) -->
+  <!-- Quick Scene Switcher, Companion & Gallery (Bottom Right) -->
   <div id="hud-bottom-right" class="fixed bottom-5 right-5 z-20 flex flex-col items-end gap-2 opacity-0 transition-opacity duration-500">
-    <button id="btn-finale-shortcut" class="hidden btn-gold px-4 py-2.5 rounded-2xl text-xs uppercase cursor-pointer">
-      ✨ Perayaan Lengkap!
+    <button id="btn-finale-shortcut" class="hidden btn-gold px-4 py-2.5 rounded-2xl text-xs uppercase cursor-pointer pulse-gold">
+      👑 Perayaan Lengkap!
+    </button>
+    <button id="btn-companion-follow" class="glass-maroon px-3.5 py-2 rounded-2xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer" style="color: var(--gold);">
+      <span id="follow-icon">🤝</span> <span id="follow-label">Ajak Afa Jalan</span>
     </button>
     <button id="btn-galeri" class="glass-maroon px-4 py-2.5 rounded-2xl text-xs font-semibold flex items-center gap-2 cursor-pointer" style="color: var(--gold);">
       <span>🖼️</span> Galeri & Semestaku
@@ -206,7 +250,7 @@
   </div>
 
   <!-- Toast Notification -->
-  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full glass-maroon text-xs font-semibold tracking-wide opacity-0 pointer-events-none transition-all duration-300" style="color: var(--gold);">
+  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-2.5 rounded-full glass-maroon text-xs font-semibold tracking-wide opacity-0 pointer-events-none transition-all duration-300 text-center max-w-[90vw]" style="color: var(--gold);">
     Pesan notifikasi
   </div>
 
@@ -221,11 +265,35 @@
     const MEDIA_DATA = window.MEDIA || { fotos: [], videos: [], sync: [] };
     const CHATS_DATA = window.CHATS || [];
     const STATS_DATA = {"total": 39597, "sayang": 11975, "cantik": 175, "start": "2025-06-29"};
-    const STAR_QUOTES = [{"s": "her", "t": "23.59", "x": "maacii sayang sudah mau membaca dan membalas semua cerita aku, aku senang sekaliii"}, {"s": "her", "t": "11.44", "x": "semangat sayang aku dukung kamu selaluuu dari sinii"}, {"s": "her", "t": "00.35", "x": "selamat istirahat sayang semoga nyenyak bobo nyaa"}, {"s": "her", "t": "22.11", "x": "i lovee u more sayangku makasih banyakk yaaw"}, {"s": "her", "t": "11.29", "x": "alhamdulillah kerennn banget kamu, aku banggaa"}, {"s": "her", "t": "15.21", "x": "sayangkuuu semangattt ya kerjanyaaa"}, {"s": "her", "t": "19.40", "x": "hati hatii sayangku semangat kerjanya"}, {"s": "her", "t": "12.05", "x": "semangattt sayangg dijalan hati hati yaaa"}, {"s": "her", "t": "19.12", "x": "boleh kok, selamat istirahat sayangkuuu"}, {"s": "her", "t": "23.59", "x": "maacii sayang sudah mau membaca dan membalas semua cerita aku, aku senang sekaliii"}, {"s": "her", "t": "14.14", "x": "sayang alhamdulillah semangat yaa kerjanyaa"}, {"s": "me", "t": "01.32", "x": "aku bahagia selalu bisa istirahat sama kamu"}, {"s": "me", "t": "01.32", "x": "kalau aku pasti mimpi kamu, wanita paling indah dihidup aku"}, {"s": "me", "t": "14.19", "x": "aku yang peluk kamu sayangku, peluk kamu yang erat gaakan dilepasinn"}, {"s": "me", "t": "02.30", "x": "i love you so much sayang"}, {"s": "me", "t": "00.48", "x": "aku selaluu sayangg sama kamuu dan spark akuu kekamuu selaluu penuhh sayangg, gaakann adaa kondisii aku bosenn kasihku sayangkuu"}, {"s": "me", "t": "08.08", "x": "ndapapaa sayaangg, kamu capeee, aku justruu bahagiaa kamu bisaa istirahatt dengan nyaman, pinterr sayangku"}, {"s": "me", "t": "23.24", "x": "aku sangat kangen kamu"}, {"s": "me", "t": "05.28", "x": "halloww cantikkuu"}, {"s": "me", "t": "17.04", "x": "aaaa cantikkk bangett pacaerkuu sayangggg"}, {"s": "me", "t": "11.03", "x": "selaluuu cantikk siiii pacarrkuu"}, {"s": "me", "t": "11.55", "x": "makasih juga sudah mau obrolin semuanya ke aku sayangg"}, {"s": "me", "t": "14.54", "x": "makasihh yaa sudahh percayaa samaa akuuu"}, {"s": "me", "t": "18.42", "x": "maaciii pappnyaaa cantiikkuuu sayanggg"}, {"s": "me", "t": "19.01", "x": "semangatt bekerjaaanyaaa sayaangkuuu cintakuu"}, {"s": "me", "t": "07.11", "x": "kamuu hebatt bangett, aku bangga banget sama kamu"}, {"s": "me", "t": "13.07", "x": "pinternyaa sayang, aku bangga sama kamu"}, {"s": "me", "t": "01.24", "x": "akuu banggaa bangett kamu sudah ngejalaninn harinyaa sayangku, goodd jobbb"}, {"s": "me", "t": "23.05", "x": "happy 365 sayangg sudahh benerr kamuu, maacii yaa sayangg"}, {"s": "me", "t": "00.50", "x": "aku banggaa banget sama kamu sayanh"}, {"s": "me", "t": "13.30", "x": "aku bahagiaa dengernyaa sayangg"}];
-    const FULL_LETTER = ["HAPPY BIRTHDAYYYYY SAYANGKUUUU, selamat ulang tahun perempuan paling aku sayanggg, selamat bertambah usia cintakuuu, tepat tanggal 28 november ini kamu genap berusia 22 tahun, aku bersyukur banget karena pada tanggal ini seseorang yang begitu berharga buat aku dilahirkan ke dunia, seseorang yang sekarang menjadi bagian penting dalam hari hari aku, seseorang yang bisa membuat aku tersenyum hanya dengan pesan sederhana, seseorang yang ceritanya selalu ingin aku dengarkan, dan seseorang yang selalu punya tempat istimewa di hati aku.", "Sayanggg, di hari ulang tahun kamu ini aku mau berterima kasih sama kamu karena sudah bertahan sejauh ini, terima kasih sudah melewati banyak hal dalam hidup kamu, termasuk hari hari yang mungkin nggak mudah, hari ketika kamu merasa lelah, kecewa, sedih, bingung, atau bahkan merasa nggak cukup baik, aku mungkin nggak selalu tahu semua hal yang pernah kamu hadapi sebelum aku hadir, tapi aku ingin kamu tahu kalau aku menghargai setiap proses yang sudah membawa kamu sampai di titik ini, aku bangga sama kamu, bangga karena kamu terus berusaha menjalani hari hari kamu, tetap bekerja, mengurus banyak hal, menyayangi orang orang di sekitar kamu, dan tetap mencoba melakukan yang terbaik meskipun terkadang keadaan nggak berjalan sesuai keinginan kamu.", "Semoga di usia yang baru ini kamu bisa semakin mengenal diri kamu sendiri, semakin percaya sama kemampuan kamu, semakin berani mengambil kesempatan baik, dan semakin yakin bahwa kamu pantas mendapatkan banyak hal baik dalam hidup.", "Aku berdoa semoga Allah selalu menjaga kamu di mana pun kamu berada, memberikan kesehatan untuk tubuh kamu, ketenangan untuk hati dan pikiran kamu, melancarkan setiap urusan kamu, melapangkan rezeki kamu, memudahkan pekerjaan dan segala cita cita kamu, mempertemukan kamu dengan orang orang yang tulus, serta menjauhkan kamu dari hal hal yang bisa menyakiti dan membuat kamu kehilangan kebahagiaan, semoga setiap doa yang selama ini kamu simpan diam diam bisa menemukan jalannya untuk terkabul, semoga hal hal yang sedang kamu usahakan diberikan hasil terbaik, dan semoga kamu selalu punya alasan untuk tersenyum setiap harinya.", "Aku juga berharap kamu bisa lebih sering memberikan waktu untuk diri sendiri, nggak harus selalu kuat, nggak harus selalu menyelesaikan semuanya dalam satu waktu, nggak harus selalu memikirkan perasaan semua orang sampai lupa memperhatikan diri kamu sendiri, kalau kamu lelah, istirahatlah sayang, kalau kamu sedih, kamu boleh menangis, kalau ada sesuatu yang mengganggu pikiran kamu, kamu boleh cerita, kamu nggak perlu merasa harus menyimpan semuanya sendirian, aku ingin kamu bisa menjalani hidup dengan lebih ringan dan merasa bahwa kamu juga layak mendapatkan perhatian, pengertian, dan kasih sayang.", "Terima kasih sudah menjadi kamu yang aku kenal sekarang, terima kasih untuk semua cerita kecil yang kamu bagikan, semua perhatian yang kamu berikan, semua candaan yang membuat aku tertawa, semua waktu yang kita habiskan bersama, bahkan untuk hal hal sederhana yang mungkin terlihat biasa tetapi selalu punya arti buat aku, aku suka mendengarkan cerita kamu tentang kegiatan sehari hari, tentang pekerjaan, makanan yang kamu inginkan, hal yang membuat kamu kesal, hal yang membuat kamu senang, sampai cerita random yang tiba tiba muncul di tengah obrolan kita, aku ingin terus mengenal kamu lebih dalam, melihat kamu tumbuh, mendukung apa yang ingin kamu capai, dan menemani kamu melewati berbagai bagian kehidupan yang akan datang.", "Aku tahu hubungan kita juga nggak selalu berjalan sempurna, ada kalanya kita berbeda pendapat, salah memahami satu sama lain, atau tanpa sengaja membuat satu sama lain merasa sedih, tapi aku berharap kita terus punya kemauan untuk saling mendengarkan, saling memahami, dan memperbaiki hal hal yang masih perlu diperbaiki, aku nggak berharap kamu menjadi seseorang yang sempurna, aku juga nggak akan menjanjikan bahwa aku selalu bisa melakukan semuanya dengan benar, tetapi aku ingin terus belajar menjadi pasangan yang lebih baik untuk kamu, seseorang yang bisa kamu ajak berbagi cerita, seseorang yang menghargai perasaan kamu, seseorang yang mendukung langkah kamu, dan seseorang yang bisa membuat kamu merasa dicintai dengan baik.", "Semoga di usia 22 tahun ini ada lebih banyak kebahagiaan yang datang kepada kamu, lebih banyak pengalaman yang menyenangkan, lebih banyak kesempatan untuk melakukan hal yang kamu sukai, lebih banyak waktu bersama orang orang yang kamu cintai, dan lebih banyak pencapaian yang bisa kamu banggakan, semoga kamu bisa mewujudkan keinginan keinginan kamu satu per satu, termasuk keinginan kecil yang mungkin belum sempat kamu ceritakan kepada siapa pun, aku ingin melihat kamu bahagia dengan kehidupan yang sedang kamu bangun.", "Sayanggg, jangan pernah merasa bahwa kamu harus menjadi orang lain supaya pantas dicintai, aku mencintai kamu sebagai diri kamu sendiri, dengan segala cerita, kebiasaan, kelebihan, kekurangan, mimpi, dan proses yang sedang kamu jalani, terima kasih sudah hadir dalam hidup aku, terima kasih sudah memberikan aku kesempatan untuk mengenal dan menyayangi kamu sejauh ini.", "Sekali lagi selamat ulang tahun yang ke 22 tahun sayangkuuu, perempuan kesayangan aku, manusia yang selalu ingin aku bahagiakan, semoga panjang umur, sehat selalu, bahagia selalu, dilancarkan segala urusannya, dimudahkan semua langkahnya, dan semoga Allah selalu melindungi kamu dalam setiap perjalanan hidup kamu, nikmati hari spesial kamu yaa cintakuuu, kamu pantas mendapatkan kebahagiaan dan kasih sayang sebanyak banyaknya, hari ini aku ingin kamu merasa disayangi, dihargai, dan dirayakan, aku sayang kamu, hari ini, besok, dan di setiap hari yang masih bisa kita jalani bersama, HAPPY BIRTHDAY MY LOVELYYYY, i love you so so much, sayanggggg 🤍"];
+    const STAR_QUOTES = [
+      {"s": "her", "t": "23.59", "x": "maacii sayang sudah mau membaca dan membalas semua cerita aku, aku senang sekaliii"},
+      {"s": "her", "t": "11.44", "x": "semangat sayang aku dukung kamu selaluuu dari sinii"},
+      {"s": "her", "t": "00.35", "x": "selamat istirahat sayang semoga nyenyak bobo nyaa"},
+      {"s": "her", "t": "22.11", "x": "i lovee u more sayangku makasih banyakk yaaw"},
+      {"s": "her", "t": "11.29", "x": "alhamdulillah kerennn banget kamu, aku banggaa"},
+      {"s": "her", "t": "15.21", "x": "sayangkuuu semangattt ya kerjanyaaa"},
+      {"s": "me", "t": "01.32", "x": "aku bahagia selalu bisa istirahat sama kamu"},
+      {"s": "me", "t": "01.32", "x": "kalau aku pasti mimpi kamu, wanita paling indah dihidup aku"},
+      {"s": "me", "t": "14.19", "x": "aku yang peluk kamu sayangku, peluk kamu yang erat gaakan dilepasinn"},
+      {"s": "me", "t": "02.30", "x": "i love you so much sayang"},
+      {"s": "me", "t": "00.48", "x": "aku selaluu sayangg sama kamuu dan spark akuu kekamuu selaluu penuhh sayangg, gaakann adaa kondisii aku bosenn kasihku sayangkuu"},
+      {"s": "me", "t": "23.05", "x": "happy 365 sayangg sudahh benerr kamuu, maacii yaa sayangg"}
+    ];
+    const FULL_LETTER = [
+      "HAPPY BIRTHDAYYYYY SAYANGKUUUU, selamat ulang tahun perempuan paling aku sayanggg, selamat bertambah usia cintakuuu, tepat tanggal 28 november ini kamu genap berusia 22 tahun, aku bersyukur banget karena pada tanggal ini seseorang yang begitu berharga buat aku dilahirkan ke dunia, seseorang yang sekarang menjadi bagian penting dalam hari hari aku, seseorang yang bisa membuat aku tersenyum hanya dengan pesan sederhana, seseorang yang ceritanya selalu ingin aku dengarkan, dan seseorang yang selalu punya tempat istimewa di hati aku.",
+      "Sayanggg, di hari ulang tahun kamu ini aku mau berterima kasih sama kamu karena sudah bertahan sejauh ini, terima kasih sudah melewati banyak hal dalam hidup kamu, termasuk hari hari yang mungkin nggak mudah, hari ketika kamu merasa lelah, kecewa, sedih, bingung, atau bahkan merasa nggak cukup baik, aku mungkin nggak selalu tahu semua hal yang pernah kamu hadapi sebelum aku hadir, tapi aku ingin kamu tahu kalau aku menghargai setiap proses yang sudah membawa kamu sampai di titik ini, aku bangga sama kamu, bangga karena kamu terus berusaha menjalani hari hari kamu, tetap bekerja, mengurus banyak hal, menyayangi orang orang di sekitar kamu, dan tetap mencoba melakukan yang terbaik meskipun terkadang keadaan nggak berjalan sesuai keinginan kamu.",
+      "Semoga di usia yang baru ini kamu bisa semakin mengenal diri kamu sendiri, semakin percaya sama kemampuan kamu, semakin berani mengambil kesempatan baik, dan semakin yakin bahwa kamu pantas mendapatkan banyak hal baik dalam hidup.",
+      "Aku berdoa semoga Allah selalu menjaga kamu di mana pun kamu berada, memberikan kesehatan untuk tubuh kamu, ketenangan untuk hati dan pikiran kamu, melancarkan setiap urusan kamu, melapangkan rezeki kamu, memudahkan pekerjaan dan segala cita cita kamu, mempertemukan kamu dengan orang orang yang tulus, serta menjauhkan kamu dari hal hal yang bisa menyakiti dan membuat kamu kehilangan kebahagiaan, semoga setiap doa yang selama ini kamu simpan diam diam bisa menemukan jalannya untuk terkabul, semoga hal hal yang sedang kamu usahakan diberikan hasil terbaik, dan semoga kamu selalu punya alasan untuk tersenyum setiap harinya.",
+      "Aku juga berharap kamu bisa lebih sering memberikan waktu untuk diri sendiri, nggak harus selalu kuat, nggak harus selalu menyelesaikan semuanya dalam satu waktu, nggak harus selalu memikirkan perasaan semua orang sampai lupa memperhatikan diri kamu sendiri, kalau kamu lelah, istirahatlah sayang, kalau kamu sedih, kamu boleh menangis, kalau ada sesuatu yang mengganggu pikiran kamu, kamu boleh cerita, kamu nggak perlu merasa harus menyimpan semuanya sendirian, aku ingin kamu bisa menjalani hidup dengan lebih ringan dan merasa bahwa kamu juga layak mendapatkan perhatian, pengertian, dan kasih sayang.",
+      "Terima kasih sudah menjadi kamu yang aku kenal sekarang, terima kasih untuk semua cerita kecil yang kamu bagikan, semua perhatian yang kamu berikan, semua candaan yang membuat aku tertawa, semua waktu yang kita habiskan bersama, bahkan untuk hal hal sederhana yang mungkin terlihat biasa tetapi selalu punya arti buat aku, aku suka mendecarkan cerita kamu tentang kegiatan sehari hari, tentang pekerjaan, makanan yang kamu inginkan, hal yang membuat kamu kesal, hal yang membuat kamu senang, sampai cerita random yang tiba tiba muncul di tengah obrolan kita, aku ingin terus mengenal kamu lebih dalam, melihat kamu tumbuh, mendukung apa yang ingin kamu capai, dan menemani kamu melewati berbagai bagian kehidupan yang akan datang.",
+      "Aku tahu hubungan kita juga nggak selalu berjalan sempurna, ada kalanya kita berbeda pendapat, salah memahami satu sama lain, atau tanpa sengaja membuat satu sama lain merasa sedih, tapi aku berharap kita terus punya kemauan untuk saling mendengarkan, saling memahami, dan memperbaiki hal hal yang masih perlu diperbaiki, aku nggak berharap kamu menjadi seseorang yang sempurna, aku juga nggak akan menjanjikan bahwa aku selalu bisa melakukan semuanya dengan benar, tetapi aku ingin terus belajar menjadi pasangan yang lebih baik untuk kamu, seseorang yang bisa kamu ajak berbagi cerita, seseorang yang menghargai perasaan kamu, seseorang yang mendukung langkah kamu, dan seseorang yang bisa membuat kamu merasa dicintai dengan baik.",
+      "Semoga di usia 22 tahun ini ada lebih banyak kebahagiaan yang datang kepada kamu, lebih banyak pengalaman yang menyenangkan, lebih banyak kesempatan untuk melakukan hal yang kamu sukai, lebih banyak waktu bersama orang orang yang kamu cintai, dan lebih banyak pencapaian yang bisa kamu banggakan, semoga kamu bisa mewujudkan keinginan keinginan kamu satu per satu, termasuk keinginan kecil yang mungkin belum sempat kamu ceritakan kepada siapa pun, aku ingin melihat kamu bahagia dengan kehidupan yang sedang kamu bangun.",
+      "Sayanggg, jangan pernah merasa bahwa kamu harus menjadi orang lain supaya pantas dicintai, aku mencintai kamu sebagai diri kamu sendiri, dengan segala cerita, kebiasaan, kelebihan, kekurangan, mimpi, dan proses yang sedang kamu jalani, terima kasih sudah hadir dalam hidup aku, terima kasih sudah memberikan aku kesempatan untuk mengenal dan menyayangi kamu sejauh ini.",
+      "Sekali lagi selamat ulang tahun yang ke 22 tahun sayangkuuu, perempuan kesayangan aku, manusia yang selalu ingin aku bahagiakan, semoga panjang umur, sehat selalu, bahagia selalu, dilancarkan segala urusannya, dimudahkan semua langkahnya, dan semoga Allah selalu melindungi kamu dalam setiap perjalanan hidup kamu, nikmati hari spesial kamu yaa cintakuuu, kamu pantas mendapatkan kebahagiaan dan kasih sayang sebanyak banyaknya, hari ini aku ingin kamu merasa disayangi, dihargai, dan dirayakan, aku sayang kamu, hari ini, besok, dan di setiap hari yang masih bisa kita jalani bersama, HAPPY BIRTHDAY MY LOVELYYYY, i love you so so much, sayanggggg 🤍"
+    ];
 
     // ==========================================
-    // 1. REAL MP3 PLAYER + WEB AUDIO SFX FALLBACK
+    // 1. REAL MP3 PLAYER + WEB AUDIO SFX
     // ==========================================
     class SemestaAudio {
       constructor() {
@@ -264,7 +332,7 @@
 
       playSfx(kind) {
         if (kind === 'key') {
-          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => this.playTone(f, 0.25, 'triangle', 0.11), i * 80));
+          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => this.playTone(f, 0.26, 'triangle', 0.11), i * 80));
         } else if (kind === 'door') {
           this.playTone(220, 0.22, 'sine', 0.09);
           setTimeout(() => this.playTone(330, 0.32, 'sine', 0.09), 120);
@@ -311,23 +379,22 @@
     const audio = new SemestaAudio();
 
     // ==========================================
-    // 2. PROCEDURAL TEXTURES & PHOTO LOADER
+    // 2. PROCEDURAL TEXTURES & SIGN GENERATORS
     // ==========================================
     function createGrassTexture() {
       const canvas = document.createElement('canvas');
       canvas.width = 512; canvas.height = 512;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#4e9a58';
+      ctx.fillStyle = '#489352';
       ctx.fillRect(0, 0, 512, 512);
-      for (let i = 0; i < 6500; i++) {
-        ctx.fillStyle = Math.random() > 0.5 ? '#5eb068' : '#3f8648';
+      for (let i = 0; i < 7000; i++) {
+        ctx.fillStyle = Math.random() > 0.5 ? '#58a862' : '#3b7f44';
         ctx.fillRect(Math.random() * 512, Math.random() * 512, 2, 5);
       }
-      // Gold & cream wildflower specks matching maroon-gold palette
-      for (let i = 0; i < 75; i++) {
+      for (let i = 0; i < 85; i++) {
         ctx.fillStyle = Math.random() > 0.35 ? '#e8d9a8' : '#f4a2b8';
         ctx.beginPath();
-        ctx.arc(Math.random() * 512, Math.random() * 512, 2.3, 0, Math.PI * 2);
+        ctx.arc(Math.random() * 512, Math.random() * 512, 2.4, 0, Math.PI * 2);
         ctx.fill();
       }
       const tex = new THREE.CanvasTexture(canvas);
@@ -375,6 +442,25 @@
       return tex;
     }
 
+    function createSignTexture(line1, line2) {
+      const c = document.createElement('canvas');
+      c.width = 512; c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#470b1d';
+      ctx.fillRect(0, 0, 512, 256);
+      ctx.strokeStyle = '#e8d9a8';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(14, 14, 484, 228);
+      ctx.fillStyle = '#e8d9a8';
+      ctx.font = 'italic bold 40px Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(line1, 256, 112);
+      ctx.fillStyle = '#faf3e6';
+      ctx.font = '24px sans-serif';
+      ctx.fillText(line2, 256, 168);
+      return new THREE.CanvasTexture(c);
+    }
+
     function createFallbackFrameTexture(label, sub) {
       const c = document.createElement('canvas');
       c.width = 512; c.height = 384;
@@ -398,15 +484,15 @@
     }
 
     // ==========================================
-    // 3. THREE.JS SCENE, RENDERER & LIGHTING
+    // 3. THREE.JS SCENE, RENDERER & 3-MODE LIGHTING
     // ==========================================
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#3b1224');
-    scene.fog = new THREE.FogExp2('#3b1224', 0.013);
+    scene.fog = new THREE.FogExp2('#3b1224', 0.012);
 
-    const camera = new THREE.PerspectiveCamera(44, window.innerWidth / window.innerHeight, 0.1, 200);
-    camera.position.set(0, 12, 16);
+    const camera = new THREE.PerspectiveCamera(44, window.innerWidth / window.innerHeight, 0.1, 220);
+    camera.position.set(0, 11.5, 16.5);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -414,22 +500,21 @@
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.12;
+    renderer.toneMappingExposure = 1.14;
     container.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
+    controls.dampingFactor = 0.065;
     controls.maxPolarAngle = Math.PI / 2.15;
-    controls.minDistance = 6;
+    controls.minDistance = 5.5;
     controls.maxDistance = 28;
 
-    // Warm Golden-Hour & Romantic Maroon Twilight Lighting
-    const hemiLight = new THREE.HemisphereLight('#ffeedd', '#4a1d2d', 0.9);
+    const hemiLight = new THREE.HemisphereLight('#ffeedd', '#4a1d2d', 0.92);
     hemiLight.position.set(0, 25, 0);
     scene.add(hemiLight);
 
-    const sunLight = new THREE.DirectionalLight('#ffe4b5', 1.45);
+    const sunLight = new THREE.DirectionalLight('#ffe4b5', 1.48);
     sunLight.position.set(14, 22, 12);
     sunLight.castShadow = true;
     sunLight.shadow.mapSize.width = 2048;
@@ -444,17 +529,42 @@
     sunLight.shadow.bias = -0.0005;
     scene.add(sunLight);
 
-    const rimLight = new THREE.DirectionalLight('#e8d9a8', 0.55);
+    const rimLight = new THREE.DirectionalLight('#e8d9a8', 0.58);
     rimLight.position.set(-12, 10, -14);
     scene.add(rimLight);
 
+    // Starfield & Crescent Moon for Twilight/Night
+    const starGeo = new THREE.BufferGeometry();
+    const starCount = 420;
+    const starPos = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+      const r = 45 + Math.random() * 45;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.random() * Math.PI * 0.45;
+      starPos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      starPos[i * 3 + 1] = 12 + r * Math.cos(phi);
+      starPos[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+    }
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    const starMat = new THREE.PointsMaterial({ color: '#f7ecc6', size: 0.42, transparent: true, opacity: 0.85 });
+    const starField = new THREE.Points(starGeo, starMat);
+    scene.add(starField);
+
+    const moonMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(2.4, 24, 24),
+      new THREE.MeshBasicMaterial({ color: '#f7ecc6' })
+    );
+    moonMesh.position.set(-22, 26, -32);
+    scene.add(moonMesh);
+
     // ==========================================
-    // 4. GAME STATE & QUEST TRACKER
+    // 4. GAME STATE & 6-QUEST TRACKER
     // ==========================================
     const state = {
       sceneMode: 'island', // 'island' | 'house'
-      isDayMode: false,    // false = Romantic Maroon-Gold Twilight (default), true = Golden Sunny Day
+      lightMode: 0,        // 0 = Senja Emas, 1 = Malam Bintang, 2 = Siang Hangat
       hasKey: false,
+      companionFollow: false,
       isSwinging: false,
       swingTime: 0,
       swingBoost: 0,
@@ -464,6 +574,7 @@
       wallPhotoOffset: 0,
       quests: {
         key: false,
+        telescope: false,
         cake: false,
         letter: false,
         photobooth: false,
@@ -472,15 +583,24 @@
       finaleShown: false
     };
 
+    const QUEST_INFO = [
+      { id: 'key', label: 'Temukan Kunci Emas di bawah pohon sakura timur' },
+      { id: 'telescope', label: 'Intip Bintang Harapan di Teleskop Dermaga' },
+      { id: 'cake', label: 'Tiup 22 Lilin Kue Ulang Tahun di dalam rumah' },
+      { id: 'letter', label: 'Baca Surat Lengkap dari Afa' },
+      { id: 'photobooth', label: 'Ambil 3 Foto di Photobooth Polaroid' },
+      { id: 'tetris', label: 'Mainkan Arcade Tetris Nadhifa' }
+    ];
+
     function completeQuest(key) {
       if (state.quests[key]) return;
       state.quests[key] = true;
       const doneCount = Object.values(state.quests).filter(Boolean).length;
-      document.getElementById('quest-progress').textContent = `${doneCount}/5 Misi`;
-      if (doneCount === 5 && !state.finaleShown) {
+      document.getElementById('quest-progress').textContent = `${doneCount}/6 Misi`;
+      if (doneCount === 6 && !state.finaleShown) {
         state.finaleShown = true;
         document.getElementById('btn-finale-shortcut').classList.remove('hidden');
-        setTimeout(() => openFinaleModal(), 900);
+        setTimeout(() => openFinaleModal(), 950);
       }
     }
 
@@ -492,6 +612,7 @@
 
     const interactables = [];
     const particles = [];
+    const lanternBulbs = [];
 
     // ==========================================
     // 5. CHARACTER BUILDER (CUTE CHIBI NADHIFA & AFA)
@@ -499,7 +620,6 @@
     function createChibiCharacter(opts) {
       const group = new THREE.Group();
 
-      // Soft Drop Shadow Blob
       const shadowGeo = new THREE.CircleGeometry(0.46, 24);
       const shadowMat = new THREE.MeshBasicMaterial({ color: 0x120307, transparent: true, opacity: 0.25 });
       const shadow = new THREE.Mesh(shadowGeo, shadowMat);
@@ -511,7 +631,6 @@
       const shoeMat = new THREE.MeshStandardMaterial({ color: opts.shoeColor || '#2a0812', roughness: 0.45 });
       const pantsMat = new THREE.MeshStandardMaterial({ color: opts.pantsColor || '#1e1b24', roughness: 0.72 });
 
-      // Legs (Clean rounded capsules / cylinders)
       const legGeo = new THREE.CylinderGeometry(0.085, 0.078, 0.34, 14);
       const leftLeg = new THREE.Group();
       leftLeg.position.set(-0.13, 0.38, 0);
@@ -532,14 +651,12 @@
       rightLeg.add(rMesh, rShoe);
       group.add(leftLeg, rightLeg);
 
-      // Torso / Cute Chibi Body
       const torsoMat = new THREE.MeshStandardMaterial({ color: opts.shirtColor, roughness: 0.62 });
       const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.28, 0.48, 18), torsoMat);
       torso.position.y = 0.62;
       torso.castShadow = true;
       group.add(torso);
 
-      // Collar / Polo Neckline detail
       if (!opts.hasHijab) {
         const collarMat = new THREE.MeshStandardMaterial({ color: '#101828', roughness: 0.6 });
         const collar = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.032, 10, 20), collarMat);
@@ -548,7 +665,6 @@
         group.add(collar);
       }
 
-      // Gold buttons on Nadhifa's blouse
       if (opts.hasHijab) {
         const btnMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.85, roughness: 0.2 });
         [0.74, 0.62, 0.50].forEach(by => {
@@ -566,7 +682,6 @@
         group.add(skirt);
       }
 
-      // Arms with cute rounded hands
       const armGeo = new THREE.CylinderGeometry(0.068, 0.062, 0.34, 12);
       const handGeo = new THREE.SphereGeometry(0.068, 12, 12);
 
@@ -589,7 +704,6 @@
       rightArm.add(raMesh, rHand);
       group.add(leftArm, rightArm);
 
-      // Head Group (Cute Chibi Proportions, slightly fuller cheeks)
       const headGroup = new THREE.Group();
       headGroup.position.y = 1.24;
 
@@ -598,7 +712,6 @@
       head.castShadow = true;
       headGroup.add(head);
 
-      // Expressive Anime/Chibi Eyes + Eyebrows + Cute Smile
       const eyeMat = new THREE.MeshStandardMaterial({ color: '#1b1726', roughness: 0.12, metalness: 0.1 });
       const shineMat = new THREE.MeshBasicMaterial({ color: '#ffffff' });
       const browMat = new THREE.MeshStandardMaterial({ color: '#241c18', roughness: 0.6 });
@@ -614,7 +727,6 @@
         const shineSmall = new THREE.Mesh(new THREE.SphereGeometry(0.009, 8, 8), shineMat);
         shineSmall.position.set(ex - 0.012, -0.012, 0.395);
 
-        // Soft Eyebrows
         const brow = new THREE.Mesh(new THREE.BoxGeometry(0.085, 0.016, 0.015), browMat);
         brow.position.set(ex, 0.085, 0.372);
         brow.rotation.z = ex > 0 ? -0.08 : 0.08;
@@ -623,7 +735,6 @@
         headGroup.add(eye, shineBig, shineSmall, brow);
       });
 
-      // Cute Curved Smile Mouth
       const mouthCurve = new THREE.TorusGeometry(0.042, 0.009, 8, 16, Math.PI * 0.75);
       const mouthMat = new THREE.MeshBasicMaterial({ color: '#b85066' });
       const mouth = new THREE.Mesh(mouthCurve, mouthMat);
@@ -631,7 +742,6 @@
       mouth.rotation.z = Math.PI * 1.125;
       headGroup.add(mouth);
 
-      // Soft Rosy Blush
       const blushMat = new THREE.MeshBasicMaterial({ color: '#f07892', transparent: true, opacity: 0.55 });
       [-0.21, 0.21].forEach(bx => {
         const blush = new THREE.Mesh(new THREE.CircleGeometry(0.055, 16), blushMat);
@@ -641,7 +751,6 @@
         headGroup.add(blush);
       });
 
-      // Cute Cat-Eye / Round Glasses
       if (opts.hasGlasses) {
         const glassMat = new THREE.MeshStandardMaterial({
           color: opts.glassColor || '#5c341d',
@@ -658,9 +767,7 @@
           const rimGroup = new THREE.Group();
           rimGroup.position.set(gx, 0.008, 0.398);
           rimGroup.rotation.y = gx > 0 ? 0.22 : -0.22;
-          if (opts.catEyeGlasses) {
-            rimGroup.rotation.z = gx > 0 ? 0.12 : -0.12;
-          }
+          if (opts.catEyeGlasses) rimGroup.rotation.z = gx > 0 ? 0.12 : -0.12;
           const rim = new THREE.Mesh(new THREE.TorusGeometry(0.086, 0.011, 10, 24), glassMat);
           if (opts.catEyeGlasses) rim.scale.set(1.12, 0.92, 1);
           const lens = new THREE.Mesh(new THREE.CircleGeometry(0.082, 20), lensMat);
@@ -674,39 +781,29 @@
       }
 
       if (opts.hasHijab) {
-        // Neat, Graceful Hijab Framing the Face (No clipping over eyes!)
         const hijabMat = new THREE.MeshStandardMaterial({ color: opts.hijabColor || '#18151e', roughness: 0.72 });
-
-        // Back & top hijab dome shifted backward so face is completely clear
         const hood = new THREE.Mesh(new THREE.SphereGeometry(0.435, 28, 24), hijabMat);
         hood.scale.set(1.06, 1.04, 1.08);
         hood.position.set(0, 0.02, -0.075);
         hood.castShadow = true;
         headGroup.add(hood);
 
-        // Clean Hijab Frame Ring around the outer perimeter of the face
         const faceFrame = new THREE.Mesh(new THREE.TorusGeometry(0.365, 0.055, 14, 32), hijabMat);
         faceFrame.scale.set(1.04, 1.02, 1.15);
         faceFrame.position.set(0, 0.01, 0.085);
         headGroup.add(faceFrame);
 
-        // Soft chin/neck scarf wrap
         const neckScarf = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.36, 0.24, 20), hijabMat);
         neckScarf.position.set(0, -0.34, -0.02);
         headGroup.add(neckScarf);
 
-        // Neat chest pashmina drape (attached to torso so it doesn't float awkwardly)
-        const chestDrape = new THREE.Mesh(
-          new THREE.ConeGeometry(0.34, 0.42, 20),
-          hijabMat
-        );
+        const chestDrape = new THREE.Mesh(new THREE.ConeGeometry(0.34, 0.42, 20), hijabMat);
         chestDrape.scale.set(1.05, 1, 0.72);
         chestDrape.position.set(0, 0.72, 0.11);
         group.add(chestDrape);
 
-        // Cute Gold Birthday Crown on top of Hijab
         const crownMat = new THREE.MeshStandardMaterial({
-          color: '#f3e1a6',
+          color: '#f7ecc6',
           metalness: 0.85,
           roughness: 0.18,
           emissive: '#b45309',
@@ -716,17 +813,13 @@
         crown.position.set(0, 0.48, -0.04);
         headGroup.add(crown);
       } else {
-        // Stylish Two-Block / Curtain Hair for Afa (matches photo!)
         const hairMat = new THREE.MeshStandardMaterial({ color: opts.hairColor || '#171412', roughness: 0.65 });
-
-        // Back & crown hair volume (shifted back so face is clear)
         const hairBack = new THREE.Mesh(new THREE.SphereGeometry(0.425, 26, 24), hairMat);
         hairBack.scale.set(1.06, 1.02, 1.06);
         hairBack.position.set(0, 0.04, -0.075);
         hairBack.castShadow = true;
         headGroup.add(hairBack);
 
-        // Top hair cap above forehead
         const hairTop = new THREE.Mesh(
           new THREE.SphereGeometry(0.415, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.44),
           hairMat
@@ -735,7 +828,6 @@
         hairTop.rotation.x = -0.12;
         headGroup.add(hairTop);
 
-        // Two-part curtain bangs framing forehead nicely
         const leftBang = new THREE.Mesh(new THREE.SphereGeometry(0.16, 14, 14), hairMat);
         leftBang.scale.set(1.15, 0.85, 0.55);
         leftBang.position.set(-0.16, 0.26, 0.30);
@@ -746,7 +838,6 @@
         rightBang.position.set(0.16, 0.26, 0.30);
         rightBang.rotation.z = -0.38;
 
-        // Cute sideburns
         [-0.38, 0.38].forEach(sx => {
           const sideHair = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.14), hairMat);
           sideHair.position.set(sx, 0.02, 0.04);
@@ -761,7 +852,7 @@
       return group;
     }
 
-    // Player = Nadhifa (Maroon blouse with gold buttons, neat black hijab, tortoiseshell cat-eye glasses, gold crown!)
+    // Player = Nadhifa
     const player = createChibiCharacter({
       hasHijab: true,
       hijabColor: '#18151e',
@@ -773,21 +864,32 @@
       skirtColor: '#18151e',
       shoeColor: '#e8d9a8'
     });
-    player.position.set(0, 0, 7.5);
+    player.position.set(0, 0, 7.6);
     scene.add(player);
+
+    // Tap-to-Walk Glowing Target Ring on Ground
+    const targetRing = new THREE.Mesh(
+      new THREE.RingGeometry(0.26, 0.38, 28),
+      new THREE.MeshBasicMaterial({ color: '#f7ecc6', side: THREE.DoubleSide, transparent: true, opacity: 0.85 })
+    );
+    targetRing.rotation.x = -Math.PI / 2;
+    targetRing.position.y = 0.04;
+    targetRing.visible = false;
+    scene.add(targetRing);
 
     // ==========================================
     // 6. BUILD ISLAND 3D WORLD
     // ==========================================
-    let waterMesh, keyMesh, mochiTail, beachSwingSeat;
+    let waterMesh, keyMesh, afaMesh, mochiGroup, mochiTail, beachSwingSeat, paperBoat;
+    const sakuraPetals = [];
 
     function buildIsland() {
       // Ocean Water
-      const waterGeo = new THREE.PlaneGeometry(140, 140, 48, 48);
+      const waterGeo = new THREE.PlaneGeometry(160, 160, 56, 56);
       const waterMat = new THREE.MeshStandardMaterial({
-        color: '#1b6b78',
-        roughness: 0.2,
-        metalness: 0.2,
+        color: '#196673',
+        roughness: 0.18,
+        metalness: 0.22,
         flatShading: true
       });
       waterMesh = new THREE.Mesh(waterGeo, waterMat);
@@ -797,7 +899,7 @@
 
       // Sandy Beach Base
       const sand = new THREE.Mesh(
-        new THREE.CylinderGeometry(13.8, 15.2, 0.7, 48),
+        new THREE.CylinderGeometry(13.8, 15.4, 0.7, 48),
         new THREE.MeshStandardMaterial({ map: createSandTexture(), roughness: 0.85 })
       );
       sand.position.y = -0.35;
@@ -826,20 +928,89 @@
       const archGroup = new THREE.Group();
       archGroup.position.set(0, 0, 9.4);
       const pillarMat = new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.6 });
+      const goldMetalMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.75, roughness: 0.22 });
       [-1.4, 1.4].forEach(px => {
         const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 2.7, 12), pillarMat);
         pillar.position.set(px, 1.35, 0);
         pillar.castShadow = true;
         archGroup.add(pillar);
       });
-      const topBeam = new THREE.Mesh(
-        new THREE.TorusGeometry(1.4, 0.16, 12, 24, Math.PI),
-        new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.65, roughness: 0.25 })
-      );
+      const topBeam = new THREE.Mesh(new THREE.TorusGeometry(1.4, 0.16, 12, 24, Math.PI), goldMetalMat);
       topBeam.position.y = 2.65;
       topBeam.castShadow = true;
       archGroup.add(topBeam);
       islandGroup.add(archGroup);
+
+      // Garden Lanterns lining the path
+      [[-1.35, 5.2], [1.35, 5.2], [-1.35, 1.2], [1.35, 1.2], [-1.35, -2.0], [1.35, -2.0]].forEach(([lx, lz]) => {
+        const lantern = new THREE.Group();
+        lantern.position.set(lx, 0, lz);
+        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 1.25, 8), pillarMat);
+        post.position.y = 0.625;
+        const cap = new THREE.Mesh(new THREE.ConeGeometry(0.18, 0.16, 6), goldMetalMat);
+        cap.position.y = 1.42;
+        const bulbMat = new THREE.MeshStandardMaterial({ color: '#fef08a', emissive: '#f59e0b', emissiveIntensity: 0.9 });
+        const bulb = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.2, 8), bulbMat);
+        bulb.position.y = 1.28;
+        lanternBulbs.push(bulbMat);
+        lantern.add(post, bulb, cap);
+        islandGroup.add(lantern);
+      });
+
+      // Wooden Pier & Star-Gazing Telescope (West Coast)
+      const pier = new THREE.Group();
+      pier.position.set(-11.4, -0.1, -1.2);
+      const woodMat = new THREE.MeshStandardMaterial({ color: '#5c2d16', roughness: 0.8 });
+      const deck = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.18, 1.8), woodMat);
+      deck.position.set(-1.1, 0.08, 0);
+      deck.castShadow = true;
+      deck.receiveShadow = true;
+      pier.add(deck);
+      [[-2.5, -0.7], [-2.5, 0.7], [-0.8, -0.7], [-0.8, 0.7]].forEach(([px, pz]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.9, 8), woodMat);
+        leg.position.set(px, -0.35, pz);
+        pier.add(leg);
+      });
+      // Golden Telescope at Pier Tip
+      const tripod = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.22, 1.1, 8), pillarMat);
+      tripod.position.set(-2.3, 0.65, 0);
+      const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.85, 12), goldMetalMat);
+      scope.position.set(-2.35, 1.25, 0);
+      scope.rotation.z = Math.PI / 3.2;
+      pier.add(tripod, scope);
+      islandGroup.add(pier);
+
+      // Little Golden Paper Boat floating near Pier
+      paperBoat = new THREE.Group();
+      paperBoat.position.set(-13.8, -0.35, 1.6);
+      const boatHull = new THREE.Mesh(
+        new THREE.ConeGeometry(0.42, 0.35, 4),
+        new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.5 })
+      );
+      boatHull.rotation.x = Math.PI;
+      boatHull.scale.set(1.4, 0.8, 0.8);
+      const boatSail = new THREE.Mesh(
+        new THREE.ConeGeometry(0.28, 0.45, 3),
+        new THREE.MeshStandardMaterial({ color: '#e8d9a8', roughness: 0.4 })
+      );
+      boatSail.position.y = 0.22;
+      paperBoat.add(boatHull, boatSail);
+      islandGroup.add(paperBoat);
+
+      // Welcome Wooden Signboard near Arch
+      const signGroup = new THREE.Group();
+      signGroup.position.set(2.3, 0, 7.6);
+      signGroup.rotation.y = -0.35;
+      const signPost = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.08, 1.35, 8), woodMat);
+      signPost.position.y = 0.675;
+      const signBoard = new THREE.Mesh(
+        new THREE.BoxGeometry(1.45, 0.78, 0.1),
+        new THREE.MeshStandardMaterial({ map: createSignTexture('Pulau Semesta', '28 Nov 2026 • 22nd') })
+      );
+      signBoard.position.y = 1.25;
+      signBoard.castShadow = true;
+      signGroup.add(signPost, signBoard);
+      islandGroup.add(signGroup);
 
       // Cozy Maroon-Roofed & Gold-Trimmed Cottage
       const cottage = new THREE.Group();
@@ -854,7 +1025,6 @@
       wall.receiveShadow = true;
       cottage.add(wall);
 
-      // Maroon Base Trim
       const baseTrim = new THREE.Mesh(
         new THREE.BoxGeometry(4.72, 0.35, 3.72),
         new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.6 })
@@ -862,7 +1032,6 @@
       baseTrim.position.y = 0.18;
       cottage.add(baseTrim);
 
-      // Deep Maroon Roof
       const roof = new THREE.Mesh(
         new THREE.ConeGeometry(3.65, 1.85, 4),
         new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.5 })
@@ -872,19 +1041,11 @@
       roof.castShadow = true;
       cottage.add(roof);
 
-      // Gold Roof Finial
-      const finial = new THREE.Mesh(
-        new THREE.SphereGeometry(0.2, 14, 14),
-        new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.85, roughness: 0.2 })
-      );
+      const finial = new THREE.Mesh(new THREE.SphereGeometry(0.2, 14, 14), goldMetalMat);
       finial.position.y = 4.52;
       cottage.add(finial);
 
-      // Gold-Framed Door
-      const doorFrame = new THREE.Mesh(
-        new THREE.BoxGeometry(1.18, 1.95, 0.16),
-        new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.7, roughness: 0.25 })
-      );
+      const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.95, 0.16), goldMetalMat);
       doorFrame.position.set(0, 0.97, 1.81);
       const door = new THREE.Mesh(
         new THREE.BoxGeometry(1.02, 1.84, 0.2),
@@ -893,8 +1054,7 @@
       door.position.set(0, 0.92, 1.82);
       cottage.add(doorFrame, door);
 
-      // Warm Glowing Windows
-      const winMat = new THREE.MeshStandardMaterial({ color: '#fef08a', emissive: '#f59e0b', emissiveIntensity: 0.65 });
+      const winMat = new THREE.MeshStandardMaterial({ color: '#fef08a', emissive: '#f59e0b', emissiveIntensity: 0.7 });
       [-1.35, 1.35].forEach(wx => {
         const win = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.75, 0.16), winMat);
         win.position.set(wx, 1.55, 1.82);
@@ -907,7 +1067,7 @@
         const t = new THREE.Group();
         t.position.set(x, 0, z);
         t.scale.setScalar(scale);
-        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.32, 1.8, 10), new THREE.MeshStandardMaterial({ color: '#5c2d16', roughness: 0.85 }));
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.32, 1.8, 10), woodMat);
         trunk.position.y = 0.9;
         trunk.castShadow = true;
         t.add(trunk);
@@ -930,10 +1090,21 @@
       addTree(-4.2, -7.2, false, 0.95);
       addTree(4.6, -7.0, true, 1.0);
 
+      // Falling Sakura Petals
+      const petalGeo = new THREE.CircleGeometry(0.075, 6);
+      const petalMat = new THREE.MeshBasicMaterial({ color: '#f7b2c7', side: THREE.DoubleSide });
+      for (let i = 0; i < 36; i++) {
+        const p = new THREE.Mesh(petalGeo, petalMat);
+        p.position.set((Math.random() - 0.5) * 18, 1 + Math.random() * 4.5, (Math.random() - 0.5) * 18);
+        p.userData = { speedY: 0.35 + Math.random() * 0.35, phase: Math.random() * Math.PI * 2 };
+        islandGroup.add(p);
+        sakuraPetals.push(p);
+      }
+
       // Golden Key (Near Sakura tree on the right)
       keyMesh = new THREE.Group();
       keyMesh.position.set(6.5, 0.85, -1.5);
-      const goldMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.9, roughness: 0.15, emissive: '#d97706', emissiveIntensity: 0.5 });
+      const goldMat = new THREE.MeshStandardMaterial({ color: '#f7ecc6', metalness: 0.9, roughness: 0.15, emissive: '#d97706', emissiveIntensity: 0.55 });
       const ring = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.06, 12, 24), goldMat);
       ring.position.y = 0.25;
       const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.55, 10), goldMat);
@@ -943,8 +1114,8 @@
       keyMesh.add(ring, shaft, bit);
       islandGroup.add(keyMesh);
 
-      // Companion Character: Afa (Pipaww) + Mochi the White Cat
-      const afa = createChibiCharacter({
+      // Companion Character: Afa (Pipaww)
+      afaMesh = createChibiCharacter({
         hasHijab: false,
         hasGlasses: true,
         catEyeGlasses: false,
@@ -954,13 +1125,13 @@
         shoeColor: '#f5f5f4',
         hairColor: '#161311'
       });
-      afa.position.set(-3.2, 0, 1.4);
-      afa.rotation.y = 0.5;
-      islandGroup.add(afa);
+      afaMesh.position.set(-3.2, 0, 1.4);
+      afaMesh.rotation.y = 0.5;
+      islandGroup.add(afaMesh);
 
-      // White Cat "Mochi" with Maroon & Gold Ribbon
-      const cat = new THREE.Group();
-      cat.position.set(-2.1, 0, 1.8);
+      // White Cat "Mochi" with Maroon Ribbon
+      mochiGroup = new THREE.Group();
+      mochiGroup.position.set(-2.1, 0, 1.8);
       const catMat = new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.5 });
       const catBody = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 16), catMat);
       catBody.position.y = 0.28;
@@ -970,15 +1141,15 @@
       [-0.12, 0.12].forEach(ex => {
         const ear = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.15, 4), catMat);
         ear.position.set(ex, 0.84, 0.08);
-        cat.add(ear);
+        mochiGroup.add(ear);
       });
       const bow = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.08, 0.08), new THREE.MeshStandardMaterial({ color: '#5e0f25' }));
       bow.position.set(0, 0.44, 0.22);
       mochiTail = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 0.38, 8), catMat);
       mochiTail.position.set(0, 0.35, -0.26);
       mochiTail.rotation.x = -0.6;
-      cat.add(catBody, catHead, bow, mochiTail);
-      islandGroup.add(cat);
+      mochiGroup.add(catBody, catHead, bow, mochiTail);
+      islandGroup.add(mochiGroup);
 
       // Beach Swing (Southwest Coast)
       const swingGroup = new THREE.Group();
@@ -1029,7 +1200,7 @@
       // Register Island Interactables
       interactables.push(
         {
-          id: 'key', scene: 'island', pos: new THREE.Vector3(6.5, 0, -1.5), radius: 2.1,
+          id: 'key', scene: 'island', pos: new THREE.Vector3(6.5, 0, -1.5), radius: 2.2,
           icon: '🔑', label: 'Ambil Kunci Emas',
           action: () => {
             if (state.hasKey) return;
@@ -1037,12 +1208,33 @@
             keyMesh.visible = false;
             completeQuest('key');
             audio.playSfx('key');
-            spawnHearts(new THREE.Vector3(6.5, 1.2, -1.5), 20);
+            spawnHearts(new THREE.Vector3(6.5, 1.2, -1.5), 22);
             document.getElementById('key-status').textContent = '🔑 Kunci Emas';
             document.getElementById('key-status').style.background = 'rgba(232, 217, 168, 0.92)';
             document.getElementById('key-status').style.color = '#2a0812';
             document.getElementById('quest-text').textContent = 'Misi: Masuk ke Rumah Marun-Emas di utara pulau!';
-            showToast('✨ Yeay! Kunci Emas ditemukan! Pintu rumah sekarang terbuka.');
+            showToast('✨ Kunci Emas ditemukan! Pintu rumah sekarang terbuka.');
+          }
+        },
+        {
+          id: 'telescope', scene: 'island', pos: new THREE.Vector3(-10.2, 0, -1.2), radius: 2.4,
+          icon: '🔭', label: 'Intip Teleskop Dermaga',
+          action: () => {
+            audio.playSfx('key');
+            completeQuest('telescope');
+            spawnHearts(new THREE.Vector3(-10.5, 1.8, -1.2), 18);
+            const q = STAR_QUOTES[Math.floor(Math.random() * STAR_QUOTES.length)];
+            openModal('Teleskop Bintang Semesta 🔭', '✨', `
+              <div class="glass-cream rounded-2xl p-5 text-center space-y-3">
+                <div class="text-4xl">🌙✨💫</div>
+                <h3 class="font-serif-title italic font-bold text-xl" style="color: #5e0f25;">Bintang Paling Terang Malam Ini</h3>
+                <p class="text-sm leading-relaxed">Dari ribuan bintang di langit Pulau Semesta, ada satu jejak obrolan kita yang bersinar paling terang:</p>
+                <blockquote class="p-3.5 rounded-2xl italic font-cg text-lg" style="background: rgba(94, 15, 37, 0.08); color: #5e0f25;">
+                  "${q.x}"
+                  <div class="text-xs font-sans not-italic opacity-70 mt-1">— Pukul ${q.t}</div>
+                </blockquote>
+              </div>
+            `);
           }
         },
         {
@@ -1063,23 +1255,26 @@
           }
         },
         {
-          id: 'afa', scene: 'island', pos: new THREE.Vector3(-2.7, 0, 1.6), radius: 2.3,
+          id: 'afa', scene: 'island', pos: () => afaMesh.position, radius: 2.3,
           icon: '💬', label: 'Ngobrol sama Afa & Mochi',
           action: () => {
             audio.playSfx('pop');
-            spawnHearts(new THREE.Vector3(-2.7, 1.8, 1.6), 14);
+            spawnHearts(new THREE.Vector3(afaMesh.position.x, 1.8, afaMesh.position.z), 15);
             const randomQuote = STAR_QUOTES.length ? STAR_QUOTES[Math.floor(Math.random() * STAR_QUOTES.length)].x : 'Aku selalu sayang kamu, Nadhifa!';
             openModal('Afa (Pipaww) & Mochi 🐱', '🤍', `
               <div class="glass-cream rounded-2xl p-4 space-y-2.5">
                 <div class="font-bold" style="color: #5e0f25;">Afa (Pipaww):</div>
-                <p>"Selamat ulang tahun ke-22, cantikku! Aku sudah siapin kue ulang tahun 22 lilin, foto-foto kita di dinding, surat lengkapku, mesin Tetris, dan photobooth di dalam rumah. Ambil Kunci Emas di dekat pohon sakura kanan dulu ya!"</p>
+                <p>"Selamat ulang tahun ke-22, cantikku! Aku sudah siapin kue ulang tahun 22 lilin, foto-foto kita di dinding, surat lengkapku, mesin Tetris, dan photobooth di dalam rumah. Mau aku temenin keliling pulau sambil gandengan?"</p>
                 <div class="text-xs italic p-2.5 rounded-xl" style="background: rgba(94, 15, 37, 0.08); color: #5e0f25;">
                   💬 Ingat chat kita: "${randomQuote}"
                 </div>
+                <button onclick="toggleCompanionFollow(); closeModal();" class="btn-gold w-full py-2.5 rounded-full text-xs uppercase cursor-pointer mt-1">
+                  ${state.companionFollow ? '🛑 Berhenti Mengikuti' : '🤝 Ajak Afa & Mochi Ikut Jalan'}
+                </button>
               </div>
               <div class="rounded-2xl p-4" style="background: rgba(94, 15, 37, 0.55); border: 1px solid rgba(232, 217, 168, 0.3);">
                 <div class="font-bold mb-1" style="color: var(--gold);">Mochi 🐱:</div>
-                <p class="text-xs" style="color: #faf3e6;">"Meoww~ Selamat ulang tahun ke-22 Kak Nadhifa! Nanti di dalam rumah jangan lupa cobain 'Tiga Jepret, Satu Kenangan' ya!"</p>
+                <p class="text-xs" style="color: #faf3e6;">"Meoww~ Selamat ulang tahun ke-22 Kak Nadhifa! Jangan lupa cek Teleskop di dermaga barat juga ya!"</p>
               </div>
             `);
           }
@@ -1098,7 +1293,7 @@
     }
 
     // ==========================================
-    // 7. BUILD COZY HOUSE INTERIOR 3D (WITH REAL PHOTOS ON WALL!)
+    // 7. BUILD COZY HOUSE INTERIOR 3D
     // ==========================================
     let candleFlames = [];
     let wallArtMeshes = [];
@@ -1132,7 +1327,6 @@
     }
 
     function buildHouse() {
-      // Warm Wood Floor
       const floor = new THREE.Mesh(
         new THREE.BoxGeometry(13, 0.3, 11),
         new THREE.MeshStandardMaterial({ map: createWoodFloorTexture(), roughness: 0.65 })
@@ -1141,7 +1335,6 @@
       floor.receiveShadow = true;
       houseGroup.add(floor);
 
-      // Warm Cream Walls + Maroon Wainscoting + Gold Trim
       const wallMat = new THREE.MeshStandardMaterial({ color: '#faf3e6', roughness: 0.85 });
       const wainscotMat = new THREE.MeshStandardMaterial({ color: '#5e0f25', roughness: 0.7 });
       const goldTrimMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8', metalness: 0.75, roughness: 0.25 });
@@ -1160,6 +1353,16 @@
       rightWall.position.set(6.5, 2.1, 0);
       houseGroup.add(backWall, backWainscot, backGoldLine, leftWall, rightWall);
 
+      // Warm Glowing Interior Windows on Side Walls
+      const indoorWinMat = new THREE.MeshStandardMaterial({ color: '#fff3c4', emissive: '#f59e0b', emissiveIntensity: 0.45 });
+      [-2.2, 2.2].forEach(wz => {
+        const wL = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.35, 1.1), indoorWinMat);
+        wL.position.set(-6.32, 2.35, wz);
+        const wR = new THREE.Mesh(new THREE.BoxGeometry(0.12, 1.35, 1.1), indoorWinMat);
+        wR.position.set(6.32, 2.35, wz);
+        houseGroup.add(wL, wR);
+      });
+
       // Maroon & Gold Round Rug
       const rugOuter = new THREE.Mesh(
         new THREE.CylinderGeometry(3.35, 3.35, 0.03, 36),
@@ -1174,7 +1377,7 @@
       rugInner.receiveShadow = true;
       houseGroup.add(rugOuter, rugInner);
 
-      // 3 Gold-Framed Wall Memory Frames (Loaded with Real Couple Photos!)
+      // 3 Gold-Framed Wall Memory Frames
       [-3.3, 0, 3.3].forEach((fx) => {
         const frame = new THREE.Mesh(new THREE.BoxGeometry(2.05, 1.55, 0.14), goldTrimMat);
         frame.position.set(fx, 2.45, -5.3);
@@ -1210,7 +1413,7 @@
       cakeTop.position.set(0, 1.26, -0.5);
       houseGroup.add(cakeBase, cakeTop);
 
-      // 22 Glowing Birthday Candles arranged in 2 concentric rings
+      // 22 Glowing Birthday Candles
       const cStickMat = new THREE.MeshStandardMaterial({ color: '#e8d9a8' });
       const flameMat = new THREE.MeshBasicMaterial({ color: '#fb923c' });
       for (let i = 0; i < 22; i++) {
@@ -1289,14 +1492,14 @@
           }
         },
         {
-          id: 'cake', scene: 'house', pos: new THREE.Vector3(0, 0, -0.5), radius: 2.3,
+          id: 'cake', scene: 'house', pos: new THREE.Vector3(0, 0, -0.5), radius: 2.5,
           icon: '🎂', label: 'Tiup 22 Lilin Kue Ulang Tahun',
           action: () => {
             audio.playSfx('key');
             state.candlesLit = !state.candlesLit;
             candleFlames.forEach(f => f.visible = state.candlesLit);
             completeQuest('cake');
-            spawnHearts(new THREE.Vector3(0, 1.9, -0.5), 28);
+            spawnHearts(new THREE.Vector3(0, 1.9, -0.5), 30);
             openModal('Selamat Ulang Tahun ke-22, Nadhifa! 🎂', '🕯️', `
               <div class="glass-cream rounded-2xl p-5 text-center space-y-3">
                 <div class="text-5xl">${state.candlesLit ? '🎂🕯️' : '🎂✨'}</div>
@@ -1355,7 +1558,7 @@
     // 8. PARTICLE SYSTEM (GOLDEN FIREFLIES & HEARTS)
     // ==========================================
     const fireflyGeo = new THREE.BufferGeometry();
-    const fireflyCount = 95;
+    const fireflyCount = 110;
     const fireflyPos = new Float32Array(fireflyCount * 3);
     for (let i = 0; i < fireflyCount; i++) {
       fireflyPos[i * 3] = (Math.random() - 0.5) * 26;
@@ -1363,19 +1566,19 @@
       fireflyPos[i * 3 + 2] = (Math.random() - 0.5) * 26;
     }
     fireflyGeo.setAttribute('position', new THREE.BufferAttribute(fireflyPos, 3));
-    const fireflyMat = new THREE.PointsMaterial({ color: '#e8d9a8', size: 0.18, transparent: true, opacity: 0.9 });
+    const fireflyMat = new THREE.PointsMaterial({ color: '#f7ecc6', size: 0.19, transparent: true, opacity: 0.9 });
     const fireflies = new THREE.Points(fireflyGeo, fireflyMat);
     scene.add(fireflies);
 
     function spawnHearts(origin, count = 18) {
       const geo = new THREE.OctahedronGeometry(0.14, 0);
-      const colors = ['#e8d9a8', '#c4566e', '#faf3e6'];
+      const colors = ['#f7ecc6', '#c4566e', '#faf3e6'];
       for (let i = 0; i < count; i++) {
         const mat = new THREE.MeshBasicMaterial({ color: colors[i % colors.length] });
         const m = new THREE.Mesh(geo, mat);
         m.position.copy(origin);
         m.userData = {
-          vel: new THREE.Vector3((Math.random() - 0.5) * 2.6, 1.5 + Math.random() * 2.5, (Math.random() - 0.5) * 2.6),
+          vel: new THREE.Vector3((Math.random() - 0.5) * 2.8, 1.6 + Math.random() * 2.6, (Math.random() - 0.5) * 2.8),
           life: 1.0
         };
         scene.add(m);
@@ -1384,22 +1587,76 @@
     }
 
     // ==========================================
-    // 9. SCENE SWITCHING & LIGHTING MODES
+    // 9. COLLISION DETECTION & SCENE CONTROLS
     // ==========================================
+    const islandObstacles = [
+      { x: 0, z: -4.6, rx: 2.55, rz: 2.05 }, // Cottage
+      { x: -6.8, z: -3.5, r: 0.65 },
+      { x: 7.2, z: -3.2, r: 0.65 },
+      { x: -7.5, z: 3.8, r: 0.65 },
+      { x: 7.4, z: 4.2, r: 0.65 },
+      { x: -6.2, z: 6.2, r: 1.1 },          // Swing frame
+      { x: 4.5, z: 3.2, r: 0.85 }           // Jukebox
+    ];
+
+    const houseObstacles = [
+      { x: 0, z: -0.5, r: 1.65 },           // Cake table
+      { x: -4.5, z: -2.5, r: 1.0 },         // Tetris
+      { x: 4.5, z: -2.5, r: 1.0 },          // Photobooth
+      { x: -3.8, z: 2.4, rx: 1.1, rz: 0.75 } // Letter desk
+    ];
+
+    function resolveCollisions(pos) {
+      const list = state.sceneMode === 'island' ? islandObstacles : houseObstacles;
+      for (const obs of list) {
+        if (obs.r) {
+          const dx = pos.x - obs.x;
+          const dz = pos.z - obs.z;
+          const dist = Math.hypot(dx, dz);
+          if (dist < obs.r && dist > 0.001) {
+            pos.x = obs.x + (dx / dist) * obs.r;
+            pos.z = obs.z + (dz / dist) * obs.r;
+          }
+        } else if (obs.rx && obs.rz) {
+          const dx = pos.x - obs.x;
+          const dz = pos.z - obs.z;
+          if (Math.abs(dx) < obs.rx && Math.abs(dz) < obs.rz) {
+            const penX = obs.rx - Math.abs(dx);
+            const penZ = obs.rz - Math.abs(dz);
+            if (penX < penZ) pos.x = obs.x + Math.sign(dx || 1) * obs.rx;
+            else pos.z = obs.z + Math.sign(dz || 1) * obs.rz;
+          }
+        }
+      }
+    }
+
+    function toggleCompanionFollow() {
+      state.companionFollow = !state.companionFollow;
+      document.getElementById('follow-icon').textContent = state.companionFollow ? '💞' : '🤝';
+      document.getElementById('follow-label').textContent = state.companionFollow ? 'Sedang Bergandengan' : 'Ajak Afa Jalan';
+      if (state.companionFollow) {
+        spawnHearts(new THREE.Vector3(player.position.x, 1.6, player.position.z), 16);
+        showToast('🤝 Afa & Mochi sekarang ikut berjalan bersamamu!');
+      } else {
+        showToast('✨ Afa & Mochi beristirahat sejenak.');
+      }
+    }
+    window.toggleCompanionFollow = toggleCompanionFollow;
+    document.getElementById('btn-companion-follow').addEventListener('click', toggleCompanionFollow);
+
     function toggleSwing() {
       state.isSwinging = !state.isSwinging;
       state.targetPos = null;
+      targetRing.visible = false;
       const { leftLeg, rightLeg, leftArm, rightArm, headGroup } = player.userData;
 
       if (state.isSwinging) {
         state.swingTime = 0;
-        state.swingBoost = 0.42;
+        state.swingBoost = 0.44;
         audio.playSfx('pop');
-        // Attach player cleanly onto the swing plank
         beachSwingSeat.add(player);
         player.position.set(0, -1.46, 0.03);
         player.rotation.set(0, 0, 0);
-        // Cute sitting pose on swing
         leftLeg.rotation.x = -Math.PI / 2.2;
         rightLeg.rotation.x = -Math.PI / 2.2;
         leftArm.rotation.x = -0.55;
@@ -1408,10 +1665,9 @@
         rightArm.rotation.z = 0.18;
         headGroup.position.y = 1.24;
 
-        spawnHearts(new THREE.Vector3(-6.2, 1.8, 6.2), 16);
-        showToast('🎠 Asyik! Naik ayunan! Tekan Spasi/Dorong untuk ayun lebih tinggi.');
+        spawnHearts(new THREE.Vector3(-6.2, 1.8, 6.2), 18);
+        showToast('🎠 Asyik! Ketuk layar / tekan Spasi untuk mengayun lebih tinggi!');
       } else {
-        // Detach player back to world scene beside swing
         scene.add(player);
         player.position.set(-4.7, 0, 6.6);
         player.rotation.set(0, 0.7, 0);
@@ -1433,6 +1689,8 @@
       houseGroup.visible = true;
       player.position.set(0, 0, 3.2);
       state.targetPos = null;
+      targetRing.visible = false;
+      document.getElementById('btn-companion-follow').classList.add('hidden');
       document.getElementById('location-badge').textContent = '🏠';
       document.getElementById('location-name').textContent = 'Rumah Hangat Kita';
       document.getElementById('quest-text').textContent = 'Dekati Foto Dinding, Kue 22, Surat, Tetris & Photobooth!';
@@ -1446,36 +1704,57 @@
       islandGroup.visible = true;
       player.position.set(0, 0, -1.5);
       state.targetPos = null;
+      targetRing.visible = false;
+      document.getElementById('btn-companion-follow').classList.remove('hidden');
       document.getElementById('location-badge').textContent = '🏝️';
       document.getElementById('location-name').textContent = 'Pulau Semesta';
       document.getElementById('quest-text').textContent = 'Nikmati suasana pulau atau masuk kembali ke rumah.';
     }
 
+    // 3-Mode Lighting Switcher (Senja Emas -> Malam Bintang -> Siang Hangat)
     document.getElementById('btn-theme').addEventListener('click', () => {
-      state.isDayMode = !state.isDayMode;
-      if (state.isDayMode) {
-        scene.background = new THREE.Color('#f7d9b9');
-        scene.fog = new THREE.FogExp2('#f7d9b9', 0.013);
-        sunLight.color.set('#fff6e5');
-        sunLight.intensity = 1.5;
-        hemiLight.color.set('#ffffff');
-        hemiLight.groundColor.set('#6ab070');
-        document.getElementById('theme-icon').textContent = '☀️';
-        document.getElementById('theme-label').textContent = 'Siang Hangat';
-      } else {
+      state.lightMode = (state.lightMode + 1) % 3;
+      if (state.lightMode === 0) {
         scene.background = new THREE.Color('#3b1224');
-        scene.fog = new THREE.FogExp2('#3b1224', 0.013);
+        scene.fog = new THREE.FogExp2('#3b1224', 0.012);
         sunLight.color.set('#ffe4b5');
-        sunLight.intensity = 1.45;
+        sunLight.intensity = 1.48;
         hemiLight.color.set('#ffeedd');
         hemiLight.groundColor.set('#4a1d2d');
+        starField.visible = true;
+        moonMesh.visible = true;
+        lanternBulbs.forEach(b => b.emissiveIntensity = 0.9);
         document.getElementById('theme-icon').textContent = '🌅';
         document.getElementById('theme-label').textContent = 'Senja Emas';
+      } else if (state.lightMode === 1) {
+        scene.background = new THREE.Color('#140612');
+        scene.fog = new THREE.FogExp2('#140612', 0.013);
+        sunLight.color.set('#c7d2fe');
+        sunLight.intensity = 0.85;
+        hemiLight.color.set('#93c5fd');
+        hemiLight.groundColor.set('#2a0812');
+        starField.visible = true;
+        moonMesh.visible = true;
+        lanternBulbs.forEach(b => b.emissiveIntensity = 1.4);
+        document.getElementById('theme-icon').textContent = '🌌';
+        document.getElementById('theme-label').textContent = 'Malam Bintang';
+      } else {
+        scene.background = new THREE.Color('#f7d9b9');
+        scene.fog = new THREE.FogExp2('#f7d9b9', 0.011);
+        sunLight.color.set('#fff6e5');
+        sunLight.intensity = 1.55;
+        hemiLight.color.set('#ffffff');
+        hemiLight.groundColor.set('#6ab070');
+        starField.visible = false;
+        moonMesh.visible = false;
+        lanternBulbs.forEach(b => b.emissiveIntensity = 0.25);
+        document.getElementById('theme-icon').textContent = '☀️';
+        document.getElementById('theme-label').textContent = 'Siang Hangat';
       }
     });
 
     document.getElementById('btn-cam-reset').addEventListener('click', () => {
-      camera.position.set(player.position.x, player.position.y + 11, player.position.z + 13);
+      camera.position.set(player.position.x, player.position.y + 11, player.position.z + 13.5);
       controls.target.copy(player.position);
     });
 
@@ -1485,9 +1764,11 @@
     });
 
     // ==========================================
-    // 10. MOVEMENT (KEYBOARD, TOUCH D-PAD & TAP)
+    // 10. MOVEMENT (CAMERA-RELATIVE WASD, ANALOG JOYSTICK & TAP)
     // ==========================================
     const keys = {};
+    const joyVec = { x: 0, z: 0 };
+
     window.addEventListener('keydown', e => {
       if (state.isSwinging) {
         if (e.code === 'Space' || e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') {
@@ -1503,25 +1784,56 @@
       }
       keys[e.key.toLowerCase()] = true;
       state.targetPos = null;
+      targetRing.visible = false;
     });
     window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 
-    document.querySelectorAll('.dpad-btn').forEach(btn => {
-      const dir = btn.dataset.dir;
-      const setDir = (val) => {
-        state.targetPos = null;
-        if (dir === 'up') keys['w'] = val;
-        if (dir === 'down') keys['s'] = val;
-        if (dir === 'left') keys['a'] = val;
-        if (dir === 'right') keys['d'] = val;
-      };
-      btn.addEventListener('touchstart', e => { e.preventDefault(); setDir(true); });
-      btn.addEventListener('touchend', e => { e.preventDefault(); setDir(false); });
-      btn.addEventListener('mousedown', () => setDir(true));
-      btn.addEventListener('mouseup', () => setDir(false));
-      btn.addEventListener('mouseleave', () => setDir(false));
-    });
+    // Smooth Analog Joystick Setup
+    const joyZone = document.getElementById('joystick-zone');
+    const joyKnob = document.getElementById('joystick-knob');
+    let joyActive = false;
 
+    function handleJoyMove(clientX, clientY) {
+      const rect = joyZone.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const maxR = rect.width / 2 - 20;
+      let dx = clientX - cx;
+      let dy = clientY - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist > maxR) {
+        dx = (dx / dist) * maxR;
+        dy = (dy / dist) * maxR;
+      }
+      joyKnob.style.transform = `translate(${dx}px, ${dy}px)`;
+      joyVec.x = dx / maxR;
+      joyVec.z = dy / maxR;
+      state.targetPos = null;
+      targetRing.visible = false;
+    }
+
+    joyZone.addEventListener('touchstart', e => {
+      e.preventDefault();
+      joyActive = true;
+      const t = e.changedTouches[0];
+      handleJoyMove(t.clientX, t.clientY);
+    });
+    joyZone.addEventListener('touchmove', e => {
+      e.preventDefault();
+      if (!joyActive) return;
+      const t = e.changedTouches[0];
+      handleJoyMove(t.clientX, t.clientY);
+    });
+    const resetJoy = () => {
+      joyActive = false;
+      joyKnob.style.transform = 'translate(0px, 0px)';
+      joyVec.x = 0;
+      joyVec.z = 0;
+    };
+    joyZone.addEventListener('touchend', resetJoy);
+    joyZone.addEventListener('touchcancel', resetJoy);
+
+    // Tap-to-Walk Raycaster
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     let pointerDownPos = { x: 0, y: 0 };
@@ -1544,15 +1856,17 @@
       const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
       const hit = new THREE.Vector3();
       if (raycaster.ray.intersectPlane(plane, hit)) {
-        const limit = state.sceneMode === 'island' ? 10.2 : 5.2;
+        const limit = state.sceneMode === 'island' ? 10.3 : 5.2;
         hit.x = THREE.MathUtils.clamp(hit.x, -limit, limit);
         hit.z = THREE.MathUtils.clamp(hit.z, -limit, limit);
         state.targetPos = hit;
+        targetRing.position.set(hit.x, 0.04, hit.z);
+        targetRing.visible = true;
       }
     });
 
     // ==========================================
-    // 11. MODALS: GALLERY, MUSIC, TETRIS, PHOTOBOOTH, FINALE
+    // 11. MODALS: QUESTS, GALLERY, MUSIC, TETRIS, PHOTOBOOTH, FINALE
     // ==========================================
     const modalBackdrop = document.getElementById('modal-backdrop');
     const modalTitle = document.getElementById('modal-title');
@@ -1576,6 +1890,7 @@
         window.camStream = null;
       }
     }
+    window.closeModal = closeModal;
 
     document.getElementById('btn-modal-close').addEventListener('click', closeModal);
     modalBackdrop.addEventListener('click', e => { if (e.target === modalBackdrop) closeModal(); });
@@ -1588,7 +1903,25 @@
       window.toastTimer = setTimeout(() => t.classList.add('opacity-0'), 3000);
     }
 
-    // Galeri & Semestaku Modal (Real Photos, Stats & WhatsApp Chat Cards!)
+    // Quest Checklist Modal
+    document.getElementById('btn-quest-list').addEventListener('click', () => {
+      audio.playSfx('pop');
+      const itemsHTML = QUEST_INFO.map(q => {
+        const done = state.quests[q.id];
+        return `
+          <div class="flex items-center gap-3 p-3 rounded-2xl" style="background: ${done ? 'rgba(232, 217, 168, 0.16)' : 'rgba(94, 15, 37, 0.5)'}; border: 1px solid rgba(232, 217, 168, 0.25);">
+            <span class="text-lg">${done ? '✅' : '⬜'}</span>
+            <span class="text-xs ${done ? 'line-through opacity-75' : 'font-medium'}">${q.label}</span>
+          </div>
+        `;
+      }).join('');
+      openModal('Daftar Misi Pulau Semesta 👑', '📜', `
+        <p class="text-xs opacity-80">Selesaikan ke-6 misi manis ini untuk membuka ucapan penutup spesial ulang tahunmu ke-22:</p>
+        <div class="space-y-2">${itemsHTML}</div>
+      `);
+    });
+
+    // Galeri & Semestaku Modal
     function openGalleryModal() {
       audio.playSfx('pop');
       const days = Math.floor((new Date() - new Date(STATS_DATA.start || '2025-06-29')) / 864e5);
@@ -1633,10 +1966,9 @@
         ${sampleChatHTML}
       `);
     }
-
     document.getElementById('btn-galeri').addEventListener('click', openGalleryModal);
 
-    // Music Modal (Plays Real lagu.mp3 & lagu2.mp3 + Link to lagu.html)
+    // Music Modal
     function openMusicModal() {
       audio.playSfx('pop');
       openModal('Dua Lagu Untuk Nadhifa 🎵', '📻', `
@@ -1670,16 +2002,16 @@
       `);
     }
 
-    // Mini-Game Tetris Modal
+    // Mini-Game Tetris Modal (With Ghost Drop Shadow & Touch Swipe)
     function openTetrisModal() {
       audio.playSfx('pop');
       openModal('Arcade Tetris Nadhifa 🕹️', '👾', `
         <div class="flex flex-col items-center gap-3">
           <div class="flex items-center justify-between w-full max-w-[240px] text-xs font-bold">
             <span>Skor: <span id="tetris-score" style="color: var(--gold);">0</span></span>
-            <span class="opacity-75">Susun baloknya!</span>
+            <span class="opacity-75">Geser / Ketuk Kanvas!</span>
           </div>
-          <canvas id="tetris-canvas" width="200" height="320" class="rounded-2xl border-2 border-[#e8d9a8] bg-[#1c050b] shadow-inner"></canvas>
+          <canvas id="tetris-canvas" width="200" height="320" class="rounded-2xl border-2 border-[#e8d9a8] bg-[#1c050b] shadow-inner touch-none"></canvas>
           <div class="flex gap-2">
             <button id="t-left" class="btn-maroon px-4 py-2 rounded-xl font-bold cursor-pointer">◀</button>
             <button id="t-rot" class="btn-gold px-4 py-2 rounded-xl font-bold cursor-pointer">↻ Putar</button>
@@ -1747,14 +2079,28 @@
       function draw() {
         ctx.fillStyle = '#1c050b';
         ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+        // Subtle Grid
+        ctx.strokeStyle = 'rgba(232, 217, 168, 0.06)';
         for (let r = 0; r < ROWS; r++) {
           for (let c = 0; c < COLS; c++) {
+            ctx.strokeRect(c * SQ, r * SQ, SQ, SQ);
             if (board[r][c]) {
               ctx.fillStyle = board[r][c];
               ctx.fillRect(c * SQ + 1, r * SQ + 1, SQ - 2, SQ - 2);
             }
           }
         }
+
+        // Ghost Drop Preview
+        let ghostDy = 0;
+        while (!collide(0, ghostDy + 1, piece.shape)) ghostDy++;
+        ctx.fillStyle = 'rgba(232, 217, 168, 0.16)';
+        piece.shape.forEach((row, r) => row.forEach((v, c) => {
+          if (v) ctx.fillRect((piece.x + c) * SQ + 1, (piece.y + r + ghostDy) * SQ + 1, SQ - 2, SQ - 2);
+        }));
+
+        // Active Piece
         piece.shape.forEach((row, r) => row.forEach((v, c) => {
           if (v) {
             ctx.fillStyle = piece.color;
@@ -1763,14 +2109,33 @@
         }));
       }
 
-      document.getElementById('t-left').onclick = () => { if (!collide(-1, 0, piece.shape)) piece.x--; draw(); };
-      document.getElementById('t-right').onclick = () => { if (!collide(1, 0, piece.shape)) piece.x++; draw(); };
-      document.getElementById('t-down').onclick = () => { if (!collide(0, 1, piece.shape)) piece.y++; else merge(); draw(); };
-      document.getElementById('t-rot').onclick = () => {
+      const rotatePiece = () => {
         const rot = piece.shape[0].map((_, i) => piece.shape.map(row => row[i]).reverse());
         if (!collide(0, 0, rot)) piece.shape = rot;
         draw();
       };
+
+      document.getElementById('t-left').onclick = () => { if (!collide(-1, 0, piece.shape)) piece.x--; draw(); };
+      document.getElementById('t-right').onclick = () => { if (!collide(1, 0, piece.shape)) piece.x++; draw(); };
+      document.getElementById('t-down').onclick = () => { if (!collide(0, 1, piece.shape)) piece.y++; else merge(); draw(); };
+      document.getElementById('t-rot').onclick = rotatePiece;
+
+      // Touch Swipe on Canvas
+      let tx = 0, ty = 0;
+      cvs.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
+      cvs.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - tx;
+        const dy = e.changedTouches[0].clientY - ty;
+        if (Math.hypot(dx, dy) < 12) rotatePiece();
+        else if (Math.abs(dx) > Math.abs(dy)) {
+          if (dx > 0 && !collide(1, 0, piece.shape)) piece.x++;
+          if (dx < 0 && !collide(-1, 0, piece.shape)) piece.x--;
+        } else if (dy > 20) {
+          while (!collide(0, 1, piece.shape)) piece.y++;
+          merge();
+        }
+        draw();
+      });
 
       window.tetrisInterval = setInterval(() => {
         if (!collide(0, 1, piece.shape)) piece.y++;
@@ -1780,12 +2145,12 @@
       draw();
     }
 
-    // Photobooth "Tiga jepret, satu kenangan" Modal (Maroon & Gold Polaroid Strip!)
+    // Photobooth "Tiga jepret, satu kenangan" Modal (With Screen Flash)
     function openPhotoboothModal() {
       audio.playSfx('pop');
       openModal('Tiga Jepret, Satu Kenangan 📸', '🎞️', `
         <div class="flex flex-col items-center gap-3 text-center">
-          <p class="text-xs opacity-85">Siapkan senyum termanismu! Kamera akan mengambil <b>3 jepretan</b> otomatis lalu menyusunnya menjadi strip Polaroid marun & emas edisi ulang tahun ke-22.</p>
+          <p class="text-xs opacity-85">Siapkan senyum termanismu! Kamera akan mengambil <b>3 jepretan</b> otomatis dengan kilatan cahaya lalu menyusunnya menjadi strip Polaroid marun & emas.</p>
           <div class="relative w-full max-w-[280px] aspect-[4/3] rounded-2xl overflow-hidden bg-[#1c050b] border-2 border-[#e8d9a8] shadow-md">
             <video id="pb-video" autoplay playsinline muted class="w-full h-full object-cover scale-x-[-1]"></video>
             <div id="pb-countdown" class="absolute inset-0 flex items-center justify-center font-serif-title font-bold text-6xl drop-shadow-lg" style="color: var(--gold);"></div>
@@ -1810,15 +2175,18 @@
         this.classList.add('opacity-50');
         const shots = [];
         const cdEl = document.getElementById('pb-countdown');
+        const flashEl = document.getElementById('flash-overlay');
 
         for (let s = 0; s < 3; s++) {
           for (let c = 3; c >= 1; c--) {
             cdEl.textContent = c;
             audio.playSfx('pop');
-            await new Promise(r => setTimeout(r, 700));
+            await new Promise(r => setTimeout(r, 650));
           }
           cdEl.textContent = '📸';
           audio.playSfx('snap');
+          flashEl.style.opacity = '0.9';
+          setTimeout(() => { flashEl.style.opacity = '0'; }, 160);
 
           const tempCvs = document.createElement('canvas');
           tempCvs.width = 220; tempCvs.height = 150;
@@ -1840,11 +2208,10 @@
             tctx.fillText(['Nadhifa 22nd 👑', 'Happy Birthday 🎂', 'Semestaku 🤍'][s], 110, 82);
           }
           shots.push(tempCvs);
-          await new Promise(r => setTimeout(r, 350));
+          await new Promise(r => setTimeout(r, 380));
         }
         cdEl.textContent = '';
 
-        // Compose Maroon & Gold Polaroid Strip
         const strip = document.getElementById('pb-strip');
         const sctx = strip.getContext('2d');
         sctx.fillStyle = '#340a19';
@@ -1881,13 +2248,13 @@
     // Closing Celebration Finale Modal
     function openFinaleModal() {
       audio.playSfx('key');
-      spawnHearts(new THREE.Vector3(player.position.x, 1.8, player.position.z), 35);
+      spawnHearts(new THREE.Vector3(player.position.x, 1.8, player.position.z), 40);
       openModal('Semua Misi Semesta Selesai! 🤍', '👑', `
         <div class="glass-cream rounded-2xl p-5 text-center space-y-3">
           <div class="text-4xl">🎂✨🤍</div>
           <h3 class="font-serif-title italic font-bold text-2xl" style="color: #5e0f25;">Selamat Ulang Tahun ke-22, Nadhifa</h3>
           <p class="text-sm leading-relaxed">
-            Kamu sudah menjelajahi seluruh Pulau Semesta, menemukan kunci rumah kita, meniup 22 lilin, membaca suratku, dan mengabadikan senyummu. Terima kasih sudah hadir dan jadi bagian paling berharga di hari-hariku.
+            Kamu sudah menjelajahi seluruh Pulau Semesta, menemukan kunci rumah kita, mengintip bintang di dermaga, meniup 22 lilin, membaca suratku, dan mengabadikan senyummu. Terima kasih sudah hadir dan jadi bagian paling berharga di hari-hariku.
           </p>
         </div>
         <div class="flex flex-col gap-2.5 pt-1">
@@ -1900,7 +2267,6 @@
         </div>
       `);
     }
-
     document.getElementById('btn-finale-shortcut').addEventListener('click', openFinaleModal);
 
     // ==========================================
@@ -1912,7 +2278,7 @@
       intro.style.opacity = '0';
       setTimeout(() => intro.remove(), 700);
       document.getElementById('hud-top').classList.remove('opacity-0');
-      document.getElementById('touch-controls').classList.remove('opacity-0');
+      document.getElementById('joystick-zone').classList.remove('opacity-0');
       document.getElementById('hud-bottom-right').classList.remove('opacity-0');
     });
 
@@ -1927,7 +2293,7 @@
       const dt = Math.min(clock.getDelta(), 0.05);
       const elapsed = clock.getElapsedTime();
 
-      // Animate Ocean Ripples
+      // Animate Ocean Ripples, Paper Boat & Falling Sakura Petals
       if (waterMesh && islandGroup.visible) {
         const pos = waterMesh.geometry.attributes.position;
         for (let i = 0; i < pos.count; i++) {
@@ -1936,6 +2302,28 @@
           pos.setZ(i, Math.sin(x * 0.25 + elapsed * 1.8) * 0.12 + Math.cos(y * 0.25 + elapsed * 1.4) * 0.12);
         }
         pos.needsUpdate = true;
+
+        if (paperBoat) {
+          paperBoat.position.y = -0.35 + Math.sin(elapsed * 2.1) * 0.06;
+          paperBoat.rotation.z = Math.sin(elapsed * 1.7) * 0.08;
+        }
+
+        sakuraPetals.forEach(p => {
+          p.position.y -= p.userData.speedY * dt;
+          p.position.x += Math.sin(elapsed * 1.4 + p.userData.phase) * 0.28 * dt;
+          p.rotation.x += 1.5 * dt;
+          p.rotation.y += 1.2 * dt;
+          if (p.position.y < 0.05) {
+            p.position.y = 4.8 + Math.random() * 1.5;
+            p.position.x = (Math.random() - 0.5) * 18;
+            p.position.z = (Math.random() - 0.5) * 18;
+          }
+        });
+      }
+
+      // Animate Target Ring Pulse
+      if (targetRing.visible) {
+        targetRing.scale.setScalar(1 + Math.sin(elapsed * 7) * 0.14);
       }
 
       // Animate Key, Cat Tail, Swing & 22 Candle Flames
@@ -1975,16 +2363,14 @@
         }
       }
 
-      // Player Movement Logic
+      // Swinging State Handling
       if (state.isSwinging) {
-        // Gentle leg kick while swinging
         const { leftLeg, rightLeg, headGroup } = player.userData;
         const kick = Math.sin(state.swingTime) * 0.28;
         leftLeg.rotation.x = -Math.PI / 2.2 + kick;
         rightLeg.rotation.x = -Math.PI / 2.2 + kick;
         headGroup.rotation.x = -beachSwingSeat.rotation.x * 0.35;
 
-        // Smooth camera tracking on swing
         const worldPlayerPos = new THREE.Vector3();
         player.getWorldPosition(worldPlayerPos);
         const camOffset = new THREE.Vector3().subVectors(camera.position, controls.target);
@@ -1992,7 +2378,6 @@
         camera.position.copy(controls.target).add(camOffset);
         controls.update();
 
-        // Show dismount button
         const swingAction = interactables.find(i => i.id === 'swing');
         const promptEl = document.getElementById('interact-prompt');
         if (swingAction) {
@@ -2005,39 +2390,53 @@
         return;
       }
 
-      const moveVec = new THREE.Vector3();
-      if (keys['w'] || keys['arrowup']) moveVec.z -= 1;
-      if (keys['s'] || keys['arrowdown']) moveVec.z += 1;
-      if (keys['a'] || keys['arrowleft']) moveVec.x -= 1;
-      if (keys['d'] || keys['arrowright']) moveVec.x += 1;
+      // Camera-Relative Input Vector
+      let rawX = joyVec.x;
+      let rawZ = joyVec.z;
+      if (keys['w'] || keys['arrowup']) rawZ -= 1;
+      if (keys['s'] || keys['arrowdown']) rawZ += 1;
+      if (keys['a'] || keys['arrowleft']) rawX -= 1;
+      if (keys['d'] || keys['arrowright']) rawX += 1;
 
-      if (moveVec.lengthSq() === 0 && state.targetPos) {
+      const moveVec = new THREE.Vector3();
+      if (Math.hypot(rawX, rawZ) > 0.05) {
+        const camAngle = Math.atan2(
+          camera.position.x - controls.target.x,
+          camera.position.z - controls.target.z
+        );
+        const sin = Math.sin(camAngle);
+        const cos = Math.cos(camAngle);
+        moveVec.x = rawX * cos + rawZ * sin;
+        moveVec.z = -rawX * sin + rawZ * cos;
+      } else if (state.targetPos) {
         const diff = new THREE.Vector3().subVectors(state.targetPos, player.position);
         diff.y = 0;
         if (diff.length() > 0.18) {
           moveVec.copy(diff).normalize();
         } else {
           state.targetPos = null;
+          targetRing.visible = false;
         }
       }
 
-      const speed = 4.6;
-      const isMoving = moveVec.lengthSq() > 0;
+      const speed = 4.8;
+      const isMoving = moveVec.lengthSq() > 0.001;
       const { leftLeg, rightLeg, leftArm, rightArm, headGroup } = player.userData;
 
       if (isMoving) {
         moveVec.normalize();
         player.position.addScaledVector(moveVec, speed * dt);
 
-        const bound = state.sceneMode === 'island' ? 10.3 : 5.2;
+        const bound = state.sceneMode === 'island' ? 10.4 : 5.2;
         player.position.x = THREE.MathUtils.clamp(player.position.x, -bound, bound);
         player.position.z = THREE.MathUtils.clamp(player.position.z, -bound, bound);
+        resolveCollisions(player.position);
 
         const targetAngle = Math.atan2(moveVec.x, moveVec.z);
         let diffAngle = targetAngle - player.rotation.y;
         while (diffAngle > Math.PI) diffAngle -= Math.PI * 2;
         while (diffAngle < -Math.PI) diffAngle += Math.PI * 2;
-        player.rotation.y += diffAngle * 10 * dt;
+        player.rotation.y += diffAngle * 11 * dt;
 
         const swing = Math.sin(elapsed * 12) * 0.65;
         leftLeg.rotation.x = swing;
@@ -2054,9 +2453,50 @@
         headGroup.position.y = 1.24 + Math.sin(elapsed * 2.5) * 0.02;
       }
 
+      // Companion Follow Logic (Afa & Mochi gently follow Nadhifa on Island)
+      if (state.sceneMode === 'island' && afaMesh && mochiGroup) {
+        if (state.companionFollow) {
+          const desiredAfa = new THREE.Vector3(
+            player.position.x - Math.sin(player.rotation.y) * 1.15 - Math.cos(player.rotation.y) * 0.65,
+            0,
+            player.position.z - Math.cos(player.rotation.y) * 1.15 + Math.sin(player.rotation.y) * 0.65
+          );
+          const distAfa = afaMesh.position.distanceTo(desiredAfa);
+          if (distAfa > 0.25) {
+            const dir = desiredAfa.clone().sub(afaMesh.position).normalize();
+            afaMesh.position.addScaledVector(dir, Math.min(distAfa, 4.2 * dt));
+            afaMesh.rotation.y = Math.atan2(dir.x, dir.z);
+            const s = Math.sin(elapsed * 11) * 0.55;
+            afaMesh.userData.leftLeg.rotation.x = s;
+            afaMesh.userData.rightLeg.rotation.x = -s;
+            afaMesh.position.y = Math.abs(Math.sin(elapsed * 11)) * 0.06;
+          } else {
+            afaMesh.userData.leftLeg.rotation.x *= 0.85;
+            afaMesh.userData.rightLeg.rotation.x *= 0.85;
+            afaMesh.position.y *= 0.85;
+          }
+
+          const desiredMochi = new THREE.Vector3(afaMesh.position.x + 0.85, 0, afaMesh.position.z + 0.55);
+          if (mochiGroup.position.distanceTo(desiredMochi) > 0.25) {
+            const mDir = desiredMochi.clone().sub(mochiGroup.position).normalize();
+            mochiGroup.position.addScaledVector(mDir, 3.8 * dt);
+            mochiGroup.rotation.y = Math.atan2(mDir.x, mDir.z);
+            mochiGroup.position.y = Math.abs(Math.sin(elapsed * 14)) * 0.08;
+          } else {
+            mochiGroup.position.y *= 0.85;
+          }
+        } else {
+          // Gentle head look toward Nadhifa when nearby
+          if (afaMesh.position.distanceTo(player.position) < 4.5) {
+            const lookAng = Math.atan2(player.position.x - afaMesh.position.x, player.position.z - afaMesh.position.z);
+            afaMesh.rotation.y = THREE.MathUtils.lerp(afaMesh.rotation.y, lookAng, 3 * dt);
+          }
+        }
+      }
+
       // Smooth Camera Follow
       const camOffset = new THREE.Vector3().subVectors(camera.position, controls.target);
-      controls.target.lerp(new THREE.Vector3(player.position.x, player.position.y + 0.9, player.position.z), 0.1);
+      controls.target.lerp(new THREE.Vector3(player.position.x, player.position.y + 0.9, player.position.z), 0.11);
       camera.position.copy(controls.target).add(camOffset);
       controls.update();
 
@@ -2066,7 +2506,8 @@
       for (const item of interactables) {
         if (item.scene !== state.sceneMode) continue;
         if (item.id === 'key' && state.hasKey) continue;
-        const d = player.position.distanceTo(item.pos);
+        const itemPos = typeof item.pos === 'function' ? item.pos() : item.pos;
+        const d = player.position.distanceTo(itemPos);
         if (d < item.radius && d < minDist) {
           minDist = d;
           closest = item;
